@@ -1,60 +1,115 @@
 CREATE DATABASE scolar_sys;
-use scolar_sys;
+USE scolar_sys;
 
--- une date de naissance a été rajouter dans la table utilisateur
-
-CREATE table utilisateur(
+CREATE TABLE utilisateur(
     MAT VARCHAR(10),
-    nom VARCHAR (50)not null not null,
-    prenom VARCHAR(50) not null,
-    date_de_naissance date not null,
-    email VARCHAR(30),
-    statut boolean default 1, -- true pour un compte actif et faulse pour l'invers
-    constraint ck_MAT check (MAT like AD-% or MAT like GE-% or MAT like ES-% or MAT like ET-%)
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50) NOT NULL,
+    date_de_naissance DATE NOT NULL,
+    email VARCHAR(30) UNIQUE,
+    motdepasse VARCHAR(255) not null,
+    statut BOOLEAN DEFAULT TRUE, --designe si le compte est actif ou pas 
 
-)
+    CONSTRAINT pk_utilisateur PRIMARY KEY(MAT),
+
+    CONSTRAINT ck_MAT CHECK (
+        MAT LIKE 'AD-%' OR 
+        MAT LIKE 'GE-%' OR 
+        MAT LIKE 'ES-%' OR 
+        MAT LIKE 'ET-%'
+    )
+);
+
 CREATE TABLE PA(
     MAT VARCHAR(10),
-    post VARCHAR(60)not null,
+    post VARCHAR(60) NOT NULL,
 
-    constraint ck_post check (post in ('ADMIN','ENSEIGNENT','GESTIONNAIRE')),
-    constraint pk_PA primary key(MAT),
-    constraint fk_PA_utilisateur foreign key(MAT)
+    CONSTRAINT pk_PA PRIMARY KEY(MAT),
+
+    CONSTRAINT ck_post CHECK (
+        post IN ('ADMIN','ENSEIGNENT','GESTIONNAIRE')
+    ),
+
+    CONSTRAINT fk_PA_utilisateur 
+    FOREIGN KEY(MAT) REFERENCES utilisateur(MAT) ON DELETE CASCADE
 );
+
+
+CREATE TABLE classe (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(50),
+    niveau VARCHAR(20)
+);
+
 
 CREATE TABLE etudiant(
-    MAT varchar(10),
-    annee_etude year not null,
-    filiere VARCHAR(20) not null,
-    niveau VARCHAR(20) not null,
+    MAT VARCHAR(10),
+    classe_id INT not null,
+    annee_etude YEAR NOT NULL,
 
-    constraint pk_etudiant primary key(MAT),
-    constraint fk_etudiant_utilisateur foreign key(MAT)
+    CONSTRAINT pk_etudiant PRIMARY KEY(MAT),
+
+    FOREIGN KEY (classe_id) REFERENCES classe(ID),
+
+    CONSTRAINT fk_etudiant_utilisateur 
+    FOREIGN KEY(MAT) REFERENCES utilisateur(MAT)
+    ON DELETE CASCADE
 );
 
--- le poids désigne la valeur d'une note par raport aux autres notes du modul
--- ex: les notes d'exame valent plus que les notes de devoir avec un poid de 60
--- donc 60% de la note final
+CREATE TABLE inscription (
+    MAT VARCHAR(10),
+    annee YEAR,
+
+    PRIMARY KEY(MAT, annee),
+
+    FOREIGN KEY (MAT) REFERENCES etudiant(MAT) ON DELETE CASCADE
+);
+
+
+CREATE TABLE module (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE enseigner (
+    MAT_PA VARCHAR(10) not null,
+    module_id INT not null,
+
+    PRIMARY KEY (MAT_PA, module_id),
+
+    FOREIGN KEY (MAT_PA) REFERENCES PA(MAT) ON DELETE CASCADE,
+    FOREIGN KEY (module_id) REFERENCES module(ID) ON DELETE CASCADE
+);
+
 
 CREATE TABLE note (
-    ID INT AUTO_INCREMENT,
-    MAT VARCHAR(10),
-    module VARCHAR(30)not null,
-    valeur decimal(4, 2) not null,
-    poids INT, 
-    penalite INT(2),
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    MAT_ET VARCHAR(10) not null,
+    module_id int NOT NULL,
+    valeur DECIMAL(4,2) NOT NULL,
+    poids INT CHECK (poids BETWEEN 0 AND 100), 
+    penalite TINYINT,
 
-    constraint ck_valeur check (valeur between 0 and 20),
-    constraint pk_note primary key(ID),
-    constraint fk_note_etudiant foreign key(MAT) references(etudiant)
+
+    CONSTRAINT ck_valeur CHECK (valeur BETWEEN 0 AND 20),
+    CONSTRAINT fk_note_module
+    FOREIGN KEY (module_id) REFERENCES module(ID),
+
+    CONSTRAINT fk_note_etudiant 
+    FOREIGN KEY(MAT_ET) REFERENCES etudiant(MAT) ON DELETE CASCADE
 );
+
 CREATE TABLE gerer(
-    ID_note int,
-    MAT_PA VARCHAR(10),
-    date_creation timestamp default current_timestamp,
+    ID_note INT not null,
+    MAT_PA VARCHAR(10) not null,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    constraint fk_gere_PA foreign key(MAT_PA) references(personnel_admin),
-    constraint fk_gerer_notes foreign key(ID_note) references(note),
-    constraint pk_gerer primary key(ID,MAT_PA)
+    CONSTRAINT pk_gerer PRIMARY KEY(ID_note, MAT_PA),
+
+    CONSTRAINT fk_gere_PA 
+    FOREIGN KEY(MAT_PA) REFERENCES PA(MAT),
+
+    CONSTRAINT fk_gerer_notes 
+    FOREIGN KEY(ID_note) REFERENCES note(ID)
+    ON DELETE CASCADE
 );
-
