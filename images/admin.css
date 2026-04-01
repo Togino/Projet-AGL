@@ -1,4 +1,4 @@
-.d1{
+#d1{
     display: grid;
     grid-template-rows: repeat(3, 400px);
 }
