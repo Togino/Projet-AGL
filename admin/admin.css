@@ -1,3 +1,8 @@
+/*Je voulais utiliser le std color pour cotrôler le théme 
+  mais je sais absolument pas comment fair
+
+*/
+
 :root{
     --std-color:#fff;
 }
@@ -41,12 +46,13 @@ img[alt="logo"]{
     bottom: 0px;
     right: 0.5%;
     height: 84.8%;
-    width: 76.2%
+    width: 76.2%;
+    display:flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
 }
-footer{
-    position: absolute;
-    bottom: 0px;
-}
+
 #d2>p{
     display: inline;
 }
@@ -56,17 +62,20 @@ ul{
     color: #e0e0e0;
 }
 
+#d3>div{
+    width: 90%;
+    min-height: 70%; 
+    overflow-y: auto;
+    overflow-x: auto;
+}
 
 table{
-    width: 90%; height: 70%;
-    position: absolute;
-    right: 5%;
-    border-radius: 10px;
-    table-layout:auto;
-
+    width: 100%;max-height: 70%;
     border-collapse: collapse;
     border-radius: 10px;
     overflow: hidden;
+    overflow-y: auto;
+
 }
 th,td{
     padding: 20px 10px;
