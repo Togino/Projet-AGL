@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin By Abder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <span class="brand-badge">AGL</span>
+                <div>
+                    <h1>Admin</h1>
+                    <p>Gestion scolaire</p>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <a href="#overview">Vue d'ensemble</a>
+                <a href="#session">Connexion</a>
+                <a href="#users">Utilisateurs</a>
+                <a href="#create">Creation</a>
+                <a href="#roles">Permissions</a>
+                <a href="#logs">Securite</a>
+            </nav>
+
+            <div class="side-note">
+                <p>Compte de test</p>
+                <strong>admin@scolarsys.test</strong>
+                <span>Admin1234!</span>
+            </div>
+        </aside>
+
+        <main class="content">
+            <header class="hero" id="overview">
+                <div>
+                    <p class="eyebrow">Interface administrateur</p>
+                    <h2>Un espace simple pour piloter les comptes, les droits et les traces de securite.</h2>
+                </div>
+                <div id="sessionState" class="session-state">Session non connectee</div>
+            </header>
+
+            <section class="stats">
+                <article class="stat-card">
+                    <span>Utilisateurs visibles</span>
+                    <strong id="usersCount">0</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Roles charges</span>
+                    <strong id="rolesCount">0</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Logs affiches</span>
+                    <strong id="logsCount">0</strong>
+                </article>
+            </section>
+
+            <section class="panel-grid">
+                <section class="panel" id="session">
+                    <div class="panel-head">
+                        <h3>Connexion</h3>
+                        <button id="meButton" class="ghost" type="button">Verifier la session</button>
+                    </div>
+                    <form id="loginForm" class="form-grid">
+                        <label>
+                            Email
+                            <input name="email" type="email" value="admin@scolarsys.test" required>
+                        </label>
+                        <label>
+                            Mot de passe
+                            <input name="motdepasse" type="password" value="Admin1234!" required>
+                        </label>
+                        <div class="actions">
+                            <button type="submit">Se connecter</button>
+                            <button id="logoutButton" class="danger" type="button">Se deconnecter</button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="panel" id="create">
+                    <div class="panel-head">
+                        <h3>Creer un utilisateur</h3>
+                        <button id="refreshUsersButton" class="ghost" type="button">Actualiser liste</button>
+                    </div>
+                    <form id="createUserForm" class="form-grid compact">
+                        <label>
+                            Matricule
+                            <input name="matricule" value="GE-0002" required>
+                        </label>
+                        <label>
+                            Nom
+                            <input name="nom" value="Traore" required>
+                        </label>
+                        <label>
+                            Prenom
+                            <input name="prenom" value="Awa" required>
+                        </label>
+                        <label>
+                            Date de naissance
+                            <input name="date_de_naissance" type="date" value="1998-03-10" required>
+                        </label>
+                        <label>
+                            Email
+                            <input name="email" type="email" value="awa.traore@test.local" required>
+                        </label>
+                        <label>
+                            Mot de passe
+                            <input name="motdepasse" type="password" value="Secure123" required>
+                        </label>
+                        <label>
+                            Role
+                            <select id="roleSelect" name="role_id"></select>
+                        </label>
+                        <label>
+                            Statut
+                            <select name="statut">
+                                <option value="1">actif</option>
+                                <option value="0">inactif</option>
+                            </select>
+                        </label>
+                        <div class="actions full">
+                            <button type="submit">Creer le compte</button>
+                        </div>
+                    </form>
+                </section>
+            </section>
+
+            <section class="panel-grid">
+                <section class="panel wide" id="users">
+                    <div class="panel-head">
+                        <h3>Utilisateurs</h3>
+                        <button id="loadUsersButton" class="ghost" type="button">Charger les utilisateurs</button>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Matricule</th>
+                                    <th>Nom</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <tr>
+                                    <td colspan="5" class="empty">Aucune donnee chargee.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="panel" id="roles">
+                    <div class="panel-head">
+                        <h3>Permissions d'un role</h3>
+                        <button id="viewRolePermissionsButton" class="ghost" type="button">Voir le role</button>
+                    </div>
+                    <form id="permissionsForm" class="form-grid">
+                        <label>
+                            Role cible
+                            <select id="rolePicker" name="role_id"></select>
+                        </label>
+                        <label>
+                            IDs permissions
+                            <textarea id="permissionIds" rows="5" placeholder="1,2,3"></textarea>
+                        </label>
+                        <div class="actions">
+                            <button type="submit">Mettre a jour</button>
+                        </div>
+                    </form>
+                    <pre id="rolePermissionsOutput">Choisis un role pour afficher ses permissions.</pre>
+                </section>
+            </section>
+
+            <section class="panel-grid">
+                <section class="panel" id="logs">
+                    <div class="panel-head">
+                        <h3>Journaux de securite</h3>
+                        <button id="logsButton" class="ghost" type="button">Charger les logs</button>
+                    </div>
+                    <pre id="logsOutput">Aucun log charge.</pre>
+                </section>
+
+                <section class="panel">
+                    <div class="panel-head">
+                        <h3>Sortie API</h3>
+                    </div>
+                    <pre id="output">En attente...</pre>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
