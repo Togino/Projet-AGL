@@ -1,29 +1,30 @@
-#d1{
-    display: grid;
-    grid-template-rows: repeat(3, 400px);
+:root{
+    --std-color:#fff;
 }
-.a2{
-    display: grid;
-    padding-right:  50%;
-    padding-left: 50%;
-}
-.a1{
-    display: grid;
-
-}
-img[alt="logo"]{
-    width: 75px; height: 75px;
-}
-
 
 body{
-    background-color: #f0f0f0;/*fefefe*/
+    font-family:'Courier New', Courier, monospace;
+    background-color: #e0e0e0;
 }
-div{
-    background-color: #fff;/*fff*/
+
+img[alt="logo"]{
+    width: auto; height: 60%;
+}
+
+
+#d1,#d2,#d3{
+    background-color: var(--std-color);
     border-radius: 5px;
     position: absolute;
+    overflow-x: auto;
 }
+
+.clear-bt{
+    border: none;
+    background-color: transparent;
+}
+
+
 #d1{
     left:0.3%;
     top: 0.2%;
@@ -46,4 +47,36 @@ footer{
     position: absolute;
     bottom: 0px;
 }
-             
+#d2>p{
+    display: inline;
+}
+
+ul{
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+
+table{
+    width: 90%; height: 70%;
+    position: absolute;
+    right: 5%;
+    border-radius: 10px;
+    table-layout:auto;
+
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+}
+th,td{
+    padding: 20px 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+th{
+    background-color: #ffff99;
+}
+
+tr:nth-child(even){
+    background-color: #fafafa;
+}
