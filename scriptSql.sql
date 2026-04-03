@@ -146,7 +146,7 @@ INSERT INTO roles (name, description) VALUES
 INSERT INTO permissions (code, description) VALUES
 ('dashboard.view', 'Acceder au tableau de bord'),
 ('users.create', 'Creer un utilisateur'),
-('users.read', 'Consulter les utilisateurs'),
+('users.read', 'Consulter les utilisateurs'),²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²
 ('users.update', 'Modifier un utilisateur'),
 ('users.delete', 'Supprimer logiquement un utilisateur'),
 ('roles.manage', 'Gerer les roles et permissions'),

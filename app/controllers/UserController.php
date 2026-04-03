@@ -26,6 +26,22 @@ class UserController
         $this->jsonResponse(['data' => $user]);
     }
 
+    public function nextMatricule(): void
+    {
+        try {
+            $roleId = (int) ($_GET['role_id'] ?? 0);
+            if ($roleId <= 0) {
+                $this->jsonResponse(['message' => 'Le parametre role_id est obligatoire.'], 422);
+                return;
+            }
+
+            $matricule = $this->userService->previewNextMatricule($roleId);
+            $this->jsonResponse(['data' => ['matricule' => $matricule]]);
+        } catch (\Throwable $exception) {
+            $this->jsonResponse(['message' => $exception->getMessage()], 422);
+        }
+    }
+
     public function store(): void
     {
         try {

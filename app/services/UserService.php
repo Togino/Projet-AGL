@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\ClassRoom;
 use App\Models\Role;
 use App\Models\User;
 
@@ -10,6 +11,7 @@ class UserService
     public function __construct(
         private User $userModel,
         private Role $roleModel,
+        private ClassRoom $classRoomModel,
         private BackupService $backupService,
         private SecurityLogService $securityLogService
     ) {
@@ -37,6 +39,21 @@ class UserService
         $this->securityLogService->log($createdBy, 'users.create', "Creation de l'utilisateur {$data['email']}");
 
         return $matricule;
+    }
+
+    public function previewNextMatricule(int $roleId): string
+    {
+        $role = $this->roleModel->findById($roleId);
+        if (!$role) {
+            throw new \InvalidArgumentException('Role invalide.');
+        }
+
+        return $this->generateUniqueMatriculeForRole($role);
+    }
+
+    public function listClasses(): array
+    {
+        return $this->classRoomModel->findAll();
     }
 
     public function updateUser(string $matricule, array $payload, string $updatedBy): bool
@@ -77,9 +94,11 @@ class UserService
 
     private function validatePayload(array $payload, bool $isCreate, ?string $currentMatricule = null): array
     {
-        $requiredFields = ['matricule', 'nom', 'prenom', 'date_de_naissance', 'email', 'role_id'];
+        $requiredFields = ['nom', 'prenom', 'date_de_naissance', 'email', 'role_id'];
         if ($isCreate) {
             $requiredFields[] = 'motdepasse';
+        } else {
+            $requiredFields[] = 'matricule';
         }
 
         foreach ($requiredFields as $field) {
@@ -92,29 +111,48 @@ class UserService
             throw new \InvalidArgumentException('Adresse email invalide.');
         }
 
-        $matricule = strtoupper(trim($payload['matricule']));
         $email = strtolower(trim($payload['email']));
         $roleId = (int) $payload['role_id'];
         $statut = isset($payload['statut']) ? (int) (bool) $payload['statut'] : 1;
-
-        if (!preg_match('/^(AD|GE|ES|ET)-[0-9A-Z]{3,}$/', $matricule)) {
-            throw new \InvalidArgumentException('Matricule invalide. Exemple attendu: AD-0001');
-        }
 
         if ($this->userModel->emailExists($email, $currentMatricule)) {
             throw new \InvalidArgumentException('Cet email existe deja.');
         }
 
-        if ($isCreate && $this->userModel->matriculeExists($matricule)) {
-            throw new \InvalidArgumentException('Ce matricule existe deja.');
+        $role = $this->roleModel->findById($roleId);
+        if (!$role) {
+            throw new \InvalidArgumentException('Role invalide.');
         }
 
-        if (!$this->roleModel->findById($roleId)) {
-            throw new \InvalidArgumentException('Role invalide.');
+        if ($isCreate) {
+            $matricule = $this->generateUniqueMatriculeForRole($role);
+        } else {
+            $matricule = strtoupper(trim((string) $payload['matricule']));
+
+            if (!preg_match('/^(AD|GE|ES|ET)-[0-9A-Z]{3,}$/', $matricule)) {
+                throw new \InvalidArgumentException('Matricule invalide. Exemple attendu: AD-0001');
+            }
         }
 
         if ($isCreate || !empty($payload['motdepasse'])) {
             $this->validatePassword((string) ($payload['motdepasse'] ?? ''));
+        }
+
+        $studentProfile = null;
+        if (strtoupper($role['name'] ?? '') === 'ETUDIANT') {
+            $classeNom = trim((string) ($payload['classe_nom'] ?? ''));
+            $niveau = trim((string) ($payload['niveau'] ?? ''));
+
+            if ($classeNom === '' || $niveau === '') {
+                throw new \InvalidArgumentException('Les champs classe et niveau sont obligatoires pour un etudiant.');
+            }
+
+            $classRoom = $this->classRoomModel->findOrCreateByNameAndLevel($classeNom, $niveau);
+
+            $studentProfile = [
+                'classe_id' => (int) $classRoom['ID'],
+                'annee_etude' => (string) date('Y'),
+            ];
         }
 
         return [
@@ -125,7 +163,38 @@ class UserService
             'email' => $email,
             'role_id' => $roleId,
             'statut' => $statut,
+            'student_profile' => $studentProfile,
         ];
+    }
+
+    private function generateUniqueMatriculeForRole(array $role): string
+    {
+        $prefix = $this->resolveMatriculePrefix($role['name'] ?? '');
+        $matricule = $this->userModel->getNextMatriculeForPrefix($prefix);
+
+        if (!$this->userModel->matriculeExists($matricule, null)) {
+            return $matricule;
+        }
+
+        for ($attempt = 0; $attempt < 10; $attempt++) {
+            $matricule = $this->userModel->getNextMatriculeForPrefix($prefix);
+            if (!$this->userModel->matriculeExists($matricule, null)) {
+                return $matricule;
+            }
+        }
+
+        throw new \RuntimeException('Impossible de generer un matricule unique pour ce role.');
+    }
+
+    private function resolveMatriculePrefix(string $roleName): string
+    {
+        return match (strtoupper($roleName)) {
+            'SUPER_ADMIN', 'ADMIN' => 'AD',
+            'GESTIONNAIRE' => 'GE',
+            'ENSEIGNANT' => 'ES',
+            'ETUDIANT' => 'ET',
+            default => throw new \InvalidArgumentException('Aucun prefixe de matricule defini pour ce role.'),
+        };
     }
 
     private function validatePassword(string $password): void

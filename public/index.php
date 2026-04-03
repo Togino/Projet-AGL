@@ -9,6 +9,7 @@ use App\Controllers\UserController;
 use App\Middlewares\AuthMiddleware;
 use App\Middlewares\CsrfMiddleware;
 use App\Middlewares\RoleMiddleware;
+use App\Models\ClassRoom;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\SecurityLog;
@@ -44,6 +45,7 @@ $pdo = Database::getConnection();
 
 $userModel = new User($pdo);
 $roleModel = new Role($pdo);
+$classRoomModel = new ClassRoom($pdo);
 $permissionModel = new Permission($pdo);
 $securityLogModel = new SecurityLog($pdo);
 
@@ -51,7 +53,7 @@ $backupService = new BackupService($pdo, $appConfig);
 $securityLogService = new SecurityLogService($securityLogModel);
 $roleService = new RoleService($roleModel, $permissionModel, $securityLogService);
 $authService = new AuthService($userModel, $roleService, $securityLogService);
-$userService = new UserService($userModel, $roleModel, $backupService, $securityLogService);
+$userService = new UserService($userModel, $roleModel, $classRoomModel, $backupService, $securityLogService);
 
 $authController = new AuthController($authService);
 $userController = new UserController($userService);
@@ -99,6 +101,13 @@ if ($path === '/admin/security-logs' && $method === 'GET') {
     return;
 }
 
+if ($path === '/admin/classes' && $method === 'GET') {
+    AuthMiddleware::handle();
+    RoleMiddleware::handle('users.read');
+    $adminController->classes($userService->listClasses());
+    return;
+}
+
 if (preg_match('#^/admin/roles/(\d+)/permissions$#', $path, $matches)) {
     AuthMiddleware::handle();
     RoleMiddleware::handle('roles.manage');
@@ -120,6 +129,13 @@ if ($path === '/users' && $method === 'GET') {
     AuthMiddleware::handle();
     RoleMiddleware::handle('users.read');
     $userController->index();
+    return;
+}
+
+if ($path === '/users/next-matricule' && $method === 'GET') {
+    AuthMiddleware::handle();
+    RoleMiddleware::handle('users.create');
+    $userController->nextMatricule();
     return;
 }
 

@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration</title>
+    <link rel="stylesheet" href="admin-panel.css">
+</head>
+<body>
+    <main>
+        <div id="d1">
+            <div class="brand-block">
+                <img src="image.png" alt="logo">
+                <div class="brand-copy">
+                    <p class="brand-title">UIE</p>
+                    <span class="brand-subtitle">Interface administrateur</span>
+                </div>
+            </div>
+
+            <nav>
+                <button class="clear-bt bo-nav" type="button">ACCUEIL</button>
+                <button class="clear-bt nav-icon-button alert-nav" type="button" id="openAlertsModal" aria-label="Alertes">
+                    <span class="nav-icon-badge" id="alertsBadge" hidden>0</span>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 3.75C9.38 3.75 7.25 5.88 7.25 8.5V10.79C7.25 11.27 7.05 12 6.81 12.41L5.94 13.86C5.4 14.77 5.77 15.78 6.76 16.11C10.04 17.2 13.97 17.2 17.25 16.11C18.18 15.8 18.58 14.71 18.07 13.86L17.2 12.41C16.96 12 16.76 11.27 16.76 10.79V8.5C16.75 5.88 14.62 3.75 12 3.75Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        <path d="M13.46 4.02C13.22 3.95 12.98 3.9 12.73 3.87C12.02 3.78 11.34 3.83 10.7 4.02C10.92 3.46 11.42 3.07 12.02 3.07C12.62 3.07 13.12 3.46 13.46 4.02Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M14.5 16.38C14.5 17.76 13.38 18.88 12 18.88C11.31 18.88 10.67 18.59 10.21 18.13C9.75 17.67 9.46 17.03 9.46 16.34" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="clear-bt bo-nav" type="button" id="openActionsModal">ACTIONS</button>
+                <button class="clear-bt nav-icon-button fullscreen-nav" type="button" id="toggleFullscreenButton" aria-label="Plein ecran">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 3.75H5.75C4.65 3.75 3.75 4.65 3.75 5.75V8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 3.75H18.25C19.35 3.75 20.25 4.65 20.25 5.75V8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M20.25 16V18.25C20.25 19.35 19.35 20.25 18.25 20.25H16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 20.25H5.75C4.65 20.25 3.75 19.35 3.75 18.25V16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </nav>
+        </div>
+
+        <div id="d2">
+            <div class="sidebar-section">
+                <button class="clear-bt icon-bt">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#000000" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_3280_13046)"><path d="M16.75 20.49C16.34 20.49 15.99 20.21 15.91 19.81L15.66 18.75C15.55 18.26 15.16 17.87 14.67 17.75L13.59 17.5C13.2 17.42 12.92 17.07 12.92 16.66C12.92 16.25 13.2 15.9 13.6 15.82L14.67 15.57C15.16 15.46 15.55 15.07 15.66 14.58L15.91 13.5C15.99 13.11 16.34 12.84 16.75 12.84C17.16 12.84 17.5 13.12 17.59 13.51L17.84 14.58C17.95 15.07 18.34 15.46 18.83 15.58L19.91 15.83C20.3 15.91 20.58 16.26 20.57 16.67C20.57 17.08 20.29 17.42 19.9 17.51L18.82 17.76C18.33 17.87 17.94 18.26 17.82 18.75L17.57 19.83C17.49 20.22 17.14 20.5 16.73 20.5L16.75 20.49ZM15.9 16.66C16.24 16.88 16.54 17.18 16.76 17.52C16.98 17.18 17.28 16.88 17.62 16.66C17.28 16.44 16.98 16.14 16.76 15.8C16.54 16.14 16.24 16.44 15.9 16.66Z" fill="white" style="fill: var(--fillg);"/><path d="M12 12.75C8.83 12.75 6.25 10.17 6.25 7C6.25 3.83 8.83 1.25 12 1.25C15.17 1.25 17.75 3.83 17.75 7C17.75 10.17 15.17 12.75 12 12.75ZM12 2.75C9.66 2.75 7.75 4.66 7.75 7C7.75 9.34 9.66 11.25 12 11.25C14.34 11.25 16.25 9.34 16.25 7C16.25 4.66 14.34 2.75 12 2.75Z" fill="white" style="fill: var(--fillg);"/><path d="M3.40997 22.75C2.99997 22.75 2.65997 22.41 2.65997 22C2.65997 17.73 6.84997 14.25 12 14.25C12.41 14.25 12.75 14.59 12.75 15C12.75 15.41 12.41 15.75 12 15.75C7.67997 15.75 4.15997 18.55 4.15997 22C4.15997 22.41 3.81997 22.75 3.40997 22.75Z" fill="white" style="fill: var(--fillg);"/><path d="M20.59 22.75C20.18 22.75 19.84 22.41 19.84 22C19.84 21.23 19.67 20.47 19.32 19.76C19.14 19.39 19.3 18.94 19.67 18.76C20.05 18.58 20.49 18.74 20.67 19.11C21.11 20.03 21.34 21 21.34 22C21.34 22.41 21 22.75 20.59 22.75Z" fill="white" style="fill: var(--fillg);"/></g><defs><clipPath id="clip0_3280_13046"><rect width="24" height="24" fill="white"/></clipPath></defs></svg>
+                </button>
+                <p>Vous</p>
+            </div>
+
+            <div class="sidebar-note">
+                <h3>Tableau de bord</h3>
+                <p>Vue rapide des personnels et etudiants disponibles dans l'interface.</p>
+            </div>
+
+            <div class="sidebar-section">
+                <button class="clear-bt icon-bt" type="button" onclick="location.href='admin-demo.html'">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.8999 7.56023C9.2099 3.96023 11.0599 2.49023 15.1099 2.49023H15.2399C19.7099 2.49023 21.4999 4.28023 21.4999 8.75023V15.2702C21.4999 19.7402 19.7099 21.5302 15.2399 21.5302H15.1099C11.0899 21.5302 9.2399 20.0802 8.9099 16.5402" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M15.0001 12H3.62012" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M5.85 8.65039L2.5 12.0004L5.85 15.3504" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                </button>
+                <p>Se déconnecter</p>
+            </div>
+
+            <hr>
+        </div>
+
+        <div id="d3">
+            <div class="summary-grid">
+                <article class="summary-card accent-card">
+                    <span class="summary-label">Utilisateurs visibles</span>
+                    <strong class="summary-value" id="summaryUsers">24</strong>
+                    <p class="summary-note">Comptes actuellement affiches dans le tableau de bord.</p>
+                </article>
+                <article class="summary-card">
+                    <span class="summary-label">Personnel</span>
+                    <strong class="summary-value" id="summaryPersonnel">12</strong>
+                    <p class="summary-note">Profils admin, gestionnaires et enseignants.</p>
+                </article>
+                <article class="summary-card">
+                    <span class="summary-label">Etudiants</span>
+                    <strong class="summary-value" id="summaryStudents">12</strong>
+                    <p class="summary-note">Etudiants remontes dans l'espace courant.</p>
+                </article>
+                <article class="summary-card">
+                    <span class="summary-label">Alertes recentes</span>
+                    <strong class="summary-value" id="summaryAlerts">0</strong>
+                    <p class="summary-note">Mise a jour lors du chargement des journaux de securite.</p>
+                </article>
+            </div>
+
+            <div class="content-card">
+                <div class="section-head">
+                    <div class="head-copy">
+                        <h2>Personnel administratif</h2>
+                        <span>Liste des comptes privilegies</span>
+                    </div>
+                    <div class="section-tools">
+                        <label class="search-box">
+                            <span>Recherche</span>
+                            <input id="adminSearch" type="text" placeholder="Nom, matricule, poste">
+                        </label>
+                        <button id="syncBackendButton" class="mini-link button-link" type="button">Charger backend</button>
+                    </div>
+                </div>
+                <div class="table-shell">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>MAT</th>
+                                <th>Nom</th>
+                                <th>Prenom</th>
+                                <th>Pst</th>
+                                <th>email</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminTableBody">
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="personnel">GT-21</button></td><td>Elrique</td><td>Edward</td><td>GESTIONNAIRE</td><td>NaN@exemple.com</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="personnel">GT-22</button></td><td>Kone</td><td>Abdou</td><td>ADMIN</td><td>abdou@exemple.com</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="personnel">GT-23</button></td><td>Diallo</td><td>Salif</td><td>GESTIONNAIRE</td><td>salif@exemple.com</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="personnel">GT-24</button></td><td>Traore</td><td>Fatou</td><td>GESTIONNAIRE</td><td>fatou@exemple.com</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="personnel">GT-25</button></td><td>Sissoko</td><td>Ali</td><td>ADMIN</td><td>ali@exemple.com</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="personnel">ES-11</button></td><td>Keita</td><td>Moussa</td><td>ENSEIGNANT</td><td>moussa@exemple.com</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="personnel">GT-26</button></td><td>Coulibaly</td><td>Awa</td><td>GESTIONNAIRE</td><td>awa@exemple.com</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="personnel">ES-12</button></td><td>Camara</td><td>Jean</td><td>ENSEIGNANT</td><td>jean@exemple.com</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="personnel">GT-27</button></td><td>Barry</td><td>Oumar</td><td>GESTIONNAIRE</td><td>oumar@exemple.com</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="personnel">GT-28</button></td><td>Sangare</td><td>Nina</td><td>ADMIN</td><td>nina@exemple.com</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="personnel">GT-29</button></td><td>Sidibe</td><td>Kadi</td><td>GESTIONNAIRE</td><td>kadi@exemple.com</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="personnel">ES-13</button></td><td>Maiga</td><td>Paul</td><td>ENSEIGNANT</td><td>paul@exemple.com</td></tr>
+                            <tr class="empty-row" hidden><td colspan="5">Aucun resultat pour cette recherche.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p id="backendStatus" class="backend-status">Tableau local affiche. Clique sur "Charger backend" pour injecter les vraies donnees API.</p>
+            </div>
+
+            <div class="content-card">
+                <div class="section-head">
+                    <div class="head-copy">
+                        <h2>Etudiants</h2>
+                        <span>Vue rapide par niveau et classe</span>
+                    </div>
+                    <a class="mini-link" href="admin-demo.html">Ouvrir le backend</a>
+                </div>
+                <div class="table-shell">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>MAT</th>
+                                <th>Nom</th>
+                                <th>Prenom</th>
+                                <th>Niveau</th>
+                                <th>Classe</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody">
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="etudiant">ET-21</button></td><td>Elrique</td><td>Alfonce</td><td>L2</td><td>ILD</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="etudiant">ET-22</button></td><td>Diallo</td><td>Mariam</td><td>L1</td><td>GL</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="etudiant">ET-23</button></td><td>Coulibaly</td><td>Adama</td><td>L3</td><td>RSA</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="etudiant">ET-24</button></td><td>Keita</td><td>Sira</td><td>L2</td><td>ILD</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="etudiant">ET-25</button></td><td>Barry</td><td>Hawa</td><td>L1</td><td>GL</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="etudiant">ET-26</button></td><td>Camara</td><td>Ibra</td><td>L2</td><td>RSA</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="etudiant">ET-27</button></td><td>Sidibe</td><td>Khalifa</td><td>L3</td><td>ILD</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="etudiant">ET-28</button></td><td>Maiga</td><td>Assa</td><td>L1</td><td>GL</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="etudiant">ET-29</button></td><td>Traore</td><td>Moussa</td><td>L2</td><td>RSA</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="etudiant">ET-30</button></td><td>Sangare</td><td>Rokia</td><td>L3</td><td>GL</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="etudiant">ET-31</button></td><td>Sissoko</td><td>Baba</td><td>L2</td><td>ILD</td></tr>
+                            <tr class="data-row"><td><button class="clear-bt row-link" data-user-type="etudiant">ET-32</button></td><td>Kone</td><td>Fanta</td><td>L1</td><td>RSA</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p id="studentBackendStatus" class="backend-status">Le tableau etudiant peut aussi etre remplace par les donnees du backend.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <ul>
+            <li>@contact:777777</li>
+            <li>service de l'etablissement: fack@ex.com</li>
+            <li>administration centrale</li>
+            <li>support interne</li>
+        </ul>
+    </footer>
+
+    <div id="actionsModal" class="modal-overlay" hidden>
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="actionsModalTitle">
+            <div class="modal-head">
+                <div>
+                    <h3 id="actionsModalTitle">Choisir une action</h3>
+                    <p>Selectionne ce que tu veux faire dans l'espace administrateur.</p>
+                </div>
+                <button class="clear-bt modal-close" type="button" id="closeActionsModal" onclick="closeActionsModal()">x</button>
+            </div>
+
+            <div class="modal-actions">
+                <button class="modal-action" type="button" data-action-card="backendCard">
+                    <strong>Tester le backend</strong>
+                    <span>Acceder a l'espace technique</span>
+                </button>
+
+                <button class="modal-action" type="button" data-action-card="createUserCard">
+                    <strong>Creer un utilisateur</strong>
+                    <span>Ajouter un compte enseignant, admin ou gestionnaire</span>
+                </button>
+
+                <button class="modal-action" type="button" data-action-card="editUserCard">
+                    <strong>Modifier un utilisateur</strong>
+                    <span>Corriger les informations d'un compte existant</span>
+                </button>
+
+                <button class="modal-action" type="button" data-action-card="deleteUserCard">
+                    <strong>Desactiver un compte</strong>
+                    <span>Faire une suppression logique sans perdre les traces</span>
+                </button>
+
+                <button class="modal-action" type="button" data-action-card="permissionsCard">
+                    <strong>Gerer les permissions</strong>
+                    <span>Acceder aux roles et droits</span>
+                </button>
+            </div>
+
+            <div class="modal-detail">
+                <article id="backendCard" class="action-card is-active">
+                    <h4>Console technique</h4>
+                    <p>Cette zone ouvre l'interface de test backend pour verifier rapidement les routes API, les roles, les logs et les appels techniques.</p>
+                    <div class="action-tags">
+                        <span>API</span>
+                        <span>Tests</span>
+                        <span>Debug</span>
+                    </div>
+                    <a class="detail-button mini-link" href="admin-demo.html">Ouvrir la console backend</a>
+                </article>
+
+                <article id="createUserCard" class="action-card" hidden>
+                    <h4>Creation d'utilisateur</h4>
+                    <p>Cette action sert a ouvrir l'espace backend pour enregistrer un nouvel utilisateur avec son matricule, son role et son mot de passe securise.</p>
+                    <div class="action-tags">
+                        <span>Creation</span>
+                        <span>Validation</span>
+                        <span>Trace</span>
+                    </div>
+                    <button class="detail-button" type="button" id="openCreateUserForm">Ouvrir la creation</button>
+                </article>
+
+                <article id="editUserCard" class="action-card" hidden>
+                    <h4>Modification d'utilisateur</h4>
+                    <p>Utilise cette action pour corriger un nom, un email, un statut ou un role. Les changements doivent etre journalises pour rester tracables.</p>
+                    <div class="action-tags">
+                        <span>Mise a jour</span>
+                        <span>Historique</span>
+                        <span>Controle</span>
+                    </div>
+                    <button class="detail-button" type="button" id="openEditUserFormFromActions">Ouvrir la modification</button>
+                </article>
+
+                <article id="deleteUserCard" class="action-card" hidden>
+                    <h4>Suppression logique</h4>
+                    <p>Le compte est desactive sans effacer les donnees. Cette option convient aux comptes qui ne doivent plus apparaitre dans l'interface courante.</p>
+                    <div class="action-tags">
+                        <span>Soft delete</span>
+                        <span>Securite</span>
+                        <span>Archivage</span>
+                    </div>
+                    <button class="detail-button danger-button" type="button" id="openDeactivateFromActions">Lancer la desactivation</button>
+                </article>
+
+                <article id="permissionsCard" class="action-card" hidden>
+                    <h4>Gestion des permissions</h4>
+                    <p>Attribue les bons droits a chaque profil pour proteger les zones sensibles et limiter les acces aux seules personnes autorisees.</p>
+                    <div class="action-tags">
+                        <span>Roles</span>
+                        <span>Droits</span>
+                        <span>Protection</span>
+                    </div>
+                    <div class="permissions-toolbar">
+                        <label class="permissions-role-picker">
+                            <span class="field-label">Role cible</span>
+                            <select id="permissionsRoleSelect">
+                                <option value="">Choisir un role</option>
+                            </select>
+                        </label>
+                        <button class="detail-button alt-button" type="button" id="loadPermissionsSummary">Afficher les roles</button>
+                    </div>
+                    <div id="permissionsSummary" class="action-output">Charge les roles et permissions depuis le backend.</div>
+                    <div id="permissionsEditor" class="permissions-editor" hidden>
+                        <div class="permissions-grid" id="permissionsGrid"></div>
+                        <div class="permissions-actions">
+                            <button class="detail-button" type="button" id="savePermissionsButton">Enregistrer les permissions</button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+
+    <div id="alertsModal" class="modal-overlay" hidden>
+        <div class="modal-card alerts-modal-card" role="dialog" aria-modal="true" aria-labelledby="alertsModalTitle">
+            <div class="modal-head">
+                <div>
+                    <h3 id="alertsModalTitle">Alertes et journaux</h3>
+                    <p>Suivi rapide des actions sensibles et des evenements de securite.</p>
+                </div>
+                <button class="clear-bt modal-close" type="button" id="closeAlertsModal">x</button>
+            </div>
+
+            <div class="alerts-toolbar">
+                <button class="detail-button alt-button" type="button" id="loadSecurityLogsButton">Charger les alertes</button>
+            </div>
+
+            <div id="alertsStatus" class="action-output">Clique sur "Charger les alertes" pour afficher les journaux recents.</div>
+
+            <div id="alertsList" class="alerts-list">
+                <div class="alert-item alert-empty">
+                    <strong>Aucune alerte chargee</strong>
+                    <small>Les derniers evenements sensibles apparaitront ici.</small>
+                </div>
+            </div>
+
+            <div class="alerts-footer-tools">
+                <button class="detail-button subtle-button" type="button" id="showMoreAlertsButton" hidden>Voir plus</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="userModal" class="modal-overlay" hidden>
+        <div class="modal-card user-modal-card" role="dialog" aria-modal="true" aria-labelledby="userModalTitle">
+            <div class="modal-head">
+                <div>
+                    <h3 id="userModalTitle">Fiche utilisateur</h3>
+                    <p>Consultation rapide avant action.</p>
+                </div>
+                <button class="clear-bt modal-close" type="button" id="closeUserModal" onclick="closeUserModal()">x</button>
+            </div>
+
+            <div class="user-detail-shell">
+                <div class="user-detail-top">
+                    <div class="user-title-block">
+                        <h4 id="userMatriculeTitle">MAT</h4>
+                        <div class="user-meta-inline">
+                            <span class="user-meta-pill" id="userRoleLine">Role</span>
+                            <span class="user-meta-pill" id="userType">Categorie</span>
+                            <span class="user-meta-pill" id="userLogicalStatus">Actif</span>
+                        </div>
+                    </div>
+                    <div class="user-side-actions">
+                        <button class="detail-button alt-button" type="button" id="openEditUserForm">Modifier</button>
+                        <button class="detail-button danger-button" type="button" id="deactivateUserButton">Dessactiver</button>
+                    </div>
+                </div>
+
+                <div class="user-info-list">
+                    <div class="user-info-box">
+                        <span>nom</span>
+                        <strong id="userNomField">-</strong>
+                    </div>
+                    <div class="user-info-box">
+                        <span>prenom</span>
+                        <strong id="userPrenomField">-</strong>
+                    </div>
+                    <div class="user-info-box">
+                        <span>email</span>
+                        <strong id="userEmailField">-</strong>
+                    </div>
+                    <div class="user-info-box">
+                        <span>date de naissance</span>
+                        <strong id="userBirthDateField">-</strong>
+                    </div>
+                    <div class="user-info-box">
+                        <span id="userStudentLabel">la classe si c'est un etudiant</span>
+                        <strong id="userStudentField">-</strong>
+                    </div>
+                </div>
+
+                <div class="user-bottom-actions">
+                    <button class="detail-button subtle-button" type="button" id="closeUserModalFooter">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="manageUserModal" class="modal-overlay" hidden>
+        <div class="modal-card user-form-modal" role="dialog" aria-modal="true" aria-labelledby="manageUserTitle">
+            <div class="modal-head">
+                <div>
+                    <h3 id="manageUserTitle">Gestion utilisateur</h3>
+                    <p id="manageUserSubtitle">Creation ou modification d'un compte.</p>
+                </div>
+                <button class="clear-bt modal-close" type="button" id="closeManageUserModal">x</button>
+            </div>
+
+            <form id="manageUserForm" class="manage-user-form">
+                <div class="form-hero">
+                    <div class="form-hero-badge" id="formHeroBadge">CU</div>
+                    <div class="form-hero-copy">
+                        <h4 id="formHeroTitle">Compte utilisateur</h4>
+                        <p>Renseigne les informations essentielles du compte avant validation.</p>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="form-section-head">
+                        <h5>Identite</h5>
+                        <span>Informations principales</span>
+                    </div>
+                    <div class="form-grid-two">
+                        <label>
+                            <span class="field-label">Matricule</span>
+                            <input type="text" name="matricule" id="formMatricule" required readonly placeholder="Genere automatiquement selon le role">
+                            <small class="field-helper" id="matriculeHelper">Choisis un role pour generer automatiquement un matricule unique.</small>
+                        </label>
+                        <label>
+                            <span class="field-label">Role</span>
+                            <select name="role_id" id="formRoleId" required></select>
+                            <small class="field-helper" id="roleHelper">Le role choisi determine automatiquement le prefixe du matricule.</small>
+                        </label>
+                        <label>
+                            <span class="field-label">Nom</span>
+                            <input type="text" name="nom" id="formNom" required>
+                        </label>
+                        <label>
+                            <span class="field-label">Prenom</span>
+                            <input type="text" name="prenom" id="formPrenom" required>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="form-section-head">
+                        <h5>Compte</h5>
+                        <span>Connexion et statut</span>
+                    </div>
+                    <div class="form-grid-two">
+                        <label>
+                            <span class="field-label">Date de naissance</span>
+                            <input type="date" name="date_de_naissance" id="formBirthDate" required>
+                        </label>
+                        <label>
+                            <span class="field-label">Email</span>
+                            <input type="email" name="email" id="formEmail" required>
+                        </label>
+                        <label>
+                            <span class="field-label">Statut</span>
+                            <select name="statut" id="formStatut">
+                                <option value="1">actif</option>
+                                <option value="0">inactif</option>
+                            </select>
+                        </label>
+                        <label>
+                            <span class="field-label">Mot de passe</span>
+                            <input type="password" name="motdepasse" id="formPassword" placeholder="laisser vide si inchange en modification">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-section" id="studentFieldsSection" hidden>
+                    <div class="form-section-head">
+                        <h5>Infos etudiant</h5>
+                        <span>Classe et annee academique</span>
+                    </div>
+                    <div class="form-grid-two">
+                        <label>
+                            <span class="field-label">Classe</span>
+                            <input type="text" name="classe_nom" id="formClasseNom" placeholder="Ex: GL">
+                            <small class="field-helper">Saisis simplement la classe de l'etudiant.</small>
+                        </label>
+                        <label>
+                            <span class="field-label">Niveau</span>
+                            <input type="text" name="niveau" id="formNiveau" placeholder="Ex: L2">
+                            <small class="field-helper">Exemple : L1, L2, L3, M1.</small>
+                        </label>
+                    </div>
+                </div>
+
+                <p id="manageUserFeedback" class="backend-status form-feedback">Remplis le formulaire puis valide.</p>
+
+                <div class="manage-form-actions">
+                    <button class="detail-button" type="submit" id="saveUserButton">Enregistrer</button>
+                    <button class="detail-button subtle-button" type="button" id="cancelManageUserButton">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const adminSearch = document.getElementById('adminSearch');
+        const adminTableBody = document.getElementById('adminTableBody');
+        let adminRows = Array.from(document.querySelectorAll('#adminTableBody .data-row'));
+        let emptyRow = document.querySelector('#adminTableBody .empty-row');
+        const actionsModal = document.getElementById('actionsModal');
+        const openActionsModalButton = document.getElementById('openActionsModal');
+        const closeActionsModalButton = document.getElementById('closeActionsModal');
+        const toggleFullscreenButton = document.getElementById('toggleFullscreenButton');
+        const alertsBadge = document.getElementById('alertsBadge');
+        const summaryUsers = document.getElementById('summaryUsers');
+        const summaryPersonnel = document.getElementById('summaryPersonnel');
+        const summaryStudents = document.getElementById('summaryStudents');
+        const summaryAlerts = document.getElementById('summaryAlerts');
+        const alertsModal = document.getElementById('alertsModal');
+        const openAlertsModalButton = document.getElementById('openAlertsModal');
+        const closeAlertsModalButton = document.getElementById('closeAlertsModal');
+        const loadSecurityLogsButton = document.getElementById('loadSecurityLogsButton');
+        const alertsStatus = document.getElementById('alertsStatus');
+        const alertsList = document.getElementById('alertsList');
+        const showMoreAlertsButton = document.getElementById('showMoreAlertsButton');
+        const modalActionButtons = Array.from(document.querySelectorAll('[data-action-card]'));
+        const actionCards = Array.from(document.querySelectorAll('.action-card'));
+        let rowLinks = Array.from(document.querySelectorAll('.row-link'));
+        const userModal = document.getElementById('userModal');
+        const closeUserModalButton = document.getElementById('closeUserModal');
+        const closeUserModalFooterButton = document.getElementById('closeUserModalFooter');
+        const userMatriculeTitle = document.getElementById('userMatriculeTitle');
+        const userRoleLine = document.getElementById('userRoleLine');
+        const userNomField = document.getElementById('userNomField');
+        const userPrenomField = document.getElementById('userPrenomField');
+        const userEmailField = document.getElementById('userEmailField');
+        const userBirthDateField = document.getElementById('userBirthDateField');
+        const userStudentLabel = document.getElementById('userStudentLabel');
+        const userStudentField = document.getElementById('userStudentField');
+        const userType = document.getElementById('userType');
+        const userLogicalStatus = document.getElementById('userLogicalStatus');
+        const syncBackendButton = document.getElementById('syncBackendButton');
+        const backendStatus = document.getElementById('backendStatus');
+        const studentTableBody = document.getElementById('studentTableBody');
+        const studentBackendStatus = document.getElementById('studentBackendStatus');
+        const deactivateUserButton = document.getElementById('deactivateUserButton');
+        const openDeactivateFromActionsButton = document.getElementById('openDeactivateFromActions');
+        const loadPermissionsSummaryButton = document.getElementById('loadPermissionsSummary');
+        const permissionsSummary = document.getElementById('permissionsSummary');
+        const permissionsRoleSelect = document.getElementById('permissionsRoleSelect');
+        const permissionsEditor = document.getElementById('permissionsEditor');
+        const permissionsGrid = document.getElementById('permissionsGrid');
+        const savePermissionsButton = document.getElementById('savePermissionsButton');
+        const manageUserModal = document.getElementById('manageUserModal');
+        const closeManageUserModalButton = document.getElementById('closeManageUserModal');
+        const cancelManageUserButton = document.getElementById('cancelManageUserButton');
+        const manageUserForm = document.getElementById('manageUserForm');
+        const manageUserTitle = document.getElementById('manageUserTitle');
+        const manageUserSubtitle = document.getElementById('manageUserSubtitle');
+        const manageUserFeedback = document.getElementById('manageUserFeedback');
+        const formHeroBadge = document.getElementById('formHeroBadge');
+        const formHeroTitle = document.getElementById('formHeroTitle');
+        const openCreateUserFormButton = document.getElementById('openCreateUserForm');
+        const openEditUserFormButton = document.getElementById('openEditUserForm');
+        const openEditUserFormFromActionsButton = document.getElementById('openEditUserFormFromActions');
+        const formMatricule = document.getElementById('formMatricule');
+        const formRoleId = document.getElementById('formRoleId');
+        const matriculeHelper = document.getElementById('matriculeHelper');
+        const roleHelper = document.getElementById('roleHelper');
+        const formNom = document.getElementById('formNom');
+        const formPrenom = document.getElementById('formPrenom');
+        const formBirthDate = document.getElementById('formBirthDate');
+        const formEmail = document.getElementById('formEmail');
+        const formStatut = document.getElementById('formStatut');
+        const formPassword = document.getElementById('formPassword');
+        const studentFieldsSection = document.getElementById('studentFieldsSection');
+        const formClasseNom = document.getElementById('formClasseNom');
+        const formNiveau = document.getElementById('formNiveau');
+        const saveUserButton = document.getElementById('saveUserButton');
+        let backendCsrfToken = null;
+        let currentUserMatricule = null;
+        let manageMode = 'create';
+        let rolesCache = [];
+        let permissionsCache = [];
+        let latestAlertsCache = [];
+        let showAllAlerts = false;
+
+        function updateDashboardSummary({ personnelCount, studentCount, alertCount } = {}) {
+            const fallbackPersonnel = document.querySelectorAll('#adminTableBody .data-row').length;
+            const fallbackStudents = document.querySelectorAll('#studentTableBody .data-row').length;
+            const nextPersonnel = typeof personnelCount === 'number' ? personnelCount : fallbackPersonnel;
+            const nextStudents = typeof studentCount === 'number' ? studentCount : fallbackStudents;
+            const nextAlerts = typeof alertCount === 'number' ? alertCount : Number(summaryAlerts.textContent || 0);
+
+            summaryPersonnel.textContent = String(nextPersonnel);
+            summaryStudents.textContent = String(nextStudents);
+            summaryUsers.textContent = String(nextPersonnel + nextStudents);
+            summaryAlerts.textContent = String(nextAlerts);
+        }
+
+        function syncFullscreenButtonLabel() {
+            if (!toggleFullscreenButton) {
+                return;
+            }
+
+            toggleFullscreenButton.setAttribute('aria-label', document.fullscreenElement ? 'Quitter le plein ecran' : 'Plein ecran');
+            toggleFullscreenButton.classList.toggle('is-active', Boolean(document.fullscreenElement));
+        }
+
+        async function toggleFullscreenMode() {
+            try {
+                if (!document.fullscreenElement) {
+                    await document.documentElement.requestFullscreen();
+                } else {
+                    await document.exitFullscreen();
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                syncFullscreenButtonLabel();
+            }
+        }
+
+        function filterAdminRows() {
+            const query = adminSearch.value.trim().toLowerCase();
+            let visibleCount = 0;
+
+            adminRows.forEach((row) => {
+                const text = row.textContent.toLowerCase();
+                const visible = text.includes(query);
+                row.hidden = !visible;
+                if (visible) {
+                    visibleCount += 1;
+                }
+            });
+
+            emptyRow.hidden = visibleCount !== 0;
+        }
+
+        adminSearch.addEventListener('input', filterAdminRows);
+
+        if (toggleFullscreenButton) {
+            toggleFullscreenButton.addEventListener('click', toggleFullscreenMode);
+            document.addEventListener('fullscreenchange', syncFullscreenButtonLabel);
+            syncFullscreenButtonLabel();
+        }
+
+        function openActionsModal() {
+            closeAlertsModal(true);
+            closeUserModal(true);
+            actionsModal.hidden = false;
+            document.body.classList.add('modal-open');
+        }
+
+        function closeActionsModal(silent = false) {
+            actionsModal.hidden = true;
+            if (userModal.hidden && alertsModal.hidden && !silent) {
+                document.body.classList.remove('modal-open');
+            }
+        }
+
+        openActionsModalButton.addEventListener('click', openActionsModal);
+        if (closeActionsModalButton) {
+            closeActionsModalButton.addEventListener('click', closeActionsModal);
+        }
+
+        actionsModal.addEventListener('click', (event) => {
+            if (event.target === actionsModal) {
+                closeActionsModal();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !actionsModal.hidden) {
+                closeActionsModal();
+            }
+        });
+
+        function openAlertsModal() {
+            closeActionsModal(true);
+            closeUserModal(true);
+            alertsModal.hidden = false;
+            document.body.classList.add('modal-open');
+        }
+
+        function closeAlertsModal(silent = false) {
+            alertsModal.hidden = true;
+            if (actionsModal.hidden && userModal.hidden && !silent) {
+                document.body.classList.remove('modal-open');
+            }
+        }
+
+        function renderSecurityLogs(logs) {
+            alertsList.innerHTML = '';
+            updateDashboardSummary({ alertCount: logs.length });
+            latestAlertsCache = logs;
+
+            if (alertsBadge) {
+                alertsBadge.hidden = logs.length === 0;
+                alertsBadge.textContent = String(Math.min(logs.length, 99));
+            }
+
+            const visibleLogs = showAllAlerts ? logs : logs.slice(0, 6);
+            if (showMoreAlertsButton) {
+                showMoreAlertsButton.hidden = logs.length <= 6;
+                showMoreAlertsButton.textContent = showAllAlerts ? 'Voir moins' : 'Voir plus';
+            }
+
+            if (!visibleLogs.length) {
+                alertsList.innerHTML = `
+                    <div class="alert-item alert-empty">
+                        <strong>Aucune alerte recente</strong>
+                        <small>Les journaux de securite sont vides pour le moment.</small>
+                    </div>
+                `;
+                return;
+            }
+
+            visibleLogs.forEach((log) => {
+                const item = document.createElement('article');
+                item.className = 'alert-item';
+                const actor = [log.prenom, log.nom].filter(Boolean).join(' ').trim() || log.mat_user || 'Systeme';
+                const meta = [log.created_at, log.ip_address].filter(Boolean).join(' • ');
+                item.innerHTML = `
+                    <div class="alert-head">
+                        <strong>${log.action || 'action.systeme'}</strong>
+                        <span>${actor}</span>
+                    </div>
+                    <p>${log.description || 'Evenement de securite enregistre.'}</p>
+                    <small>${meta}</small>
+                `;
+                alertsList.appendChild(item);
+            });
+        }
+
+        async function loadSecurityLogs() {
+            try {
+                await ensureBackendSession();
+                alertsStatus.textContent = 'Chargement des journaux de securite...';
+                loadSecurityLogsButton.disabled = true;
+                const data = await backendApi('/admin/security-logs?limit=24');
+                const logs = data.data || [];
+                renderSecurityLogs(logs);
+                alertsStatus.textContent = `${logs.length} alerte(s) chargee(s) depuis le backend.`;
+            } catch (error) {
+                alertsStatus.textContent = "Impossible de charger les alertes depuis le backend.";
+                console.error(error);
+            } finally {
+                loadSecurityLogsButton.disabled = false;
+            }
+        }
+
+        async function refreshAlertsBadge() {
+            try {
+                await ensureBackendSession();
+                const data = await backendApi('/admin/security-logs?limit=24');
+                const logs = data.data || [];
+                latestAlertsCache = logs;
+                updateDashboardSummary({ alertCount: logs.length });
+
+                if (alertsBadge) {
+                    alertsBadge.hidden = logs.length === 0;
+                    alertsBadge.textContent = String(Math.min(logs.length, 99));
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        if (openAlertsModalButton) {
+            openAlertsModalButton.addEventListener('click', async () => {
+                openAlertsModal();
+                if (!latestAlertsCache.length) {
+                    await loadSecurityLogs();
+                }
+            });
+        }
+
+        if (closeAlertsModalButton) {
+            closeAlertsModalButton.addEventListener('click', closeAlertsModal);
+        }
+
+        alertsModal.addEventListener('click', (event) => {
+            if (event.target === alertsModal) {
+                closeAlertsModal();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !alertsModal.hidden) {
+                closeAlertsModal();
+            }
+        });
+
+        if (loadSecurityLogsButton) {
+            loadSecurityLogsButton.addEventListener('click', loadSecurityLogs);
+        }
+
+        if (showMoreAlertsButton) {
+            showMoreAlertsButton.addEventListener('click', () => {
+                showAllAlerts = !showAllAlerts;
+                renderSecurityLogs(latestAlertsCache);
+            });
+        }
+
+        refreshAlertsBadge();
+
+        function activateActionCard(cardId) {
+            actionCards.forEach((card) => {
+                const isActive = card.id === cardId;
+                card.hidden = !isActive;
+                card.classList.toggle('is-active', isActive);
+            });
+        }
+
+        async function showPermissionsSummary() {
+            try {
+                await ensureBackendSession();
+                permissionsSummary.textContent = 'Chargement des roles et permissions...';
+                const [rolesData, permissionsData] = await Promise.all([
+                    backendApi('/admin/roles'),
+                    backendApi('/admin/permissions')
+                ]);
+
+                const roles = rolesData.data || [];
+                const permissions = permissionsData.data || [];
+                permissionsCache = permissions;
+                const roleNames = roles.map((role) => role.name).join(', ') || 'Aucun role';
+                permissionsRoleSelect.innerHTML = '<option value="">Choisir un role</option>';
+                roles.forEach((role) => {
+                    const option = document.createElement('option');
+                    option.value = role.id;
+                    option.textContent = role.name;
+                    permissionsRoleSelect.appendChild(option);
+                });
+                permissionsSummary.innerHTML = `
+                    <strong>${roles.length}</strong> roles detectes : ${roleNames}<br>
+                    <strong>${permissions.length}</strong> permissions disponibles dans le backend.
+                `;
+                permissionsEditor.hidden = true;
+            } catch (error) {
+                permissionsSummary.textContent = "Impossible de charger les permissions depuis le backend.";
+                console.error(error);
+            }
+        }
+
+        async function loadRolePermissionsEditor(roleId) {
+            if (!roleId) {
+                permissionsEditor.hidden = true;
+                permissionsGrid.innerHTML = '';
+                return;
+            }
+
+            try {
+                await ensureBackendSession();
+                permissionsSummary.textContent = 'Chargement des permissions du role...';
+                const data = await backendApi(`/admin/roles/${roleId}/permissions`);
+                const assignedPermissions = (data.data?.permissions || []).map((permission) => permission.id);
+
+                permissionsGrid.innerHTML = '';
+                permissionsCache.forEach((permission) => {
+                    const item = document.createElement('label');
+                    item.className = 'permission-item';
+                    item.innerHTML = `
+                        <input type="checkbox" value="${permission.id}">
+                        <span>
+                            <strong>${permission.code}</strong>
+                            <small>${permission.description || 'Permission systeme'}</small>
+                        </span>
+                    `;
+
+                    const checkbox = item.querySelector('input');
+                    checkbox.checked = assignedPermissions.includes(permission.id);
+                    permissionsGrid.appendChild(item);
+                });
+
+                permissionsEditor.hidden = false;
+                permissionsSummary.textContent = `Permissions du role chargees. Tu peux maintenant ajuster les droits.`;
+            } catch (error) {
+                permissionsEditor.hidden = true;
+                permissionsSummary.textContent = "Impossible de charger les permissions de ce role.";
+                console.error(error);
+            }
+        }
+
+        async function saveRolePermissions() {
+            const roleId = Number(permissionsRoleSelect.value);
+            if (!roleId) {
+                permissionsSummary.textContent = 'Choisis un role avant d enregistrer.';
+                return;
+            }
+
+            const selectedIds = Array.from(permissionsGrid.querySelectorAll('input[type="checkbox"]:checked'))
+                .map((checkbox) => Number(checkbox.value));
+
+            try {
+                await ensureBackendSession();
+                savePermissionsButton.disabled = true;
+                permissionsSummary.textContent = 'Enregistrement des permissions en cours...';
+                await backendApi(`/admin/roles/${roleId}/permissions`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ permission_ids: selectedIds })
+                });
+                permissionsSummary.textContent = 'Permissions mises a jour avec succes.';
+            } catch (error) {
+                permissionsSummary.textContent = "Impossible d'enregistrer les permissions.";
+                console.error(error);
+            } finally {
+                savePermissionsButton.disabled = false;
+            }
+        }
+
+        modalActionButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                activateActionCard(button.dataset.actionCard);
+            });
+        });
+
+        async function openUserModalFromRow(button) {
+            closeAlertsModal(true);
+            closeActionsModal(true);
+            const row = button.closest('tr');
+            const cells = row.querySelectorAll('td');
+            const matricule = cells[0].innerText.trim();
+            const firstValue = cells[1]?.innerText.trim() || '';
+            const secondValue = cells[2]?.innerText.trim() || '';
+            const fourthValue = cells[3]?.innerText.trim() || '';
+            const fifthValue = cells[4]?.innerText.trim() || '';
+            const type = button.dataset.userType === 'etudiant' ? 'Etudiant' : 'Personnel administratif';
+            currentUserMatricule = matricule;
+
+            userMatriculeTitle.textContent = matricule || 'MAT';
+            userRoleLine.textContent = fourthValue;
+            userNomField.textContent = firstValue || '-';
+            userPrenomField.textContent = secondValue || '-';
+            userEmailField.textContent = type === 'Etudiant' ? '-' : (fifthValue || '-');
+            userBirthDateField.textContent = '-';
+            userStudentLabel.textContent = "la classe si c'est un etudiant";
+            userStudentField.textContent = type === 'Etudiant' ? `${fourthValue || '-'} - ${fifthValue || '-'}` : 'non applicable';
+            userType.textContent = type;
+            userLogicalStatus.textContent = 'Actif';
+
+            try {
+                await ensureBackendSession();
+                const data = await backendApi(`/users/${matricule}`);
+                const user = data.data || {};
+
+                userMatriculeTitle.textContent = user.MAT || matricule;
+                userRoleLine.textContent = user.role_name || fourthValue;
+                userNomField.textContent = user.nom || firstValue || '-';
+                userPrenomField.textContent = user.prenom || secondValue || '-';
+                userEmailField.textContent = user.email || fifthValue || '-';
+                userBirthDateField.textContent = user.date_de_naissance || '-';
+                userLogicalStatus.textContent = Number(user.statut) ? 'Actif' : 'Inactif';
+
+                if ((user.role_name || '').toUpperCase() === 'ETUDIANT') {
+                    userType.textContent = 'Etudiant';
+                    userStudentLabel.textContent = "classe / niveau";
+                    userStudentField.textContent = [user.classe_nom, user.classe_niveau || user.annee_etude].filter(Boolean).join(' - ') || '-';
+                } else {
+                    userType.textContent = 'Personnel administratif';
+                    userStudentLabel.textContent = "poste / categorie";
+                    userStudentField.textContent = user.role_name || 'non applicable';
+                }
+            } catch (error) {
+                console.error(error);
+            }
+
+            userModal.hidden = false;
+            document.body.classList.add('modal-open');
+        }
+
+        function closeUserModal(silent = false) {
+            userModal.hidden = true;
+            currentUserMatricule = null;
+            if (actionsModal.hidden && alertsModal.hidden && !silent) {
+                document.body.classList.remove('modal-open');
+            }
+        }
+
+        function bindRowLinks() {
+            rowLinks = Array.from(document.querySelectorAll('.row-link'));
+            rowLinks.forEach((button) => {
+                button.addEventListener('click', async () => openUserModalFromRow(button));
+            });
+        }
+
+        bindRowLinks();
+
+        if (closeUserModalButton) {
+            closeUserModalButton.addEventListener('click', closeUserModal);
+        }
+        if (closeUserModalFooterButton) {
+            closeUserModalFooterButton.addEventListener('click', closeUserModal);
+        }
+
+        userModal.addEventListener('click', (event) => {
+            if (event.target === userModal) {
+                closeUserModal();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !userModal.hidden) {
+                closeUserModal();
+            }
+        });
+
+        async function backendApi(path, options = {}) {
+            const headers = options.headers || {};
+            if (backendCsrfToken) {
+                headers['X-CSRF-Token'] = backendCsrfToken;
+            }
+
+            const response = await fetch(path, {
+                credentials: 'same-origin',
+                ...options,
+                headers
+            });
+
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                throw data;
+            }
+
+            return data;
+        }
+
+        async function loginBackendSession() {
+            const data = await backendApi('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: 'admin@scolarsys.test',
+                    motdepasse: 'Admin1234!'
+                })
+            });
+
+            backendCsrfToken = data.data?.csrf_token || null;
+            return data;
+        }
+
+        async function ensureBackendSession() {
+            if (!backendCsrfToken) {
+                await loginBackendSession();
+            }
+        }
+
+        async function loadRolesForForm() {
+            await ensureBackendSession();
+            const data = await backendApi('/admin/roles');
+            rolesCache = data.data || [];
+            formRoleId.innerHTML = '';
+            if (!rolesCache.length) {
+                formRoleId.innerHTML = '<option value="">Aucun role disponible</option>';
+                return;
+            }
+            rolesCache.forEach((role) => {
+                const option = document.createElement('option');
+                option.value = role.id;
+                option.textContent = `${role.name} (#${role.id})`;
+                formRoleId.appendChild(option);
+            });
+        }
+
+        function syncStudentFieldsVisibility() {
+            const selectedRole = rolesCache.find((role) => String(role.id) === String(formRoleId.value));
+            const isStudent = selectedRole?.name === 'ETUDIANT';
+            studentFieldsSection.hidden = !isStudent;
+            formClasseNom.required = isStudent;
+            formNiveau.required = isStudent;
+
+            if (!isStudent) {
+                formClasseNom.value = '';
+                formNiveau.value = '';
+            }
+        }
+
+        function openManageUserModal() {
+            closeActionsModal(true);
+            closeUserModal(true);
+            manageUserModal.hidden = false;
+            document.body.classList.add('modal-open');
+        }
+
+        function closeManageUserModal(silent = false) {
+            manageUserModal.hidden = true;
+            if (actionsModal.hidden && userModal.hidden && !silent) {
+                document.body.classList.remove('modal-open');
+            }
+        }
+
+        function resetManageUserForm() {
+            manageUserForm.reset();
+            formStatut.value = '1';
+            formMatricule.value = '';
+            manageUserFeedback.textContent = 'Remplis le formulaire puis valide.';
+        }
+
+        async function refreshGeneratedMatricule(roleId) {
+            if (!roleId || manageMode !== 'create') {
+                return;
+            }
+
+            try {
+                formMatricule.value = 'Generation...';
+                const data = await backendApi(`/users/next-matricule?role_id=${roleId}`);
+                formMatricule.value = data.data?.matricule || '';
+            } catch (error) {
+                formMatricule.value = '';
+                manageUserFeedback.textContent = "Impossible de generer le matricule pour ce role.";
+                console.error(error);
+            }
+        }
+
+        async function openCreateUserFlow() {
+            manageMode = 'create';
+            manageUserTitle.textContent = 'Creer un utilisateur';
+            manageUserSubtitle.textContent = "Ajoute un nouveau compte et enregistre-le dans la base.";
+            formHeroBadge.textContent = 'CU';
+            formHeroTitle.textContent = 'Nouveau compte utilisateur';
+            resetManageUserForm();
+            formMatricule.readOnly = true;
+            formRoleId.disabled = false;
+            formPassword.required = true;
+            matriculeHelper.textContent = 'Choisis un role pour generer automatiquement un matricule unique.';
+            roleHelper.textContent = 'Le role choisi determine automatiquement le prefixe du matricule.';
+            openManageUserModal();
+            manageUserFeedback.textContent = 'Chargement des roles...';
+            try {
+                await loadRolesForForm();
+                syncStudentFieldsVisibility();
+                if (formRoleId.value) {
+                    await refreshGeneratedMatricule(Number(formRoleId.value));
+                }
+                manageUserFeedback.textContent = 'Remplis le formulaire puis valide.';
+            } catch (error) {
+                formRoleId.innerHTML = '<option value="">Connexion backend indisponible</option>';
+                manageUserFeedback.textContent = "La fenetre est ouverte, mais le backend ne repond pas pour charger les roles. Verifie que tu es bien sur localhost:8000.";
+                console.error(error);
+            }
+        }
+
+        async function openEditUserFlow() {
+            if (!currentUserMatricule) {
+                manageUserFeedback.textContent = "Ouvre d'abord une fiche utilisateur pour modifier ce compte.";
+                openManageUserModal();
+                return;
+            }
+
+            manageMode = 'edit';
+            manageUserTitle.textContent = 'Modifier un utilisateur';
+            manageUserSubtitle.textContent = `Mets a jour les informations du compte ${currentUserMatricule}.`;
+            formHeroBadge.textContent = 'MU';
+            formHeroTitle.textContent = 'Edition du compte utilisateur';
+            resetManageUserForm();
+            formMatricule.readOnly = true;
+            formRoleId.disabled = true;
+            formPassword.required = false;
+            matriculeHelper.textContent = 'Le matricule est fige apres creation et ne peut plus etre modifie.';
+            roleHelper.textContent = 'Le role est verrouille en modification pour conserver la coherence avec le matricule.';
+            openManageUserModal();
+            manageUserFeedback.textContent = 'Chargement du compte...';
+            try {
+                await loadRolesForForm();
+                const data = await backendApi(`/users/${currentUserMatricule}`);
+                const user = data.data || {};
+                formMatricule.value = user.MAT || currentUserMatricule;
+                formNom.value = user.nom || '';
+                formPrenom.value = user.prenom || '';
+                formBirthDate.value = user.date_de_naissance || '2000-01-01';
+                formEmail.value = user.email || '';
+                formStatut.value = Number(user.statut) ? '1' : '0';
+                const selectedRole = rolesCache.find((role) => role.name === user.role_name);
+                if (selectedRole) {
+                    formRoleId.value = String(selectedRole.id);
+                }
+                syncStudentFieldsVisibility();
+                formClasseNom.value = user.classe_nom || '';
+                formNiveau.value = user.classe_niveau || user.annee_etude || '';
+                manageUserFeedback.textContent = 'Compte charge. Tu peux modifier les informations.';
+            } catch (error) {
+                formRoleId.innerHTML = '<option value="">Connexion backend indisponible</option>';
+                manageUserFeedback.textContent = "La fenetre est ouverte, mais les donnees n'ont pas pu etre chargees. Verifie que tu es bien sur localhost:8000.";
+                console.error(error);
+            }
+        }
+
+        function renderBackendUsers(users) {
+            const personnelUsers = users.filter((user) => !String(user.MAT || '').startsWith('ET-'));
+            const studentUsers = users.filter((user) => String(user.MAT || '').startsWith('ET-'));
+
+            adminTableBody.innerHTML = '';
+
+            if (!personnelUsers.length) {
+                adminTableBody.innerHTML = '<tr class="empty-row"><td colspan="5">Aucun utilisateur remonte depuis le backend.</td></tr>';
+            } else {
+                personnelUsers.forEach((user) => {
+                    const row = document.createElement('tr');
+                    row.className = 'data-row';
+                    row.innerHTML = `
+                        <td><button class="clear-bt row-link" data-user-type="personnel">${user.MAT}</button></td>
+                        <td>${user.nom}</td>
+                        <td>${user.prenom}</td>
+                        <td>${user.role_name}</td>
+                        <td>${user.email}</td>
+                    `;
+                    adminTableBody.appendChild(row);
+                });
+                adminTableBody.insertAdjacentHTML('beforeend', '<tr class="empty-row" hidden><td colspan="5">Aucun resultat pour cette recherche.</td></tr>');
+            }
+
+            adminRows = Array.from(document.querySelectorAll('#adminTableBody .data-row'));
+            emptyRow = document.querySelector('#adminTableBody .empty-row');
+
+            studentTableBody.innerHTML = '';
+            if (!studentUsers.length) {
+                studentTableBody.innerHTML = '<tr><td colspan="5">Aucun etudiant remonte depuis le backend.</td></tr>';
+            } else {
+                    studentUsers.forEach((user) => {
+                        const row = document.createElement('tr');
+                        row.className = 'data-row';
+                        row.innerHTML = `
+                            <td><button class="clear-bt row-link" data-user-type="etudiant">${user.MAT}</button></td>
+                            <td>${user.nom}</td>
+                            <td>${user.prenom}</td>
+                            <td>${user.annee_etude || user.classe_niveau || '-'}</td>
+                            <td>${user.classe_nom || '-'}</td>
+                        `;
+                        studentTableBody.appendChild(row);
+                    });
+                }
+
+            bindRowLinks();
+            filterAdminRows();
+            studentBackendStatus.textContent = 'Donnees etudiants rechargees depuis le backend.';
+            updateDashboardSummary({
+                personnelCount: personnelUsers.length,
+                studentCount: studentUsers.length
+            });
+        }
+
+        syncBackendButton.addEventListener('click', async () => {
+            try {
+                backendStatus.textContent = 'Connexion au backend en cours...';
+                syncBackendButton.disabled = true;
+                await loginBackendSession();
+                const usersData = await backendApi('/users');
+                renderBackendUsers(usersData.data || []);
+                backendStatus.textContent = 'Donnees backend chargees avec succes.';
+            } catch (error) {
+                backendStatus.textContent = 'Impossible de charger les donnees backend.';
+                console.error(error);
+            } finally {
+                syncBackendButton.disabled = false;
+            }
+        });
+
+        if (openCreateUserFormButton) {
+            openCreateUserFormButton.addEventListener('click', async () => {
+                try {
+                    await openCreateUserFlow();
+                } catch (error) {
+                    backendStatus.textContent = "Impossible d'ouvrir le formulaire de creation.";
+                    console.error(error);
+                }
+            });
+        }
+
+        if (openEditUserFormButton) {
+            openEditUserFormButton.addEventListener('click', async () => {
+                try {
+                    await ensureBackendSession();
+                    await openEditUserFlow();
+                } catch (error) {
+                    backendStatus.textContent = "Impossible d'ouvrir le formulaire de modification.";
+                    console.error(error);
+                }
+            });
+        }
+
+        if (openEditUserFormFromActionsButton) {
+            openEditUserFormFromActionsButton.addEventListener('click', async () => {
+                try {
+                    await ensureBackendSession();
+                    await openEditUserFlow();
+                } catch (error) {
+                    backendStatus.textContent = "Impossible d'ouvrir le formulaire de modification.";
+                    console.error(error);
+                }
+            });
+        }
+
+        if (openDeactivateFromActionsButton) {
+            openDeactivateFromActionsButton.addEventListener('click', async () => {
+                if (!currentUserMatricule) {
+                    backendStatus.textContent = "Selectionne d'abord un utilisateur avant de lancer la desactivation.";
+                    closeActionsModal();
+                    return;
+                }
+
+                closeActionsModal();
+                await deactivateCurrentUser();
+            });
+        }
+
+        if (loadPermissionsSummaryButton) {
+            loadPermissionsSummaryButton.addEventListener('click', showPermissionsSummary);
+        }
+
+        if (permissionsRoleSelect) {
+            permissionsRoleSelect.addEventListener('change', async () => {
+                await loadRolePermissionsEditor(Number(permissionsRoleSelect.value));
+            });
+        }
+
+        if (formRoleId) {
+            formRoleId.addEventListener('change', async () => {
+                syncStudentFieldsVisibility();
+                if (manageMode === 'create') {
+                    await refreshGeneratedMatricule(Number(formRoleId.value));
+                }
+            });
+        }
+
+        if (savePermissionsButton) {
+            savePermissionsButton.addEventListener('click', saveRolePermissions);
+        }
+
+        if (closeManageUserModalButton) {
+            closeManageUserModalButton.addEventListener('click', closeManageUserModal);
+        }
+
+        if (cancelManageUserButton) {
+            cancelManageUserButton.addEventListener('click', closeManageUserModal);
+        }
+
+        manageUserModal.addEventListener('click', (event) => {
+            if (event.target === manageUserModal) {
+                closeManageUserModal();
+            }
+        });
+
+        manageUserForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            try {
+                await ensureBackendSession();
+                saveUserButton.disabled = true;
+                manageUserFeedback.textContent = 'Enregistrement en cours...';
+
+                const payload = {
+                    nom: formNom.value.trim(),
+                    prenom: formPrenom.value.trim(),
+                    date_de_naissance: formBirthDate.value,
+                    email: formEmail.value.trim(),
+                    role_id: Number(formRoleId.value),
+                    statut: Number(formStatut.value)
+                };
+
+                if (!studentFieldsSection.hidden) {
+                    payload.classe_nom = formClasseNom.value.trim();
+                    payload.niveau = formNiveau.value.trim();
+                }
+
+                if (formPassword.value.trim()) {
+                    payload.motdepasse = formPassword.value.trim();
+                }
+
+                if (manageMode === 'create') {
+                    if (!payload.motdepasse) {
+                        throw new Error('Le mot de passe est obligatoire pour la creation.');
+                    }
+
+                    const createResponse = await backendApi('/users', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    backendStatus.textContent = `Utilisateur ${createResponse.matricule || formMatricule.value} cree avec succes.`;
+                } else {
+                    payload.matricule = formMatricule.value.trim();
+                    await backendApi(`/users/${payload.matricule}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    backendStatus.textContent = `Utilisateur ${payload.matricule} modifie avec succes.`;
+                }
+
+                const usersData = await backendApi('/users');
+                renderBackendUsers(usersData.data || []);
+                closeManageUserModal();
+            } catch (error) {
+                manageUserFeedback.textContent = error.message || error.message || "Erreur lors de l'enregistrement.";
+                console.error(error);
+            } finally {
+                saveUserButton.disabled = false;
+            }
+        });
+
+        async function deactivateCurrentUser() {
+            if (!currentUserMatricule) {
+                return;
+            }
+
+            if (!confirm(`Desactiver le compte ${currentUserMatricule} ?`)) {
+                return;
+            }
+
+            try {
+                if (!backendCsrfToken) {
+                    await loginBackendSession();
+                }
+
+                await backendApi(`/users/${currentUserMatricule}`, { method: 'DELETE' });
+                userLogicalStatus.textContent = 'Desactive';
+                backendStatus.textContent = `Le compte ${currentUserMatricule} a ete desactive via le backend.`;
+                const usersData = await backendApi('/users');
+                renderBackendUsers(usersData.data || []);
+                closeUserModal();
+            } catch (error) {
+                backendStatus.textContent = `Impossible de desactiver ${currentUserMatricule}.`;
+                console.error(error);
+            }
+        }
+
+        deactivateUserButton.addEventListener('click', async () => {
+            await deactivateCurrentUser();
+        });
+
+        window.openActionsModal = openActionsModal;
+        window.closeActionsModal = closeActionsModal;
+        window.closeAlertsModal = closeAlertsModal;
+        window.closeUserModal = closeUserModal;
+        window.closeManageUserModal = closeManageUserModal;
+        updateDashboardSummary();
+    </script>
+</body>
+</html>

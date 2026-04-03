@@ -52,6 +52,11 @@ class AdminController
         $this->jsonResponse(['data' => $this->roleService->listRecentSecurityLogs($limit)]);
     }
 
+    public function classes(array $classes): void
+    {
+        $this->jsonResponse(['data' => $classes]);
+    }
+
     private function getInput(): array
     {
         $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
