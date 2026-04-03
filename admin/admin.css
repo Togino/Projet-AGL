@@ -194,6 +194,7 @@ hr {
     width: 76.2%;
     display: flex;
     flex-direction: column;
+<<<<<<< HEAD
     gap: 20px;
     padding: 18px;
     overflow-y: auto;
@@ -216,6 +217,8 @@ hr {
 .section-head {
     display: flex;
     justify-content: space-between;
+=======
+>>>>>>> 96ef20117b82bca3bcc0ac5af5394851a9663f26
     align-items: center;
     gap: 16px;
     margin-bottom: 14px;
@@ -233,9 +236,20 @@ hr {
     gap: 12px;
 }
 
+<<<<<<< HEAD
 .section-head h2 {
     margin: 0;
     font-size: 20px;
+=======
+#d3>div{
+    width: 90%;
+    min-height: 70%; 
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid #333;
+    border-radius: 10px;
+    margin: 10px 0;
+>>>>>>> 96ef20117b82bca3bcc0ac5af5394851a9663f26
 }
 
 .section-head span {
@@ -299,9 +313,14 @@ hr {
 table {
     width: 100%;
     border-collapse: collapse;
+<<<<<<< HEAD
     border-radius: 14px;
     overflow: hidden;
     background: var(--surface);
+=======
+    overflow: hidden;
+    overflow-y: auto;
+>>>>>>> 96ef20117b82bca3bcc0ac5af5394851a9663f26
 }
 
 thead th {
@@ -314,7 +333,14 @@ th,
 td {
     padding: 14px 12px;
     text-align: left;
+<<<<<<< HEAD
     border-bottom: 1px solid #ece5d8;
+=======
+    border-bottom: 1px solid #ddd;
+}
+th{
+    background-color: #6e6eff;
+>>>>>>> 96ef20117b82bca3bcc0ac5af5394851a9663f26
 }
 
 th {
