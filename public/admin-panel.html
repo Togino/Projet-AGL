@@ -47,6 +47,7 @@
                 <p>Vous</p>
             </div>
 
+           
 
             <div class="sidebar-section">
                 <button class="clear-bt icon-bt" type="button" onclick="location.href='admin-demo.html'">
@@ -1548,37 +1549,6 @@
                     });
                     const createdMatricule = createResponse.matricule || formMatricule.value;
                     backendStatus.textContent = `Utilisateur ${createdMatricule} cree avec succes.`;
-                    markFeedbackSuccess(`Compte ${createdMatricule} cree avec succes.`);
-                    if (createResponse.motdepasse) {
-                        showGeneratedPassword(createResponse.motdepasse);
-                    }
-                } else {
-                    payload.matricule = formMatricule.value.trim();
-                    await backendApi(`/users/${payload.matricule}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    backendStatus.textContent = `Utilisateur ${payload.matricule} modifie avec succes.`;
-                    markFeedbackSuccess(`Compte ${payload.matricule} mis a jour avec succes.`);
-                }
-
-                const usersData = await backendApi('/users');
-                renderBackendUsers(usersData.data || []);
-                if (manageMode === 'edit') {
-                    setTimeout(() => closeManageUserModal(), 450);
-                }
-            } catch (error) {
-                manageUserFeedback.textContent = error.message || error.message || "Erreur lors de l'enregistrement.";
-                console.error(error);
-            } finally {
-                saveUserButton.disabled = false;
-            }
-        });
-
-        if (copyGeneratedPasswordButton) {
-            copyGeneratedPasswordButton.addEventListener('click', async () => {
-       `Utilisateur ${createdMatricule} cree avec succes.`;
                     markFeedbackSuccess(`Compte ${createdMatricule} cree avec succes.`);
                     if (createResponse.motdepasse) {
                         showGeneratedPassword(createResponse.motdepasse);
