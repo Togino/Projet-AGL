@@ -47,7 +47,9 @@ class User
     public function listAll(): array
     {
         $sql = "SELECT u.MAT, u.nom, u.prenom, u.date_de_naissance, u.email, u.statut,
-                       u.created_at, r.name AS role_name,
+                       u.created_at, u.deactivation_reason, u.deactivated_at, u.deactivated_by,
+                       u.deletion_requested, u.deletion_requested_at, u.deletion_requested_by,
+                       r.name AS role_name,
                        e.classe_id, e.annee_etude, c.nom AS classe_nom, c.niveau AS classe_niveau
                 FROM utilisateur u
                 INNER JOIN roles r ON r.id = u.role_id
@@ -149,16 +151,26 @@ class User
         }
     }
 
-    public function softDelete(string $matricule, ?string $updatedBy): bool
+    public function softDelete(string $matricule, ?string $updatedBy, array $data): bool
     {
         $statement = $this->pdo->prepare(
             "UPDATE utilisateur
-             SET statut = FALSE, deleted_at = NOW(), updated_by = :updated_by
+             SET statut = FALSE,
+                 deactivation_reason = :deactivation_reason,
+                 deactivated_at = NOW(),
+                 deactivated_by = :deactivated_by,
+                 deletion_requested = :deletion_requested,
+                 deletion_requested_at = CASE WHEN :deletion_requested = 1 THEN NOW() ELSE NULL END,
+                 deletion_requested_by = CASE WHEN :deletion_requested = 1 THEN :deactivated_by ELSE NULL END,
+                 updated_by = :updated_by
              WHERE MAT = :matricule AND deleted_at IS NULL"
         );
 
         return $statement->execute([
             'matricule' => $matricule,
+            'deactivation_reason' => $data['deactivation_reason'],
+            'deactivated_by' => $updatedBy,
+            'deletion_requested' => (int) $data['deletion_requested'],
             'updated_by' => $updatedBy,
         ]);
     }

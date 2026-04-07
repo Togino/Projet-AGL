@@ -12,7 +12,7 @@ declare(strict_types=1);
 <body>
     <main>
         <div id="d1">
-            <img src="../images/image.png" alt="logo"><br>
+            <img src="image.png" alt="logo"><br>
             <p>UIE</p>
             <nav>
                 <button id="bo-nav">ACCUEIL</button>

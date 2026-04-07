@@ -33,6 +33,14 @@ CREATE TABLE utilisateur(
     role_id INT NOT NULL,
     statut BOOLEAN DEFAULT TRUE,
     deleted_at DATETIME NULL,
+    deactivation_reason TEXT NULL,
+    deactivated_at DATETIME NULL,
+    deactivated_by VARCHAR(10) NULL,
+    deletion_requested BOOLEAN DEFAULT FALSE,
+    deletion_requested_at DATETIME NULL,
+    deletion_requested_by VARCHAR(10) NULL,
+    reactivated_at DATETIME NULL,
+    reactivated_by VARCHAR(10) NULL,
     created_by VARCHAR(10) NULL,
     updated_by VARCHAR(10) NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -58,6 +66,20 @@ CREATE TABLE security_logs (
     CONSTRAINT fk_security_logs_user FOREIGN KEY(mat_user) REFERENCES utilisateur(MAT) ON DELETE SET NULL
 );
 
+CREATE TABLE admin_alerts (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    type VARCHAR(100) NOT NULL,
+    severity ENUM('low', 'medium', 'high') NOT NULL DEFAULT 'medium',
+    title VARCHAR(150) NOT NULL,
+    message TEXT NOT NULL,
+    target_mat_user VARCHAR(10) NULL,
+    created_by VARCHAR(10) NULL,
+    is_read BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_admin_alerts_target FOREIGN KEY(target_mat_user) REFERENCES utilisateur(MAT) ON DELETE SET NULL,
+    CONSTRAINT fk_admin_alerts_creator FOREIGN KEY(created_by) REFERENCES utilisateur(MAT) ON DELETE SET NULL
+);
+
 CREATE TABLE backup_jobs (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     entity_type VARCHAR(50) NOT NULL,
@@ -78,6 +100,13 @@ CREATE TABLE PA(
         post IN ('ADMIN', 'ENSEIGNANT', 'GESTIONNAIRE')
     ),
     CONSTRAINT fk_PA_utilisateur FOREIGN KEY(MAT) REFERENCES utilisateur(MAT) ON DELETE CASCADE
+);
+
+CREATE TABLE enseignant(
+    MAT VARCHAR(10),
+    specialisation VARCHAR(100) NULL,
+    CONSTRAINT pk_enseignant PRIMARY KEY(MAT),
+    CONSTRAINT fk_enseignant_pa FOREIGN KEY(MAT) REFERENCES PA(MAT) ON DELETE CASCADE
 );
 
 CREATE TABLE classe (
@@ -115,6 +144,17 @@ CREATE TABLE enseigner (
     CONSTRAINT fk_enseigner_module FOREIGN KEY (module_id) REFERENCES module(ID) ON DELETE CASCADE
 );
 
+CREATE TABLE enseignement_affectation (
+    MAT_enseignant VARCHAR(10) NOT NULL,
+    module_id INT NOT NULL,
+    classe_id INT NOT NULL,
+    annee_scolaire VARCHAR(20) NULL,
+    PRIMARY KEY (MAT_enseignant, module_id, classe_id),
+    CONSTRAINT fk_affectation_enseignant FOREIGN KEY (MAT_enseignant) REFERENCES enseignant(MAT) ON DELETE CASCADE,
+    CONSTRAINT fk_affectation_module FOREIGN KEY (module_id) REFERENCES module(ID) ON DELETE CASCADE,
+    CONSTRAINT fk_affectation_classe FOREIGN KEY (classe_id) REFERENCES classe(ID) ON DELETE CASCADE
+);
+
 CREATE TABLE note (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     MAT_ET VARCHAR(10) NOT NULL,
@@ -146,7 +186,7 @@ INSERT INTO roles (name, description) VALUES
 INSERT INTO permissions (code, description) VALUES
 ('dashboard.view', 'Acceder au tableau de bord'),
 ('users.create', 'Creer un utilisateur'),
-('users.read', 'Consulter les utilisateurs'),²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²
+('users.read', 'Consulter les utilisateurs'),
 ('users.update', 'Modifier un utilisateur'),
 ('users.delete', 'Supprimer logiquement un utilisateur'),
 ('roles.manage', 'Gerer les roles et permissions'),

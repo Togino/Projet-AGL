@@ -2,11 +2,12 @@
 
 namespace App\Controllers;
 
+use App\Services\AdminAlertService;
 use App\Services\RoleService;
 
 class AdminController
 {
-    public function __construct(private RoleService $roleService)
+    public function __construct(private RoleService $roleService, private AdminAlertService $adminAlertService)
     {
     }
 
@@ -50,6 +51,12 @@ class AdminController
     {
         $limit = isset($_GET['limit']) ? (int) $_GET['limit'] : 50;
         $this->jsonResponse(['data' => $this->roleService->listRecentSecurityLogs($limit)]);
+    }
+
+    public function alerts(): void
+    {
+        $limit = isset($_GET['limit']) ? (int) $_GET['limit'] : 50;
+        $this->jsonResponse(['data' => $this->adminAlertService->listRecent($limit)]);
     }
 
     public function classes(array $classes): void

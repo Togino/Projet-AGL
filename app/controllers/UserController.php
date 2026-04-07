@@ -46,8 +46,13 @@ class UserController
     {
         try {
             $payload = $this->getInput();
-            $matricule = $this->userService->createUser($payload, $_SESSION['matricule']);
-            $this->jsonResponse(['message' => 'Utilisateur cree.', 'matricule' => $matricule], 201);
+            $createdUser = $this->userService->createUser($payload, $_SESSION['matricule']);
+            $this->jsonResponse([
+                'message' => 'Utilisateur cree.',
+                'matricule' => $createdUser['matricule'],
+                'motdepasse' => $createdUser['motdepasse'],
+                'generated_password' => $createdUser['generated_password'],
+            ], 201);
         } catch (\Throwable $exception) {
             $this->jsonResponse(['message' => $exception->getMessage()], 422);
         }
@@ -66,7 +71,8 @@ class UserController
 
     public function destroy(string $matricule): void
     {
-        $deleted = $this->userService->softDeleteUser($matricule, $_SESSION['matricule']);
+        $payload = $this->getInput();
+        $deleted = $this->userService->softDeleteUser($matricule, $_SESSION['matricule'], $payload);
 
         if (!$deleted) {
             $this->jsonResponse(['message' => 'Utilisateur introuvable ou deja supprime.'], 404);

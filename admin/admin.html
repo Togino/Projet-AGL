@@ -10,7 +10,7 @@
     <main>
         <div id="d1">
             <div class="brand-block">
-                <img src="../images/image.png" alt="logo">
+                <img src="image.png" alt="logo">
                 <div class="brand-copy">
                     <p class="brand-title">UIE</p>
                     <span class="brand-subtitle">Interface administrateur</span>
@@ -19,8 +19,23 @@
 
             <nav>
                 <button class="clear-bt bo-nav" type="button">ACCUEIL</button>
-                <button class="clear-bt bo-nav" type="button" onclick="location.href='alert.php'">ALERTES</button>
+                <button class="clear-bt nav-icon-button alert-nav" type="button" id="openAlertsModal" aria-label="Alertes">
+                    <span class="nav-icon-badge" id="alertsBadge" hidden>0</span>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 3.75C9.38 3.75 7.25 5.88 7.25 8.5V10.79C7.25 11.27 7.05 12 6.81 12.41L5.94 13.86C5.4 14.77 5.77 15.78 6.76 16.11C10.04 17.2 13.97 17.2 17.25 16.11C18.18 15.8 18.58 14.71 18.07 13.86L17.2 12.41C16.96 12 16.76 11.27 16.76 10.79V8.5C16.75 5.88 14.62 3.75 12 3.75Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        <path d="M13.46 4.02C13.22 3.95 12.98 3.9 12.73 3.87C12.02 3.78 11.34 3.83 10.7 4.02C10.92 3.46 11.42 3.07 12.02 3.07C12.62 3.07 13.12 3.46 13.46 4.02Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M14.5 16.38C14.5 17.76 13.38 18.88 12 18.88C11.31 18.88 10.67 18.59 10.21 18.13C9.75 17.67 9.46 17.03 9.46 16.34" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
                 <button class="clear-bt bo-nav" type="button" id="openActionsModal">ACTIONS</button>
+                <button class="clear-bt nav-icon-button fullscreen-nav" type="button" id="toggleFullscreenButton" aria-label="Plein ecran">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 3.75H5.75C4.65 3.75 3.75 4.65 3.75 5.75V8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 3.75H18.25C19.35 3.75 20.25 4.65 20.25 5.75V8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M20.25 16V18.25C20.25 19.35 19.35 20.25 18.25 20.25H16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 20.25H5.75C4.65 20.25 3.75 19.35 3.75 18.25V16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
             </nav>
         </div>
 
@@ -32,13 +47,10 @@
                 <p>Vous</p>
             </div>
 
-            <div class="sidebar-note">
-                <h3>Tableau de bord</h3>
-                <p>Vue rapide des personnels et etudiants disponibles dans l'interface.</p>
-            </div>
+           
 
             <div class="sidebar-section">
-                <button class="clear-bt icon-bt" type="button" onclick="location.href='../public/admin-demo.html'">
+                <button class="clear-bt icon-bt" type="button" onclick="location.href='admin-demo.html'">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.8999 7.56023C9.2099 3.96023 11.0599 2.49023 15.1099 2.49023H15.2399C19.7099 2.49023 21.4999 4.28023 21.4999 8.75023V15.2702C21.4999 19.7402 19.7099 21.5302 15.2399 21.5302H15.1099C11.0899 21.5302 9.2399 20.0802 8.9099 16.5402" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M15.0001 12H3.62012" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M5.85 8.65039L2.5 12.0004L5.85 15.3504" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
                 </button>
                 <p>Se déconnecter</p>
@@ -48,6 +60,29 @@
         </div>
 
         <div id="d3">
+            <div class="summary-grid">
+                <article class="summary-card accent-card">
+                    <span class="summary-label">Utilisateurs visibles</span>
+                    <strong class="summary-value" id="summaryUsers">24</strong>
+                    <p class="summary-note">Comptes actuellement affiches dans le tableau de bord.</p>
+                </article>
+                <article class="summary-card">
+                    <span class="summary-label">Personnel</span>
+                    <strong class="summary-value" id="summaryPersonnel">12</strong>
+                    <p class="summary-note">Profils admin, gestionnaires et enseignants.</p>
+                </article>
+                <article class="summary-card">
+                    <span class="summary-label">Etudiants</span>
+                    <strong class="summary-value" id="summaryStudents">12</strong>
+                    <p class="summary-note">Etudiants remontes dans l'espace courant.</p>
+                </article>
+                <article class="summary-card">
+                    <span class="summary-label">Alertes recentes</span>
+                    <strong class="summary-value" id="summaryAlerts">0</strong>
+                    <p class="summary-note">Mise a jour lors du chargement des journaux de securite.</p>
+                </article>
+            </div>
+
             <div class="content-card">
                 <div class="section-head">
                     <div class="head-copy">
@@ -99,7 +134,7 @@
                         <h2>Etudiants</h2>
                         <span>Vue rapide par niveau et classe</span>
                     </div>
-                    <a class="mini-link" href="../public/admin-demo.html">Ouvrir le backend</a>
+                    <a class="mini-link" href="admin-demo.html">Ouvrir le backend</a>
                 </div>
                 <div class="table-shell">
                     <table>
@@ -153,7 +188,7 @@
             </div>
 
             <div class="modal-actions">
-                <button class="modal-action" type="button" data-action-card="createUserCard">
+                <button class="modal-action" type="button" data-action-card="backendCard">
                     <strong>Tester le backend</strong>
                     <span>Acceder a l'espace technique</span>
                 </button>
@@ -180,7 +215,18 @@
             </div>
 
             <div class="modal-detail">
-                <article id="createUserCard" class="action-card is-active">
+                <article id="backendCard" class="action-card is-active">
+                    <h4>Console technique</h4>
+                    <p>Cette zone ouvre l'interface de test backend pour verifier rapidement les routes API, les roles, les logs et les appels techniques.</p>
+                    <div class="action-tags">
+                        <span>API</span>
+                        <span>Tests</span>
+                        <span>Debug</span>
+                    </div>
+                    <a class="detail-button mini-link" href="admin-demo.html">Ouvrir la console backend</a>
+                </article>
+
+                <article id="createUserCard" class="action-card" hidden>
                     <h4>Creation d'utilisateur</h4>
                     <p>Cette action sert a ouvrir l'espace backend pour enregistrer un nouvel utilisateur avec son matricule, son role et son mot de passe securise.</p>
                     <div class="action-tags">
@@ -188,7 +234,7 @@
                         <span>Validation</span>
                         <span>Trace</span>
                     </div>
-                    <button class="detail-button" type="button" onclick="location.href='../public/admin-demo.html'">Ouvrir la creation</button>
+                    <button class="detail-button" type="button" id="openCreateUserForm">Ouvrir la creation</button>
                 </article>
 
                 <article id="editUserCard" class="action-card" hidden>
@@ -199,7 +245,7 @@
                         <span>Historique</span>
                         <span>Controle</span>
                     </div>
-                    <button class="detail-button" type="button" onclick="location.href='../public/admin-demo.html'">Ouvrir la modification</button>
+                    <button class="detail-button" type="button" id="openEditUserFormFromActions">Ouvrir la modification</button>
                 </article>
 
                 <article id="deleteUserCard" class="action-card" hidden>
@@ -210,7 +256,7 @@
                         <span>Securite</span>
                         <span>Archivage</span>
                     </div>
-                    <button class="detail-button" type="button" onclick="location.href='../public/admin-demo.html'">Ouvrir la desactivation</button>
+                    <button class="detail-button danger-button" type="button" id="openDeactivateFromActions">Lancer la desactivation</button>
                 </article>
 
                 <article id="permissionsCard" class="action-card" hidden>
@@ -221,8 +267,52 @@
                         <span>Droits</span>
                         <span>Protection</span>
                     </div>
-                    <button class="detail-button" type="button" onclick="location.href='../public/admin-demo.html#roles'">Ouvrir les permissions</button>
+                    <div class="permissions-toolbar">
+                        <label class="permissions-role-picker">
+                            <span class="field-label">Role cible</span>
+                            <select id="permissionsRoleSelect">
+                                <option value="">Choisir un role</option>
+                            </select>
+                        </label>
+                        <button class="detail-button alt-button" type="button" id="loadPermissionsSummary">Afficher les roles</button>
+                    </div>
+                    <div id="permissionsSummary" class="action-output">Charge les roles et permissions depuis le backend.</div>
+                    <div id="permissionsEditor" class="permissions-editor" hidden>
+                        <div class="permissions-grid" id="permissionsGrid"></div>
+                        <div class="permissions-actions">
+                            <button class="detail-button" type="button" id="savePermissionsButton">Enregistrer les permissions</button>
+                        </div>
+                    </div>
                 </article>
+            </div>
+        </div>
+    </div>
+
+    <div id="alertsModal" class="modal-overlay" hidden>
+        <div class="modal-card alerts-modal-card" role="dialog" aria-modal="true" aria-labelledby="alertsModalTitle">
+            <div class="modal-head">
+                <div>
+                    <h3 id="alertsModalTitle">Alertes et journaux</h3>
+                    <p>Suivi rapide des actions sensibles et des evenements de securite.</p>
+                </div>
+                <button class="clear-bt modal-close" type="button" id="closeAlertsModal">x</button>
+            </div>
+
+            <div class="alerts-toolbar">
+                <button class="detail-button alt-button" type="button" id="loadSecurityLogsButton">Charger les alertes</button>
+            </div>
+
+            <div id="alertsStatus" class="action-output">Clique sur "Charger les alertes" pour afficher les journaux recents.</div>
+
+            <div id="alertsList" class="alerts-list">
+                <div class="alert-item alert-empty">
+                    <strong>Aucune alerte chargee</strong>
+                    <small>Les derniers evenements sensibles apparaitront ici.</small>
+                </div>
+            </div>
+
+            <div class="alerts-footer-tools">
+                <button class="detail-button subtle-button" type="button" id="showMoreAlertsButton" hidden>Voir plus</button>
             </div>
         </div>
     </div>
@@ -237,39 +327,190 @@
                 <button class="clear-bt modal-close" type="button" id="closeUserModal" onclick="closeUserModal()">x</button>
             </div>
 
-            <div class="user-profile">
-                <div class="user-avatar" id="userAvatar">UI</div>
+            <div class="user-detail-shell">
+                <div class="user-detail-top">
+                    <div class="user-title-block">
+                        <h4 id="userMatriculeTitle">MAT</h4>
+                        <div class="user-meta-inline">
+                            <span class="user-meta-pill" id="userRoleLine">Role</span>
+                            <span class="user-meta-pill" id="userType">Categorie</span>
+                            <span class="user-meta-pill" id="userLogicalStatus">Actif</span>
+                        </div>
+                    </div>
+                    <div class="user-side-actions">
+                        <button class="detail-button alt-button" type="button" id="openEditUserForm">Modifier</button>
+                        <button class="detail-button danger-button" type="button" id="deactivateUserButton">Dessactiver</button>
+                    </div>
+                </div>
+
+                <div class="user-info-list">
+                    <div class="user-info-box">
+                        <span>nom</span>
+                        <strong id="userNomField">-</strong>
+                    </div>
+                    <div class="user-info-box">
+                        <span>prenom</span>
+                        <strong id="userPrenomField">-</strong>
+                    </div>
+                    <div class="user-info-box">
+                        <span>email</span>
+                        <strong id="userEmailField">-</strong>
+                    </div>
+                    <div class="user-info-box">
+                        <span>date de naissance</span>
+                        <strong id="userBirthDateField">-</strong>
+                    </div>
+                    <div class="user-info-box">
+                        <span id="userStudentLabel">la classe si c'est un etudiant</span>
+                        <strong id="userStudentField">-</strong>
+                    </div>
+                </div>
+
+                <div class="user-bottom-actions">
+                    <button class="detail-button subtle-button" type="button" id="closeUserModalFooter">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="deactivationModal" class="modal-overlay" hidden>
+        <div class="modal-card deactivation-modal-card" role="dialog" aria-modal="true" aria-labelledby="deactivationModalTitle">
+            <div class="modal-head">
                 <div>
-                    <h4 id="userFullName">Nom complet</h4>
-                    <p id="userRoleLine">Role</p>
+                    <h3 id="deactivationModalTitle">Desactivation du compte</h3>
+                    <p id="deactivationModalSubtitle">Precise le motif avant validation.</p>
                 </div>
+                <button class="clear-bt modal-close" type="button" id="closeDeactivationModal">x</button>
             </div>
 
-            <div class="user-grid">
-                <div class="user-field">
-                    <span>Matricule</span>
-                    <strong id="userMatricule">-</strong>
+            <form id="deactivationForm" class="deactivation-form">
+                <div class="form-section">
+                    <div class="form-section-head">
+                        <h5>Justification</h5>
+                        <span>Securite et traçabilite</span>
+                    </div>
+
+                    <label>
+                        <span class="field-label">Motif</span>
+                        <textarea id="deactivationReason" rows="4" placeholder="Explique pourquoi ce compte doit etre desactive." required></textarea>
+                    </label>
+
+                    <label class="checkbox-row">
+                        <input type="checkbox" id="deletionRequestCheckbox">
+                        <span>Ajouter une demande de suppression en plus de la desactivation</span>
+                    </label>
                 </div>
-                <div class="user-field">
-                    <span>Email / Info</span>
-                    <strong id="userInfo">-</strong>
+
+                <p id="deactivationFeedback" class="backend-status form-feedback">Renseigne le motif avant de confirmer.</p>
+
+                <div class="manage-form-actions">
+                    <button class="detail-button danger-button" type="submit" id="confirmDeactivationButton">Confirmer</button>
+                    <button class="detail-button subtle-button" type="button" id="cancelDeactivationButton">Annuler</button>
                 </div>
-                <div class="user-field">
-                    <span>Categorie</span>
-                    <strong id="userType">-</strong>
+            </form>
+        </div>
+    </div>
+
+    <div id="manageUserModal" class="modal-overlay" hidden>
+        <div class="modal-card user-form-modal" role="dialog" aria-modal="true" aria-labelledby="manageUserTitle">
+            <div class="modal-head">
+                <div>
+                    <h3 id="manageUserTitle">Gestion utilisateur</h3>
+                    <p id="manageUserSubtitle">Creation ou modification d'un compte.</p>
                 </div>
-                <div class="user-field">
-                    <span>Statut logique</span>
-                    <strong id="userLogicalStatus">Actif</strong>
-                </div>
+                <button class="clear-bt modal-close" type="button" id="closeManageUserModal">x</button>
             </div>
 
-            <div class="user-actions">
-                <button class="detail-button" type="button" onclick="location.href='../public/admin-demo.html'">Modifier</button>
-                <button class="detail-button alt-button" type="button" onclick="location.href='../public/admin-demo.html#roles'">Permissions</button>
-                <button class="detail-button danger-button" type="button" id="deactivateUserButton">Desactiver</button>
-                <button class="detail-button subtle-button" type="button" id="closeUserModalFooter">Fermer</button>
-            </div>
+            <form id="manageUserForm" class="manage-user-form">
+                <div class="form-hero">
+                    <div class="form-hero-badge" id="formHeroBadge">CU</div>
+                    <div class="form-hero-copy">
+                        <h4 id="formHeroTitle">Compte utilisateur</h4>
+                        <p>Renseigne les informations essentielles du compte avant validation.</p>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="form-section-head">
+                        <h5>Identite</h5>
+                        <span>Informations principales</span>
+                    </div>
+                    <div class="form-grid-two">
+                        <label>
+                            <span class="field-label">Matricule</span>
+                            <input type="text" name="matricule" id="formMatricule" required readonly placeholder="Genere automatiquement selon le role">
+                            <small class="field-helper" id="matriculeHelper">Choisis un role pour generer automatiquement un matricule unique.</small>
+                        </label>
+                        <label>
+                            <span class="field-label">Role</span>
+                            <select name="role_id" id="formRoleId" required></select>
+                            <small class="field-helper" id="roleHelper">Le role choisi determine automatiquement le prefixe du matricule.</small>
+                        </label>
+                        <label>
+                            <span class="field-label">Nom</span>
+                            <input type="text" name="nom" id="formNom" required>
+                        </label>
+                        <label>
+                            <span class="field-label">Prenom</span>
+                            <input type="text" name="prenom" id="formPrenom" required>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="form-section-head">
+                        <h5>Compte</h5>
+                        <span>Connexion et statut</span>
+                    </div>
+                    <div class="form-grid-two">
+                        <label>
+                            <span class="field-label">Date de naissance</span>
+                            <input type="date" name="date_de_naissance" id="formBirthDate" required>
+                        </label>
+                        <label>
+                            <span class="field-label">Email</span>
+                            <input type="email" name="email" id="formEmail" required>
+                        </label>
+                        <label>
+                            <span class="field-label">Statut</span>
+                            <select name="statut" id="formStatut">
+                                <option value="1">actif</option>
+                                <option value="0">inactif</option>
+                            </select>
+                        </label>
+                        <label>
+                            <span class="field-label">Mot de passe</span>
+                            <input type="password" name="motdepasse" id="formPassword" placeholder="laisser vide si inchange en modification">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-section" id="studentFieldsSection" hidden>
+                    <div class="form-section-head">
+                        <h5>Infos etudiant</h5>
+                        <span>Classe et annee academique</span>
+                    </div>
+                    <div class="form-grid-two">
+                        <label>
+                            <span class="field-label">Classe</span>
+                            <input type="text" name="classe_nom" id="formClasseNom" placeholder="Ex: GL">
+                            <small class="field-helper">Saisis simplement la classe de l'etudiant.</small>
+                        </label>
+                        <label>
+                            <span class="field-label">Niveau</span>
+                            <input type="text" name="niveau" id="formNiveau" placeholder="Ex: L2">
+                            <small class="field-helper">Exemple : L1, L2, L3, M1.</small>
+                        </label>
+                    </div>
+                </div>
+
+                <p id="manageUserFeedback" class="backend-status form-feedback">Remplis le formulaire puis valide.</p>
+
+                <div class="manage-form-actions">
+                    <button class="detail-button" type="submit" id="saveUserButton">Enregistrer</button>
+                    <button class="detail-button subtle-button" type="button" id="cancelManageUserButton">Annuler</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -281,26 +522,124 @@
         const actionsModal = document.getElementById('actionsModal');
         const openActionsModalButton = document.getElementById('openActionsModal');
         const closeActionsModalButton = document.getElementById('closeActionsModal');
+        const toggleFullscreenButton = document.getElementById('toggleFullscreenButton');
+        const alertsBadge = document.getElementById('alertsBadge');
+        const summaryUsers = document.getElementById('summaryUsers');
+        const summaryPersonnel = document.getElementById('summaryPersonnel');
+        const summaryStudents = document.getElementById('summaryStudents');
+        const summaryAlerts = document.getElementById('summaryAlerts');
+        const alertsModal = document.getElementById('alertsModal');
+        const openAlertsModalButton = document.getElementById('openAlertsModal');
+        const closeAlertsModalButton = document.getElementById('closeAlertsModal');
+        const loadSecurityLogsButton = document.getElementById('loadSecurityLogsButton');
+        const alertsStatus = document.getElementById('alertsStatus');
+        const alertsList = document.getElementById('alertsList');
+        const showMoreAlertsButton = document.getElementById('showMoreAlertsButton');
         const modalActionButtons = Array.from(document.querySelectorAll('[data-action-card]'));
         const actionCards = Array.from(document.querySelectorAll('.action-card'));
         let rowLinks = Array.from(document.querySelectorAll('.row-link'));
         const userModal = document.getElementById('userModal');
         const closeUserModalButton = document.getElementById('closeUserModal');
         const closeUserModalFooterButton = document.getElementById('closeUserModalFooter');
-        const userFullName = document.getElementById('userFullName');
+        const userMatriculeTitle = document.getElementById('userMatriculeTitle');
         const userRoleLine = document.getElementById('userRoleLine');
-        const userMatricule = document.getElementById('userMatricule');
-        const userInfo = document.getElementById('userInfo');
+        const userNomField = document.getElementById('userNomField');
+        const userPrenomField = document.getElementById('userPrenomField');
+        const userEmailField = document.getElementById('userEmailField');
+        const userBirthDateField = document.getElementById('userBirthDateField');
+        const userStudentLabel = document.getElementById('userStudentLabel');
+        const userStudentField = document.getElementById('userStudentField');
         const userType = document.getElementById('userType');
-        const userAvatar = document.getElementById('userAvatar');
         const userLogicalStatus = document.getElementById('userLogicalStatus');
         const syncBackendButton = document.getElementById('syncBackendButton');
         const backendStatus = document.getElementById('backendStatus');
         const studentTableBody = document.getElementById('studentTableBody');
         const studentBackendStatus = document.getElementById('studentBackendStatus');
         const deactivateUserButton = document.getElementById('deactivateUserButton');
+        const openDeactivateFromActionsButton = document.getElementById('openDeactivateFromActions');
+        const deactivationModal = document.getElementById('deactivationModal');
+        const closeDeactivationModalButton = document.getElementById('closeDeactivationModal');
+        const cancelDeactivationButton = document.getElementById('cancelDeactivationButton');
+        const deactivationForm = document.getElementById('deactivationForm');
+        const deactivationReason = document.getElementById('deactivationReason');
+        const deletionRequestCheckbox = document.getElementById('deletionRequestCheckbox');
+        const deactivationFeedback = document.getElementById('deactivationFeedback');
+        const confirmDeactivationButton = document.getElementById('confirmDeactivationButton');
+        const loadPermissionsSummaryButton = document.getElementById('loadPermissionsSummary');
+        const permissionsSummary = document.getElementById('permissionsSummary');
+        const permissionsRoleSelect = document.getElementById('permissionsRoleSelect');
+        const permissionsEditor = document.getElementById('permissionsEditor');
+        const permissionsGrid = document.getElementById('permissionsGrid');
+        const savePermissionsButton = document.getElementById('savePermissionsButton');
+        const manageUserModal = document.getElementById('manageUserModal');
+        const closeManageUserModalButton = document.getElementById('closeManageUserModal');
+        const cancelManageUserButton = document.getElementById('cancelManageUserButton');
+        const manageUserForm = document.getElementById('manageUserForm');
+        const manageUserTitle = document.getElementById('manageUserTitle');
+        const manageUserSubtitle = document.getElementById('manageUserSubtitle');
+        const manageUserFeedback = document.getElementById('manageUserFeedback');
+        const formHeroBadge = document.getElementById('formHeroBadge');
+        const formHeroTitle = document.getElementById('formHeroTitle');
+        const openCreateUserFormButton = document.getElementById('openCreateUserForm');
+        const openEditUserFormButton = document.getElementById('openEditUserForm');
+        const openEditUserFormFromActionsButton = document.getElementById('openEditUserFormFromActions');
+        const formMatricule = document.getElementById('formMatricule');
+        const formRoleId = document.getElementById('formRoleId');
+        const matriculeHelper = document.getElementById('matriculeHelper');
+        const roleHelper = document.getElementById('roleHelper');
+        const formNom = document.getElementById('formNom');
+        const formPrenom = document.getElementById('formPrenom');
+        const formBirthDate = document.getElementById('formBirthDate');
+        const formEmail = document.getElementById('formEmail');
+        const formStatut = document.getElementById('formStatut');
+        const formPassword = document.getElementById('formPassword');
+        const studentFieldsSection = document.getElementById('studentFieldsSection');
+        const formClasseNom = document.getElementById('formClasseNom');
+        const formNiveau = document.getElementById('formNiveau');
+        const saveUserButton = document.getElementById('saveUserButton');
         let backendCsrfToken = null;
         let currentUserMatricule = null;
+        let manageMode = 'create';
+        let rolesCache = [];
+        let permissionsCache = [];
+        let latestAlertsCache = [];
+        let showAllAlerts = false;
+
+        function updateDashboardSummary({ personnelCount, studentCount, alertCount } = {}) {
+            const fallbackPersonnel = document.querySelectorAll('#adminTableBody .data-row').length;
+            const fallbackStudents = document.querySelectorAll('#studentTableBody .data-row').length;
+            const nextPersonnel = typeof personnelCount === 'number' ? personnelCount : fallbackPersonnel;
+            const nextStudents = typeof studentCount === 'number' ? studentCount : fallbackStudents;
+            const nextAlerts = typeof alertCount === 'number' ? alertCount : Number(summaryAlerts.textContent || 0);
+
+            summaryPersonnel.textContent = String(nextPersonnel);
+            summaryStudents.textContent = String(nextStudents);
+            summaryUsers.textContent = String(nextPersonnel + nextStudents);
+            summaryAlerts.textContent = String(nextAlerts);
+        }
+
+        function syncFullscreenButtonLabel() {
+            if (!toggleFullscreenButton) {
+                return;
+            }
+
+            toggleFullscreenButton.setAttribute('aria-label', document.fullscreenElement ? 'Quitter le plein ecran' : 'Plein ecran');
+            toggleFullscreenButton.classList.toggle('is-active', Boolean(document.fullscreenElement));
+        }
+
+        async function toggleFullscreenMode() {
+            try {
+                if (!document.fullscreenElement) {
+                    await document.documentElement.requestFullscreen();
+                } else {
+                    await document.exitFullscreen();
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                syncFullscreenButtonLabel();
+            }
+        }
 
         function filterAdminRows() {
             const query = adminSearch.value.trim().toLowerCase();
@@ -320,15 +659,23 @@
 
         adminSearch.addEventListener('input', filterAdminRows);
 
+        if (toggleFullscreenButton) {
+            toggleFullscreenButton.addEventListener('click', toggleFullscreenMode);
+            document.addEventListener('fullscreenchange', syncFullscreenButtonLabel);
+            syncFullscreenButtonLabel();
+        }
+
         function openActionsModal() {
+            closeAlertsModal(true);
             closeUserModal(true);
+            closeDeactivationModal(true);
             actionsModal.hidden = false;
             document.body.classList.add('modal-open');
         }
 
         function closeActionsModal(silent = false) {
             actionsModal.hidden = true;
-            if (userModal.hidden && !silent) {
+            if (userModal.hidden && alertsModal.hidden && deactivationModal.hidden && !silent) {
                 document.body.classList.remove('modal-open');
             }
         }
@@ -350,6 +697,183 @@
             }
         });
 
+        function openAlertsModal() {
+            closeActionsModal(true);
+            closeUserModal(true);
+            closeDeactivationModal(true);
+            alertsModal.hidden = false;
+            document.body.classList.add('modal-open');
+        }
+
+        function closeAlertsModal(silent = false) {
+            alertsModal.hidden = true;
+            if (actionsModal.hidden && userModal.hidden && deactivationModal.hidden && !silent) {
+                document.body.classList.remove('modal-open');
+            }
+        }
+
+        function renderSecurityLogs(logs) {
+            alertsList.innerHTML = '';
+            updateDashboardSummary({ alertCount: logs.length });
+            latestAlertsCache = logs;
+
+            if (alertsBadge) {
+                alertsBadge.hidden = logs.length === 0;
+                alertsBadge.textContent = String(Math.min(logs.length, 99));
+                alertsBadge.classList.toggle('has-alerts', logs.length > 0);
+            }
+
+            const visibleLogs = showAllAlerts ? logs : logs.slice(0, 6);
+            if (showMoreAlertsButton) {
+                showMoreAlertsButton.hidden = logs.length <= 6;
+                showMoreAlertsButton.textContent = showAllAlerts ? 'Voir moins' : 'Voir plus';
+            }
+
+            if (!visibleLogs.length) {
+                alertsList.innerHTML = `
+                    <div class="alert-item alert-empty">
+                        <strong>Aucune alerte recente</strong>
+                        <small>Les journaux de securite sont vides pour le moment.</small>
+                    </div>
+                `;
+                return;
+            }
+
+            visibleLogs.forEach((log) => {
+                const item = document.createElement('article');
+                item.className = 'alert-item';
+                const actor = [log.prenom, log.nom].filter(Boolean).join(' ').trim() || log.mat_user || 'Systeme';
+                const meta = [log.created_at, log.ip_address].filter(Boolean).join(' • ');
+                item.innerHTML = `
+                    <div class="alert-head">
+                        <strong>${log.action || 'action.systeme'}</strong>
+                        <span>${actor}</span>
+                    </div>
+                    <p>${log.description || 'Evenement de securite enregistre.'}</p>
+                    <small>${meta}</small>
+                `;
+                alertsList.appendChild(item);
+            });
+        }
+
+        function renderAdminAlerts(logs) {
+            alertsList.innerHTML = '';
+            updateDashboardSummary({ alertCount: logs.length });
+            latestAlertsCache = logs;
+
+            if (alertsBadge) {
+                alertsBadge.hidden = logs.length === 0;
+                alertsBadge.textContent = String(Math.min(logs.length, 99));
+                alertsBadge.classList.toggle('has-alerts', logs.length > 0);
+            }
+
+            const visibleLogs = showAllAlerts ? logs : logs.slice(0, 6);
+            if (showMoreAlertsButton) {
+                showMoreAlertsButton.hidden = logs.length <= 6;
+                showMoreAlertsButton.textContent = showAllAlerts ? 'Voir moins' : 'Voir plus';
+            }
+
+            if (!visibleLogs.length) {
+                alertsList.innerHTML = `
+                    <div class="alert-item alert-empty">
+                        <strong>Aucune alerte recente</strong>
+                        <small>Les alertes administratives sont vides pour le moment.</small>
+                    </div>
+                `;
+                return;
+            }
+
+            visibleLogs.forEach((log) => {
+                const item = document.createElement('article');
+                item.className = 'alert-item';
+                const actor = [log.creator_prenom, log.creator_nom].filter(Boolean).join(' ').trim() || log.created_by || 'Systeme';
+                const target = [log.target_prenom, log.target_nom].filter(Boolean).join(' ').trim() || log.target_mat_user || '';
+                const meta = [log.created_at, log.severity ? `niveau ${log.severity}` : '', target ? `cible ${target}` : ''].filter(Boolean).join(' • ');
+                item.innerHTML = `
+                    <div class="alert-head">
+                        <strong>${log.title || 'Alerte systeme'}</strong>
+                        <span>${actor}</span>
+                    </div>
+                    <p>${log.message || 'Alerte administrative enregistree.'}</p>
+                    <small>${meta}</small>
+                `;
+                alertsList.appendChild(item);
+            });
+        }
+
+        async function loadSecurityLogs() {
+            try {
+                await ensureBackendSession();
+                alertsStatus.textContent = 'Chargement des journaux de securite...';
+                loadSecurityLogsButton.disabled = true;
+                const data = await backendApi('/admin/alerts?limit=24');
+                const logs = data.data || [];
+                renderAdminAlerts(logs);
+                alertsStatus.textContent = `${logs.length} alerte(s) chargee(s) depuis le backend.`;
+            } catch (error) {
+                alertsStatus.textContent = "Impossible de charger les alertes depuis le backend.";
+                console.error(error);
+            } finally {
+                loadSecurityLogsButton.disabled = false;
+            }
+        }
+
+        async function refreshAlertsBadge() {
+            try {
+                await ensureBackendSession();
+                const data = await backendApi('/admin/alerts?limit=24');
+                const logs = data.data || [];
+                latestAlertsCache = logs;
+                updateDashboardSummary({ alertCount: logs.length });
+
+                if (alertsBadge) {
+                    alertsBadge.hidden = logs.length === 0;
+                    alertsBadge.textContent = String(Math.min(logs.length, 99));
+                    alertsBadge.classList.toggle('has-alerts', logs.length > 0);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        if (openAlertsModalButton) {
+            openAlertsModalButton.addEventListener('click', async () => {
+                openAlertsModal();
+                if (!latestAlertsCache.length) {
+                    await loadSecurityLogs();
+                }
+            });
+        }
+
+        if (closeAlertsModalButton) {
+            closeAlertsModalButton.addEventListener('click', closeAlertsModal);
+        }
+
+        alertsModal.addEventListener('click', (event) => {
+            if (event.target === alertsModal) {
+                closeAlertsModal();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !alertsModal.hidden) {
+                closeAlertsModal();
+            }
+        });
+
+        if (loadSecurityLogsButton) {
+            loadSecurityLogsButton.addEventListener('click', loadSecurityLogs);
+        }
+
+        if (showMoreAlertsButton) {
+            showMoreAlertsButton.addEventListener('click', () => {
+                showAllAlerts = !showAllAlerts;
+                renderAdminAlerts(latestAlertsCache);
+            });
+        }
+
+        refreshAlertsBadge();
+
         function activateActionCard(cardId) {
             actionCards.forEach((card) => {
                 const isActive = card.id === cardId;
@@ -358,14 +882,114 @@
             });
         }
 
+        async function showPermissionsSummary() {
+            try {
+                await ensureBackendSession();
+                permissionsSummary.textContent = 'Chargement des roles et permissions...';
+                const [rolesData, permissionsData] = await Promise.all([
+                    backendApi('/admin/roles'),
+                    backendApi('/admin/permissions')
+                ]);
+
+                const roles = rolesData.data || [];
+                const permissions = permissionsData.data || [];
+                permissionsCache = permissions;
+                const roleNames = roles.map((role) => role.name).join(', ') || 'Aucun role';
+                permissionsRoleSelect.innerHTML = '<option value="">Choisir un role</option>';
+                roles.forEach((role) => {
+                    const option = document.createElement('option');
+                    option.value = role.id;
+                    option.textContent = role.name;
+                    permissionsRoleSelect.appendChild(option);
+                });
+                permissionsSummary.innerHTML = `
+                    <strong>${roles.length}</strong> roles detectes : ${roleNames}<br>
+                    <strong>${permissions.length}</strong> permissions disponibles dans le backend.
+                `;
+                permissionsEditor.hidden = true;
+            } catch (error) {
+                permissionsSummary.textContent = "Impossible de charger les permissions depuis le backend.";
+                console.error(error);
+            }
+        }
+
+        async function loadRolePermissionsEditor(roleId) {
+            if (!roleId) {
+                permissionsEditor.hidden = true;
+                permissionsGrid.innerHTML = '';
+                return;
+            }
+
+            try {
+                await ensureBackendSession();
+                permissionsSummary.textContent = 'Chargement des permissions du role...';
+                const data = await backendApi(`/admin/roles/${roleId}/permissions`);
+                const assignedPermissions = (data.data?.permissions || []).map((permission) => permission.id);
+
+                permissionsGrid.innerHTML = '';
+                permissionsCache.forEach((permission) => {
+                    const item = document.createElement('label');
+                    item.className = 'permission-item';
+                    item.innerHTML = `
+                        <input type="checkbox" value="${permission.id}">
+                        <span>
+                            <strong>${permission.code}</strong>
+                            <small>${permission.description || 'Permission systeme'}</small>
+                        </span>
+                    `;
+
+                    const checkbox = item.querySelector('input');
+                    checkbox.checked = assignedPermissions.includes(permission.id);
+                    permissionsGrid.appendChild(item);
+                });
+
+                permissionsEditor.hidden = false;
+                permissionsSummary.textContent = `Permissions du role chargees. Tu peux maintenant ajuster les droits.`;
+            } catch (error) {
+                permissionsEditor.hidden = true;
+                permissionsSummary.textContent = "Impossible de charger les permissions de ce role.";
+                console.error(error);
+            }
+        }
+
+        async function saveRolePermissions() {
+            const roleId = Number(permissionsRoleSelect.value);
+            if (!roleId) {
+                permissionsSummary.textContent = 'Choisis un role avant d enregistrer.';
+                return;
+            }
+
+            const selectedIds = Array.from(permissionsGrid.querySelectorAll('input[type="checkbox"]:checked'))
+                .map((checkbox) => Number(checkbox.value));
+
+            try {
+                await ensureBackendSession();
+                savePermissionsButton.disabled = true;
+                permissionsSummary.textContent = 'Enregistrement des permissions en cours...';
+                await backendApi(`/admin/roles/${roleId}/permissions`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ permission_ids: selectedIds })
+                });
+                permissionsSummary.textContent = 'Permissions mises a jour avec succes.';
+            } catch (error) {
+                permissionsSummary.textContent = "Impossible d'enregistrer les permissions.";
+                console.error(error);
+            } finally {
+                savePermissionsButton.disabled = false;
+            }
+        }
+
         modalActionButtons.forEach((button) => {
             button.addEventListener('click', () => {
                 activateActionCard(button.dataset.actionCard);
             });
         });
 
-        function openUserModalFromRow(button) {
+        async function openUserModalFromRow(button) {
+            closeAlertsModal(true);
             closeActionsModal(true);
+            closeDeactivationModal(true);
             const row = button.closest('tr');
             const cells = row.querySelectorAll('td');
             const matricule = cells[0].innerText.trim();
@@ -376,13 +1000,44 @@
             const type = button.dataset.userType === 'etudiant' ? 'Etudiant' : 'Personnel administratif';
             currentUserMatricule = matricule;
 
-            userFullName.textContent = `${secondValue} ${firstValue}`;
+            userMatriculeTitle.textContent = matricule || 'MAT';
             userRoleLine.textContent = fourthValue;
-            userMatricule.textContent = matricule;
-            userInfo.textContent = fifthValue;
+            userNomField.textContent = firstValue || '-';
+            userPrenomField.textContent = secondValue || '-';
+            userEmailField.textContent = type === 'Etudiant' ? '-' : (fifthValue || '-');
+            userBirthDateField.textContent = '-';
+            userStudentLabel.textContent = "la classe si c'est un etudiant";
+            userStudentField.textContent = type === 'Etudiant' ? `${fourthValue || '-'} - ${fifthValue || '-'}` : 'non applicable';
             userType.textContent = type;
-            userAvatar.textContent = `${(secondValue[0] || 'U')}${(firstValue[0] || 'I')}`.toUpperCase();
             userLogicalStatus.textContent = 'Actif';
+
+            try {
+                await ensureBackendSession();
+                const data = await backendApi(`/users/${matricule}`);
+                const user = data.data || {};
+
+                userMatriculeTitle.textContent = user.MAT || matricule;
+                userRoleLine.textContent = user.role_name || fourthValue;
+                userNomField.textContent = user.nom || firstValue || '-';
+                userPrenomField.textContent = user.prenom || secondValue || '-';
+                userEmailField.textContent = user.email || fifthValue || '-';
+                userBirthDateField.textContent = user.date_de_naissance || '-';
+                userLogicalStatus.textContent = Number(user.statut) ? 'Actif' : 'Inactif';
+                openEditUserFormButton.disabled = !Number(user.statut);
+                deactivateUserButton.disabled = !Number(user.statut);
+
+                if ((user.role_name || '').toUpperCase() === 'ETUDIANT') {
+                    userType.textContent = 'Etudiant';
+                    userStudentLabel.textContent = "classe / niveau";
+                    userStudentField.textContent = [user.classe_nom, user.classe_niveau || user.annee_etude].filter(Boolean).join(' - ') || '-';
+                } else {
+                    userType.textContent = 'Personnel administratif';
+                    userStudentLabel.textContent = "poste / categorie";
+                    userStudentField.textContent = user.role_name || 'non applicable';
+                }
+            } catch (error) {
+                console.error(error);
+            }
 
             userModal.hidden = false;
             document.body.classList.add('modal-open');
@@ -391,7 +1046,29 @@
         function closeUserModal(silent = false) {
             userModal.hidden = true;
             currentUserMatricule = null;
-            if (actionsModal.hidden && !silent) {
+            if (actionsModal.hidden && alertsModal.hidden && deactivationModal.hidden && !silent) {
+                document.body.classList.remove('modal-open');
+            }
+        }
+
+        function openDeactivationModal() {
+            if (!currentUserMatricule) {
+                backendStatus.textContent = "Selectionne d'abord un utilisateur.";
+                return;
+            }
+
+            closeActionsModal(true);
+            closeUserModal(true);
+            deactivationReason.value = '';
+            deletionRequestCheckbox.checked = false;
+            deactivationFeedback.textContent = `Desactivation du compte ${currentUserMatricule}. Le motif est obligatoire.`;
+            deactivationModal.hidden = false;
+            document.body.classList.add('modal-open');
+        }
+
+        function closeDeactivationModal(silent = false) {
+            deactivationModal.hidden = true;
+            if (actionsModal.hidden && alertsModal.hidden && userModal.hidden && !silent) {
                 document.body.classList.remove('modal-open');
             }
         }
@@ -399,7 +1076,7 @@
         function bindRowLinks() {
             rowLinks = Array.from(document.querySelectorAll('.row-link'));
             rowLinks.forEach((button) => {
-                button.addEventListener('click', () => openUserModalFromRow(button));
+                button.addEventListener('click', async () => openUserModalFromRow(button));
             });
         }
 
@@ -418,9 +1095,26 @@
             }
         });
 
+        if (closeDeactivationModalButton) {
+            closeDeactivationModalButton.addEventListener('click', closeDeactivationModal);
+        }
+
+        if (cancelDeactivationButton) {
+            cancelDeactivationButton.addEventListener('click', closeDeactivationModal);
+        }
+
+        deactivationModal.addEventListener('click', (event) => {
+            if (event.target === deactivationModal) {
+                closeDeactivationModal();
+            }
+        });
+
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape' && !userModal.hidden) {
                 closeUserModal();
+            }
+            if (event.key === 'Escape' && !deactivationModal.hidden) {
+                closeDeactivationModal();
             }
         });
 
@@ -444,6 +1138,22 @@
             return data;
         }
 
+        function formatBackendError(error, fallbackMessage) {
+            if (!error || typeof error !== 'object') {
+                return fallbackMessage;
+            }
+
+            const parts = [];
+            if (error.message) {
+                parts.push(error.message);
+            }
+            if (error.error) {
+                parts.push(error.error);
+            }
+
+            return parts.length ? parts.join(' ') : fallbackMessage;
+        }
+
         async function loginBackendSession() {
             const data = await backendApi('/login', {
                 method: 'POST',
@@ -456,6 +1166,153 @@
 
             backendCsrfToken = data.data?.csrf_token || null;
             return data;
+        }
+
+        async function ensureBackendSession() {
+            if (!backendCsrfToken) {
+                await loginBackendSession();
+            }
+        }
+
+        async function loadRolesForForm() {
+            await ensureBackendSession();
+            const data = await backendApi('/admin/roles');
+            rolesCache = data.data || [];
+            formRoleId.innerHTML = '';
+            if (!rolesCache.length) {
+                formRoleId.innerHTML = '<option value="">Aucun role disponible</option>';
+                return;
+            }
+            rolesCache.forEach((role) => {
+                const option = document.createElement('option');
+                option.value = role.id;
+                option.textContent = `${role.name} (#${role.id})`;
+                formRoleId.appendChild(option);
+            });
+        }
+
+        function syncStudentFieldsVisibility() {
+            const selectedRole = rolesCache.find((role) => String(role.id) === String(formRoleId.value));
+            const isStudent = selectedRole?.name === 'ETUDIANT';
+            studentFieldsSection.hidden = !isStudent;
+            formClasseNom.required = isStudent;
+            formNiveau.required = isStudent;
+
+            if (!isStudent) {
+                formClasseNom.value = '';
+                formNiveau.value = '';
+            }
+        }
+
+        function openManageUserModal() {
+            closeActionsModal(true);
+            closeUserModal(true);
+            closeDeactivationModal(true);
+            manageUserModal.hidden = false;
+            document.body.classList.add('modal-open');
+        }
+
+        function closeManageUserModal(silent = false) {
+            manageUserModal.hidden = true;
+            if (actionsModal.hidden && userModal.hidden && deactivationModal.hidden && !silent) {
+                document.body.classList.remove('modal-open');
+            }
+        }
+
+        function resetManageUserForm() {
+            manageUserForm.reset();
+            formStatut.value = '1';
+            formMatricule.value = '';
+            manageUserFeedback.textContent = 'Remplis le formulaire puis valide.';
+        }
+
+        async function refreshGeneratedMatricule(roleId) {
+            if (!roleId || manageMode !== 'create') {
+                return;
+            }
+
+            try {
+                formMatricule.value = 'Generation...';
+                const data = await backendApi(`/users/next-matricule?role_id=${roleId}`);
+                formMatricule.value = data.data?.matricule || '';
+            } catch (error) {
+                formMatricule.value = '';
+                manageUserFeedback.textContent = "Impossible de generer le matricule pour ce role.";
+                console.error(error);
+            }
+        }
+
+        async function openCreateUserFlow() {
+            manageMode = 'create';
+            manageUserTitle.textContent = 'Creer un utilisateur';
+            manageUserSubtitle.textContent = "Ajoute un nouveau compte et enregistre-le dans la base.";
+            formHeroBadge.textContent = 'CU';
+            formHeroTitle.textContent = 'Nouveau compte utilisateur';
+            resetManageUserForm();
+            formMatricule.readOnly = true;
+            formRoleId.disabled = false;
+            formPassword.required = true;
+            matriculeHelper.textContent = 'Choisis un role pour generer automatiquement un matricule unique.';
+            roleHelper.textContent = 'Le role choisi determine automatiquement le prefixe du matricule.';
+            openManageUserModal();
+            manageUserFeedback.textContent = 'Chargement des roles...';
+            try {
+                await loadRolesForForm();
+                syncStudentFieldsVisibility();
+                if (formRoleId.value) {
+                    await refreshGeneratedMatricule(Number(formRoleId.value));
+                }
+                manageUserFeedback.textContent = 'Remplis le formulaire puis valide.';
+            } catch (error) {
+                formRoleId.innerHTML = '<option value="">Connexion backend indisponible</option>';
+                manageUserFeedback.textContent = "La fenetre est ouverte, mais le backend ne repond pas pour charger les roles. Verifie que tu es bien sur localhost:8000.";
+                console.error(error);
+            }
+        }
+
+        async function openEditUserFlow() {
+            if (!currentUserMatricule) {
+                manageUserFeedback.textContent = "Ouvre d'abord une fiche utilisateur pour modifier ce compte.";
+                openManageUserModal();
+                return;
+            }
+
+            manageMode = 'edit';
+            manageUserTitle.textContent = 'Modifier un utilisateur';
+            manageUserSubtitle.textContent = `Mets a jour les informations du compte ${currentUserMatricule}.`;
+            formHeroBadge.textContent = 'MU';
+            formHeroTitle.textContent = 'Edition du compte utilisateur';
+            resetManageUserForm();
+            formMatricule.readOnly = true;
+            formRoleId.disabled = true;
+            formPassword.required = false;
+            matriculeHelper.textContent = 'Le matricule est fige apres creation et ne peut plus etre modifie.';
+            roleHelper.textContent = 'Le role est verrouille en modification pour conserver la coherence avec le matricule.';
+            openManageUserModal();
+            manageUserFeedback.textContent = 'Chargement du compte...';
+            try {
+                await loadRolesForForm();
+                const data = await backendApi(`/users/${currentUserMatricule}`);
+                const user = data.data || {};
+                formMatricule.value = user.MAT || currentUserMatricule;
+                formNom.value = user.nom || '';
+                formPrenom.value = user.prenom || '';
+                formBirthDate.value = user.date_de_naissance || '2000-01-01';
+                formEmail.value = user.email || '';
+                formStatut.value = Number(user.statut) ? '1' : '0';
+                const selectedRole = rolesCache.find((role) => role.name === user.role_name);
+                if (selectedRole) {
+                    formRoleId.value = String(selectedRole.id);
+                }
+                syncStudentFieldsVisibility();
+                formClasseNom.value = user.classe_nom || '';
+                formNiveau.value = user.classe_niveau || user.annee_etude || '';
+                manageUserFeedback.textContent = 'Compte charge. Tu peux modifier les informations.';
+            } catch (error) {
+                formRoleId.innerHTML = '<option value="">Connexion backend indisponible</option>';
+                manageUserFeedback.textContent = "La fenetre est ouverte, mais les donnees n'ont pas pu etre chargees. Verifie que tu es bien sur localhost:8000.";
+                console.error(error);
+            }
         }
 
         function renderBackendUsers(users) {
@@ -489,23 +1346,27 @@
             if (!studentUsers.length) {
                 studentTableBody.innerHTML = '<tr><td colspan="5">Aucun etudiant remonte depuis le backend.</td></tr>';
             } else {
-                studentUsers.forEach((user) => {
-                    const row = document.createElement('tr');
-                    row.className = 'data-row';
-                    row.innerHTML = `
-                        <td><button class="clear-bt row-link" data-user-type="etudiant">${user.MAT}</button></td>
-                        <td>${user.nom}</td>
-                        <td>${user.prenom}</td>
-                        <td>${user.role_name || 'ETUDIANT'}</td>
-                        <td>${user.email}</td>
-                    `;
-                    studentTableBody.appendChild(row);
-                });
-            }
+                    studentUsers.forEach((user) => {
+                        const row = document.createElement('tr');
+                        row.className = 'data-row';
+                        row.innerHTML = `
+                            <td><button class="clear-bt row-link" data-user-type="etudiant">${user.MAT}</button></td>
+                            <td>${user.nom}</td>
+                            <td>${user.prenom}</td>
+                            <td>${user.annee_etude || user.classe_niveau || '-'}</td>
+                            <td>${user.classe_nom || '-'}</td>
+                        `;
+                        studentTableBody.appendChild(row);
+                    });
+                }
 
             bindRowLinks();
             filterAdminRows();
             studentBackendStatus.textContent = 'Donnees etudiants rechargees depuis le backend.';
+            updateDashboardSummary({
+                personnelCount: personnelUsers.length,
+                studentCount: studentUsers.length
+            });
         }
 
         syncBackendButton.addEventListener('click', async () => {
@@ -517,19 +1378,158 @@
                 renderBackendUsers(usersData.data || []);
                 backendStatus.textContent = 'Donnees backend chargees avec succes.';
             } catch (error) {
-                backendStatus.textContent = 'Impossible de charger les donnees backend.';
+                backendStatus.textContent = formatBackendError(error, 'Impossible de charger les donnees backend.');
                 console.error(error);
             } finally {
                 syncBackendButton.disabled = false;
             }
         });
 
-        deactivateUserButton.addEventListener('click', async () => {
-            if (!currentUserMatricule) {
-                return;
-            }
+        if (openCreateUserFormButton) {
+            openCreateUserFormButton.addEventListener('click', async () => {
+                try {
+                    await openCreateUserFlow();
+                } catch (error) {
+                    backendStatus.textContent = "Impossible d'ouvrir le formulaire de creation.";
+                    console.error(error);
+                }
+            });
+        }
 
-            if (!confirm(`Desactiver le compte ${currentUserMatricule} ?`)) {
+        if (openEditUserFormButton) {
+            openEditUserFormButton.addEventListener('click', async () => {
+                try {
+                    await ensureBackendSession();
+                    await openEditUserFlow();
+                } catch (error) {
+                    backendStatus.textContent = "Impossible d'ouvrir le formulaire de modification.";
+                    console.error(error);
+                }
+            });
+        }
+
+        if (openEditUserFormFromActionsButton) {
+            openEditUserFormFromActionsButton.addEventListener('click', async () => {
+                try {
+                    await ensureBackendSession();
+                    await openEditUserFlow();
+                } catch (error) {
+                    backendStatus.textContent = "Impossible d'ouvrir le formulaire de modification.";
+                    console.error(error);
+                }
+            });
+        }
+
+        if (openDeactivateFromActionsButton) {
+            openDeactivateFromActionsButton.addEventListener('click', async () => {
+                if (!currentUserMatricule) {
+                    backendStatus.textContent = "Selectionne d'abord un utilisateur avant de lancer la desactivation.";
+                    closeActionsModal();
+                    return;
+                }
+
+                closeActionsModal();
+                openDeactivationModal();
+            });
+        }
+
+        if (loadPermissionsSummaryButton) {
+            loadPermissionsSummaryButton.addEventListener('click', showPermissionsSummary);
+        }
+
+        if (permissionsRoleSelect) {
+            permissionsRoleSelect.addEventListener('change', async () => {
+                await loadRolePermissionsEditor(Number(permissionsRoleSelect.value));
+            });
+        }
+
+        if (formRoleId) {
+            formRoleId.addEventListener('change', async () => {
+                syncStudentFieldsVisibility();
+                if (manageMode === 'create') {
+                    await refreshGeneratedMatricule(Number(formRoleId.value));
+                }
+            });
+        }
+
+        if (savePermissionsButton) {
+            savePermissionsButton.addEventListener('click', saveRolePermissions);
+        }
+
+        if (closeManageUserModalButton) {
+            closeManageUserModalButton.addEventListener('click', closeManageUserModal);
+        }
+
+        if (cancelManageUserButton) {
+            cancelManageUserButton.addEventListener('click', closeManageUserModal);
+        }
+
+        manageUserModal.addEventListener('click', (event) => {
+            if (event.target === manageUserModal) {
+                closeManageUserModal();
+            }
+        });
+
+        manageUserForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            try {
+                await ensureBackendSession();
+                saveUserButton.disabled = true;
+                manageUserFeedback.textContent = 'Enregistrement en cours...';
+
+                const payload = {
+                    nom: formNom.value.trim(),
+                    prenom: formPrenom.value.trim(),
+                    date_de_naissance: formBirthDate.value,
+                    email: formEmail.value.trim(),
+                    role_id: Number(formRoleId.value),
+                    statut: Number(formStatut.value)
+                };
+
+                if (!studentFieldsSection.hidden) {
+                    payload.classe_nom = formClasseNom.value.trim();
+                    payload.niveau = formNiveau.value.trim();
+                }
+
+                if (formPassword.value.trim()) {
+                    payload.motdepasse = formPassword.value.trim();
+                }
+
+                if (manageMode === 'create') {
+                    if (!payload.motdepasse) {
+                        throw new Error('Le mot de passe est obligatoire pour la creation.');
+                    }
+
+                    const createResponse = await backendApi('/users', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    backendStatus.textContent = `Utilisateur ${createResponse.matricule || formMatricule.value} cree avec succes.`;
+                } else {
+                    payload.matricule = formMatricule.value.trim();
+                    await backendApi(`/users/${payload.matricule}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    backendStatus.textContent = `Utilisateur ${payload.matricule} modifie avec succes.`;
+                }
+
+                const usersData = await backendApi('/users');
+                renderBackendUsers(usersData.data || []);
+                closeManageUserModal();
+            } catch (error) {
+                manageUserFeedback.textContent = error.message || error.message || "Erreur lors de l'enregistrement.";
+                console.error(error);
+            } finally {
+                saveUserButton.disabled = false;
+            }
+        });
+
+        async function deactivateCurrentUser() {
+            if (!currentUserMatricule) {
                 return;
             }
 
@@ -538,21 +1538,53 @@
                     await loginBackendSession();
                 }
 
-                await backendApi(`/users/${currentUserMatricule}`, { method: 'DELETE' });
+                await backendApi(`/users/${currentUserMatricule}`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        motif: deactivationReason.value.trim(),
+                        demande_suppression: deletionRequestCheckbox.checked
+                    })
+                });
                 userLogicalStatus.textContent = 'Desactive';
                 backendStatus.textContent = `Le compte ${currentUserMatricule} a ete desactive via le backend.`;
                 const usersData = await backendApi('/users');
                 renderBackendUsers(usersData.data || []);
-                closeUserModal();
+                await refreshAlertsBadge();
+                closeDeactivationModal();
             } catch (error) {
-                backendStatus.textContent = `Impossible de desactiver ${currentUserMatricule}.`;
+                deactivationFeedback.textContent = error.message || `Impossible de desactiver ${currentUserMatricule}.`;
                 console.error(error);
+            }
+        }
+
+        deactivateUserButton.addEventListener('click', () => {
+            openDeactivationModal();
+        });
+
+        deactivationForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            if (!deactivationReason.value.trim()) {
+                deactivationFeedback.textContent = 'Le motif est obligatoire.';
+                return;
+            }
+
+            try {
+                confirmDeactivationButton.disabled = true;
+                deactivationFeedback.textContent = 'Desactivation en cours...';
+                await deactivateCurrentUser();
+            } finally {
+                confirmDeactivationButton.disabled = false;
             }
         });
 
         window.openActionsModal = openActionsModal;
         window.closeActionsModal = closeActionsModal;
+        window.closeAlertsModal = closeAlertsModal;
         window.closeUserModal = closeUserModal;
+        window.closeManageUserModal = closeManageUserModal;
+        updateDashboardSummary();
     </script>
 </body>
 </html>

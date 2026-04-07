@@ -13,7 +13,8 @@ class UserService
         private Role $roleModel,
         private ClassRoom $classRoomModel,
         private BackupService $backupService,
-        private SecurityLogService $securityLogService
+        private SecurityLogService $securityLogService,
+        private AdminAlertService $adminAlertService
     ) {
     }
 
@@ -27,10 +28,19 @@ class UserService
         return $this->userModel->findByMatricule($matricule);
     }
 
-    public function createUser(array $payload, string $createdBy): string
+    public function createUser(array $payload, string $createdBy): array
     {
+        $plainPassword = trim((string) ($payload['motdepasse'] ?? ''));
+        $generatedPassword = false;
+
+        if ($plainPassword === '') {
+            $plainPassword = $this->generateDefaultPassword();
+            $payload['motdepasse'] = $plainPassword;
+            $generatedPassword = true;
+        }
+
         $data = $this->validatePayload($payload, true);
-        $data['motdepasse'] = password_hash($payload['motdepasse'], PASSWORD_DEFAULT);
+        $data['motdepasse'] = password_hash($plainPassword, PASSWORD_DEFAULT);
         $data['created_by'] = $createdBy;
         $data['updated_by'] = $createdBy;
 
@@ -38,7 +48,11 @@ class UserService
         $this->backupService->queue('utilisateur', $matricule, 'create', $data);
         $this->securityLogService->log($createdBy, 'users.create', "Creation de l'utilisateur {$data['email']}");
 
-        return $matricule;
+        return [
+            'matricule' => $matricule,
+            'motdepasse' => $plainPassword,
+            'generated_password' => $generatedPassword,
+        ];
     }
 
     public function previewNextMatricule(int $roleId): string
@@ -63,6 +77,10 @@ class UserService
             throw new \InvalidArgumentException('Utilisateur introuvable.');
         }
 
+        if (!(bool) $existingUser['statut']) {
+            throw new \InvalidArgumentException('Ce compte est desactive. Reactivation requise avant modification.');
+        }
+
         $data = $this->validatePayload($payload, false, $matricule);
         $data['updated_by'] = $updatedBy;
 
@@ -80,13 +98,47 @@ class UserService
         return $updated;
     }
 
-    public function softDeleteUser(string $matricule, string $updatedBy): bool
+    public function softDeleteUser(string $matricule, string $updatedBy, array $payload = []): bool
     {
-        $deleted = $this->userModel->softDelete($matricule, $updatedBy);
+        $existingUser = $this->userModel->findByMatricule($matricule);
+        if (!$existingUser) {
+            return false;
+        }
+
+        if (!(bool) $existingUser['statut']) {
+            throw new \InvalidArgumentException('Ce compte est deja desactive.');
+        }
+
+        $reason = trim((string) ($payload['motif'] ?? ''));
+        $deletionRequested = (bool) ($payload['demande_suppression'] ?? false);
+
+        if ($reason === '') {
+            throw new \InvalidArgumentException('Le motif de desactivation est obligatoire.');
+        }
+
+        $deleted = $this->userModel->softDelete($matricule, $updatedBy, [
+            'deactivation_reason' => $reason,
+            'deletion_requested' => $deletionRequested,
+        ]);
 
         if ($deleted) {
-            $this->backupService->queue('utilisateur', $matricule, 'soft_delete', ['updated_by' => $updatedBy]);
-            $this->securityLogService->log($updatedBy, 'users.delete', "Suppression logique de l'utilisateur {$matricule}");
+            $backupPayload = [
+                'updated_by' => $updatedBy,
+                'motif' => $reason,
+                'demande_suppression' => $deletionRequested,
+            ];
+            $this->backupService->queue('utilisateur', $matricule, 'soft_delete', $backupPayload);
+            $this->securityLogService->log($updatedBy, 'users.delete', "Desactivation de l'utilisateur {$matricule} pour le motif: {$reason}");
+            $this->adminAlertService->create(
+                'account.deactivated',
+                $deletionRequested ? 'high' : 'medium',
+                $deletionRequested ? 'Demande de suppression en attente' : 'Compte desactive',
+                $deletionRequested
+                    ? "Le compte {$matricule} a ete desactive avec une demande de suppression. Motif: {$reason}"
+                    : "Le compte {$matricule} a ete desactive. Motif: {$reason}",
+                $matricule,
+                $updatedBy
+            );
         }
 
         return $deleted;
@@ -206,5 +258,29 @@ class UserService
         if (!preg_match('/[A-Z]/', $password) || !preg_match('/[a-z]/', $password) || !preg_match('/[0-9]/', $password)) {
             throw new \InvalidArgumentException('Le mot de passe doit contenir une majuscule, une minuscule et un chiffre.');
         }
+    }
+
+    private function generateDefaultPassword(): string
+    {
+        $letters = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+        $digits = '23456789';
+        $symbols = '!@#$%';
+
+        $password = [
+            $letters[random_int(0, strlen($letters) - 1)],
+            strtoupper($letters[random_int(0, strlen($letters) - 1)]),
+            strtolower($letters[random_int(0, strlen($letters) - 1)]),
+            $digits[random_int(0, strlen($digits) - 1)],
+            $symbols[random_int(0, strlen($symbols) - 1)],
+        ];
+
+        $pool = $letters . $digits . $symbols;
+        for ($i = count($password); $i < 12; $i++) {
+            $password[] = $pool[random_int(0, strlen($pool) - 1)];
+        }
+
+        shuffle($password);
+
+        return implode('', $password);
     }
 }

@@ -11,9 +11,7 @@ class RoleService
         private Role $roleModel,
         private Permission $permissionModel,
         private SecurityLogService $securityLogService
-    ) {
-    }
-
+    ) {}
     public function getAllRoles(): array
     {
         return $this->roleModel->findAll();
@@ -35,7 +33,6 @@ class RoleService
         if (!$role) {
             throw new \InvalidArgumentException('Role introuvable.');
         }
-
         return [
             'role' => $role,
             'permissions' => $this->roleModel->getRolePermissions($roleId),
