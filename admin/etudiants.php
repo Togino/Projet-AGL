@@ -120,11 +120,6 @@ foreach ($etudiants as $etudiant) {
             </div>
         </div>
 
-        <a href="ajouter-etudiant.php" class="add-student-btn">
-            <i data-lucide="plus"></i>
-            Ajouter un étudiant
-        </a>
-
     </div>
 
     <div class="students-stats">
@@ -245,7 +240,6 @@ foreach ($etudiants as $etudiant) {
                         <th>Téléphone</th>
                         <th>Statut</th>
                         <th>Inscription</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
 
@@ -303,26 +297,6 @@ foreach ($etudiants as $etudiant) {
                                 <?= !empty($etu["created_at"]) ? date("d/m/Y", strtotime($etu["created_at"])) : "-" ?>
                             </td>
 
-                            <td>
-
-                                <div class="table-actions">
-
-                                    <button>
-                                        <i data-lucide="eye"></i>
-                                    </button>
-
-                                    <button>
-                                        <i data-lucide="square-pen"></i>
-                                    </button>
-
-                                    <button>
-                                        <i data-lucide="more-vertical"></i>
-                                    </button>
-
-                                </div>
-
-                            </td>
-
                         </tr>
 
                     <?php endforeach; ?>
@@ -330,7 +304,7 @@ foreach ($etudiants as $etudiant) {
                 <?php else: ?>
 
                     <tr>
-                        <td colspan="11">
+                        <td colspan="10">
 
                             <div class="empty-state">
 

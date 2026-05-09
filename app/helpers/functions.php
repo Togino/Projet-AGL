@@ -13,8 +13,184 @@ function isLoggedIn() {
     return isset($_SESSION['user']);
 }
 
+function current_user() {
+    return $_SESSION['user'] ?? null;
+}
+
+function e($value) {
+    return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+}
+
 function hasRole($role) {
     return isset($_SESSION['user']) && $_SESSION['user']['role'] === $role;
+}
+
+function require_auth(array $roles = []) {
+    if (!isLoggedIn()) {
+        redirect("../public/login.php");
+    }
+
+    if ($roles && !in_array($_SESSION['user']['role'] ?? '', $roles, true)) {
+        redirect("../public/login.php");
+    }
+}
+
+function ensure_password_changed_column(PDO $pdo) {
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*)
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+        AND TABLE_NAME = 'utilisateur'
+        AND COLUMN_NAME = 'password_changed_at'
+    ");
+    $stmt->execute();
+
+    if ((int) $stmt->fetchColumn() === 0) {
+        $pdo->exec("ALTER TABLE utilisateur ADD COLUMN password_changed_at DATETIME NULL AFTER must_change_password");
+    }
+}
+
+function handle_weekly_password_change(PDO $pdo, string $mat): array {
+    $result = ["error" => "", "success" => ""];
+
+    if (($_SERVER["REQUEST_METHOD"] ?? "GET") !== "POST" || ($_POST["action"] ?? "") !== "change_password") {
+        return $result;
+    }
+
+    ensure_password_changed_column($pdo);
+
+    $stmt = $pdo->prepare("SELECT motdepasse, password_changed_at FROM utilisateur WHERE MAT = ? LIMIT 1");
+    $stmt->execute([$mat]);
+    $user = $stmt->fetch();
+
+    $currentPassword = $_POST["current_password"] ?? "";
+    $newPassword = $_POST["new_password"] ?? "";
+    $confirmPassword = $_POST["confirm_password"] ?? "";
+    $lastChange = $user["password_changed_at"] ?? null;
+    $nextChangeAt = $lastChange ? strtotime($lastChange . " +7 days") : null;
+
+    if ($nextChangeAt && time() < $nextChangeAt) {
+        $result["error"] = "Vous pourrez changer votre mot de passe a partir du " . date("d/m/Y H:i", $nextChangeAt) . ".";
+    } elseif (empty($currentPassword) || empty($newPassword) || empty($confirmPassword)) {
+        $result["error"] = "Veuillez remplir tous les champs du mot de passe.";
+    } elseif (!$user || !password_verify($currentPassword, $user["motdepasse"])) {
+        $result["error"] = "Le mot de passe actuel est incorrect.";
+    } elseif ($newPassword !== $confirmPassword) {
+        $result["error"] = "Les nouveaux mots de passe ne correspondent pas.";
+    } elseif (password_verify($newPassword, $user["motdepasse"])) {
+        $result["error"] = "Le nouveau mot de passe doit etre different de l'ancien.";
+    } elseif (strlen($newPassword) < 8) {
+        $result["error"] = "Le mot de passe doit contenir au moins 8 caracteres.";
+    } elseif (!preg_match('/[A-Z]/', $newPassword)) {
+        $result["error"] = "Le mot de passe doit contenir au moins une lettre majuscule.";
+    } elseif (!preg_match('/[a-z]/', $newPassword)) {
+        $result["error"] = "Le mot de passe doit contenir au moins une lettre minuscule.";
+    } elseif (!preg_match('/[0-9\W]/', $newPassword)) {
+        $result["error"] = "Le mot de passe doit contenir au moins un chiffre ou un caractere special.";
+    } else {
+        $updateStmt = $pdo->prepare("
+            UPDATE utilisateur
+            SET motdepasse = ?, must_change_password = 0, password_changed_at = NOW(), updated_by = ?
+            WHERE MAT = ?
+        ");
+        $updateStmt->execute([password_hash($newPassword, PASSWORD_DEFAULT), $mat, $mat]);
+        $_SESSION["user"]["must_change_password"] = 0;
+        $result["success"] = "Mot de passe modifie avec succes. Prochain changement possible dans 7 jours.";
+    }
+
+    return $result;
+}
+
+function password_change_state(?string $lastChange): array {
+    $nextChange = $lastChange ? strtotime($lastChange . " +7 days") : null;
+
+    return [
+        "last" => $lastChange,
+        "next" => $nextChange,
+        "can_change" => !$nextChange || time() >= $nextChange,
+    ];
+}
+
+function render_password_change_card(array $state, array $message = []) {
+    $canChange = $state["can_change"];
+    ?>
+    <div class="help-settings-card">
+        <h3>Changer le mot de passe</h3>
+        <p>Vous pouvez modifier uniquement votre mot de passe, une seule fois par semaine.</p>
+
+        <?php if (!empty($message["error"])): ?>
+            <div class="alert-error"><?= htmlspecialchars($message["error"]) ?></div>
+        <?php endif; ?>
+
+        <?php if (!empty($message["success"])): ?>
+            <div class="alert-success"><?= htmlspecialchars($message["success"]) ?></div>
+        <?php endif; ?>
+
+        <?php if (!$canChange): ?>
+            <div class="alert-error">Prochain changement possible le <?= date("d/m/Y H:i", $state["next"]) ?>.</div>
+        <?php endif; ?>
+
+        <form method="POST" class="admin-form">
+            <input type="hidden" name="action" value="change_password">
+            <div class="form-grid">
+                <div class="full">
+                    <label>Mot de passe actuel</label>
+                    <input type="password" name="current_password" <?= $canChange ? "" : "disabled" ?>>
+                </div>
+                <div class="full">
+                    <label>Nouveau mot de passe</label>
+                    <input type="password" name="new_password" <?= $canChange ? "" : "disabled" ?>>
+                </div>
+                <div class="full">
+                    <label>Confirmer le nouveau mot de passe</label>
+                    <input type="password" name="confirm_password" <?= $canChange ? "" : "disabled" ?>>
+                </div>
+            </div>
+            <button type="submit" class="submit-btn" <?= $canChange ? "" : "disabled" ?>>
+                <?= ui_icon("shield") ?>
+                Mettre a jour
+            </button>
+        </form>
+    </div>
+    <?php
+}
+
+function render_app_page($pageTitle, $sidebarFile) {
+    $sidebarPath = __DIR__ . "/../includes/" . basename($sidebarFile);
+
+    if (!is_file($sidebarPath)) {
+        die("Sidebar introuvable.");
+    }
+    ?>
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title><?= e($pageTitle) ?> - EduManage</title>
+        <link rel="stylesheet" href="../public/assets/css/style.css">
+    </head>
+    <body class="app-body">
+        <?php include $sidebarPath; ?>
+
+        <main class="main-content">
+            <?php include __DIR__ . "/../includes/header.php"; ?>
+
+            <section class="dashboard">
+                <div class="students-header">
+                    <div>
+                        <h1><?= e($pageTitle) ?></h1>
+                        <div class="breadcrumb">
+                            <span>Accueil</span>
+                            <?= ui_icon("chevron-down") ?>
+                            <strong><?= e($pageTitle) ?></strong>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </body>
+    </html>
+    <?php
 }
 
 function redirect_by_role() {
@@ -34,6 +210,10 @@ function redirect_by_role() {
 
     if ($role === "ETUDIANT") {
         redirect("../etudiant/dashboard.php");
+    }
+
+    if ($role === "ENSEIGNANT") {
+        redirect("../enseignant/dashboard.php");
     }
 
     redirect("../public/login.php");

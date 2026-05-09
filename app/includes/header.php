@@ -6,7 +6,7 @@ $user = current_user();
     <nav>
         <?php if ($user): ?>
             <span><?= e($user['prenom'] . ' ' . $user['nom']) ?></span>
-            <a class="button" href="/public/logout.php">Deconnexion</a>
+            <a class="button" href="../public/logout.php">Deconnexion</a>
         <?php endif; ?>
     </nav>
 </header>

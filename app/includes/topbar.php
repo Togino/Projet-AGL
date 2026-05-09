@@ -1,5 +1,16 @@
 <?php
 $unreadTopbarAlerts = 0;
+$currentRole = $_SESSION["user"]["role"] ?? "";
+$alertsHref = $currentRole === "ENSEIGNANT" || $currentRole === "ETUDIANT" ? "dashboard.php" : "alertes.php";
+$settingsHref = in_array($currentRole, ["ENSEIGNANT", "ETUDIANT", "GESTIONNAIRE", "SUPER_ADMIN", "ADMIN"], true) ? "profil.php" : "parametres.php";
+$roleLabels = [
+    "SUPER_ADMIN" => "Super administrateur",
+    "ADMIN" => "Administrateur",
+    "GESTIONNAIRE" => "Gestionnaire",
+    "ENSEIGNANT" => "Enseignant",
+    "ETUDIANT" => "Etudiant",
+];
+$roleLabel = $roleLabels[$currentRole] ?? "Utilisateur";
 
 if (isset($pdo) && $pdo instanceof PDO) {
     try {
@@ -21,14 +32,14 @@ if (isset($pdo) && $pdo instanceof PDO) {
     </div>
 
     <div class="top-actions">
-        <a class="notif" href="alertes.php" title="Alertes et notifications" aria-label="Alertes et notifications">
+        <a class="notif" href="<?= htmlspecialchars($alertsHref) ?>" title="Alertes et notifications" aria-label="Alertes et notifications">
             <?= ui_icon("bell") ?>
             <?php if ($unreadTopbarAlerts > 0): ?>
                 <span><?= $unreadTopbarAlerts > 99 ? "99+" : $unreadTopbarAlerts ?></span>
             <?php endif; ?>
         </a>
 
-        <a class="settings" href="parametres.php" title="Parametres" aria-label="Parametres">
+        <a class="settings" href="<?= htmlspecialchars($settingsHref) ?>" title="Parametres" aria-label="Parametres">
             <?= ui_icon("settings") ?>
         </a>
 
@@ -36,7 +47,7 @@ if (isset($pdo) && $pdo instanceof PDO) {
             <div class="avatar"><?= ui_icon("briefcase") ?></div>
             <div>
                 <strong><?= $_SESSION["user"]["prenom"] ?? "Admin" ?></strong>
-                <small>Administrateur</small>
+                <small><?= htmlspecialchars($roleLabel) ?></small>
             </div>
         </div>
     </div>

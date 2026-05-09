@@ -8,6 +8,9 @@ if ($_SESSION["user"]["role"] !== "SUPER_ADMIN" && $_SESSION["user"]["role"] !==
     exit;
 }
 
+header("Location: etudiants.php?error=readonly");
+exit;
+
 ensure_student_extra_columns($pdo);
 
 $mat = $_GET["mat"] ?? "";

@@ -9,24 +9,20 @@ if (!function_exists("sidebar_active")) {
 }
 ?>
 
-<aside class="sidebar">
+<aside class="sidebar teacher-sidebar">
     <div class="brand">
-        <div class="brand-icon"><?= ui_icon("leaf") ?></div>
+        <div class="brand-icon"><?= ui_icon("graduation") ?></div>
         <div>
             <h2>EduManage</h2>
-            <p>Espace Gestionnaire</p>
+            <p>Espace Enseignant</p>
         </div>
     </div>
 
     <nav class="menu">
         <a class="<?= sidebar_active("dashboard.php") ?>" href="dashboard.php"><?= ui_icon("home") ?> Tableau de bord</a>
 
-        <span>Gestion pedagogique</span>
-        <a class="<?= sidebar_active("etudiants.php") ?>" href="etudiants.php"><?= ui_icon("users") ?> Etudiants</a>
-        <a class="<?= sidebar_active("enseignants.php") ?>" href="enseignants.php"><?= ui_icon("graduation") ?> Enseignants</a>
-        <a class="<?= sidebar_active("inscriptions.php") ?>" href="inscriptions.php"><?= ui_icon("clipboard") ?> Inscriptions</a>
-        <a class="<?= sidebar_active("classes.php") ?>" href="classes.php"><?= ui_icon("school") ?> Classes</a>
-        <a class="<?= sidebar_active("emploi-temps.php") ?>" href="emploi-temps.php"><?= ui_icon("calendar") ?> Emploi du temps</a>
+        <span>Academique</span>
+        <a class="<?= sidebar_active("classes.php") ?>" href="classes.php"><?= ui_icon("school") ?> Mes classes</a>
         <a class="<?= sidebar_active("notes.php") ?>" href="notes.php"><?= ui_icon("chart") ?> Notes</a>
 
         <span>Compte</span>
