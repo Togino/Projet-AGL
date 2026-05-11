@@ -49,7 +49,15 @@ $affectations = $stmt->fetchAll();
         <a href="ajouter.php" class="year-btn">+ Nouvelle affectation</a>
     </div>
 
-    <?php if (isset($_GET["success"]) && $_GET["success"] === "created"): ?><div class="alert-success">Affectation creee avec succes.</div><?php endif; ?>
+    <?php if (isset($_GET["success"]) && $_GET["success"] === "created"): ?>
+        <?php
+            $createdCount = isset($_GET["count"]) && ctype_digit((string) $_GET["count"]) ? (int) $_GET["count"] : 1;
+            $skippedCount = isset($_GET["skipped"]) && ctype_digit((string) $_GET["skipped"]) ? (int) $_GET["skipped"] : 0;
+        ?>
+        <div class="alert-success">
+            <?= $createdCount ?> affectation<?= $createdCount > 1 ? "s" : "" ?> creee<?= $createdCount > 1 ? "s" : "" ?> avec succes<?= $skippedCount > 0 ? " (" . $skippedCount . " deja existante" . ($skippedCount > 1 ? "s" : "") . " ignoree" . ($skippedCount > 1 ? "s" : "") . ")." : "." ?>
+        </div>
+    <?php endif; ?>
     <?php if (isset($_GET["success"]) && $_GET["success"] === "updated"): ?><div class="alert-success">Affectation modifiee avec succes.</div><?php endif; ?>
     <?php if (isset($_GET["success"]) && $_GET["success"] === "deleted"): ?><div class="alert-success">Affectation supprimee avec succes.</div><?php endif; ?>
     <?php if (isset($_GET["error"]) && $_GET["error"] === "not_found"): ?><div class="alert-error">Affectation introuvable.</div><?php endif; ?>

@@ -777,6 +777,98 @@ body {
     border-color: #157a3d;
 }
 
+.assignment-picker {
+    display: grid;
+    gap: 14px;
+    margin: 24px 0;
+}
+
+.assignment-picker-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.assignment-picker-head h3 {
+    margin: 0 0 6px;
+    color: #0f172a;
+}
+
+.assignment-picker-head p {
+    margin: 0;
+    color: #64748b;
+}
+
+.assignment-class {
+    border: 1px solid #e5e9ef;
+    border-radius: 14px;
+    background: #f8fafc;
+    overflow: hidden;
+}
+
+.assignment-class.active {
+    background: #ffffff;
+    border-color: rgba(21, 122, 61, 0.32);
+}
+
+.assignment-class-title {
+    min-height: 58px;
+    padding: 14px 16px;
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.assignment-class-title input,
+.assignment-modules input {
+    width: 18px;
+    height: 18px;
+    accent-color: #157a3d;
+}
+
+.assignment-class-title span {
+    flex: 1;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.assignment-class-title small {
+    color: #64748b;
+    font-weight: 700;
+}
+
+.assignment-modules {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+    padding: 0 16px 16px 46px;
+}
+
+.assignment-modules label {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    min-height: 42px;
+    margin-bottom: 0;
+    padding: 10px 12px;
+    border: 1px solid #e5e9ef;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #334155;
+    cursor: pointer;
+}
+
+.assignment-class:not(.active) .assignment-modules {
+    display: none;
+}
+
+.assignment-empty {
+    color: #ef4444;
+    font-weight: 700;
+    padding: 8px 0;
+}
+
 .submit-btn {
     margin-top: 25px;
     padding: 15px 22px;

@@ -5,8 +5,7 @@ require_once "../app/config/database.php";
 require_once "../app/helpers/functions.php";
 
 if (!isset($_SESSION["user"])) {
-    header("Location: login.php");
-    exit;
+    redirect("public/login.php");
 }
 
 $error = "";
@@ -20,25 +19,20 @@ $user = $stmt->fetch();
 
 if (!$user) {
     session_destroy();
-    header("Location: login.php");
-    exit;
+    redirect("public/login.php");
 }
 
 if (!$user["must_change_password"]) {
     $role = $_SESSION["user"]["role"];
 
     if ($role === "SUPER_ADMIN" || $role === "ADMIN") {
-        header("Location: ../admin/dashboard.php");
-        exit;
+        redirect("admin/dashboard.php");
     } elseif ($role === "GESTIONNAIRE") {
-        header("Location: ../gestionnaire/dashboard.php");
-        exit;
+        redirect("gestionnaire/dashboard.php");
     } elseif ($role === "ETUDIANT") {
-        header("Location: ../etudiant/dashboard.php");
-        exit;
+        redirect("etudiant/dashboard.php");
     } elseif ($role === "ENSEIGNANT") {
-        header("Location: ../enseignant/dashboard.php");
-        exit;
+        redirect("enseignant/dashboard.php");
     }
 }
 
@@ -89,17 +83,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $role = $_SESSION["user"]["role"];
 
         if ($role === "SUPER_ADMIN" || $role === "ADMIN") {
-            header("Location: ../admin/dashboard.php");
-            exit;
+            redirect("admin/dashboard.php");
         } elseif ($role === "GESTIONNAIRE") {
-            header("Location: ../gestionnaire/dashboard.php");
-            exit;
+            redirect("gestionnaire/dashboard.php");
         } elseif ($role === "ETUDIANT") {
-            header("Location: ../etudiant/dashboard.php");
-            exit;
+            redirect("etudiant/dashboard.php");
         } elseif ($role === "ENSEIGNANT") {
-            header("Location: ../enseignant/dashboard.php");
-            exit;
+            redirect("enseignant/dashboard.php");
         }
     }
 }

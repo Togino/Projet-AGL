@@ -66,7 +66,13 @@ $affectations = $stmt->fetchAll();
         </div>
 
         <?php if (isset($_GET["success"]) && $_GET["success"] === "created"): ?>
-            <div class="alert-success">Affectation creee avec succes.</div>
+            <?php
+                $createdCount = isset($_GET["count"]) && ctype_digit((string) $_GET["count"]) ? (int) $_GET["count"] : 1;
+                $skippedCount = isset($_GET["skipped"]) && ctype_digit((string) $_GET["skipped"]) ? (int) $_GET["skipped"] : 0;
+            ?>
+            <div class="alert-success">
+                <?= $createdCount ?> affectation<?= $createdCount > 1 ? "s" : "" ?> creee<?= $createdCount > 1 ? "s" : "" ?> avec succes<?= $skippedCount > 0 ? " (" . $skippedCount . " deja existante" . ($skippedCount > 1 ? "s" : "") . " ignoree" . ($skippedCount > 1 ? "s" : "") . ")." : "." ?>
+            </div>
         <?php endif; ?>
 
         <?php if (isset($_GET["success"]) && $_GET["success"] === "deleted"): ?>

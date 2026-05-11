@@ -8,7 +8,7 @@ require_once __DIR__ . "/../helpers/functions.php";
 require_once __DIR__ . "/../config/database.php";
 
 if (!isLoggedIn()) {
-    redirect("../public/login.php");
+    redirect("public/login.php");
 }
 
 $currentPage = basename($_SERVER["SCRIPT_NAME"]);
@@ -28,5 +28,5 @@ if (
     $currentPage !== "changer-mot-de-passe.php" &&
     $currentPage !== "logout.php"
 ) {
-    redirect("../public/changer-mot-de-passe.php");
+    redirect("public/changer-mot-de-passe.php");
 }

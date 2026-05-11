@@ -35,41 +35,90 @@ foreach ($classeModulesRows as $row) {
 }
 
 $error = "";
+$success = "";
 $mat = "";
-$moduleId = $_GET["module_id"] ?? "";
-$classeId = "";
+$selectedClassIds = [];
+$selectedModulesByClass = [];
 $anneeScolaire = date("Y") . "-" . ((int) date("Y") + 1);
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $mat = clean($_POST["MAT_enseignant"] ?? "");
-    $moduleId = clean($_POST["module_id"] ?? "");
-    $classeId = clean($_POST["classe_id"] ?? "");
+    $selectedClassIds = array_values(array_filter($_POST["classe_ids"] ?? [], static fn($id) => ctype_digit((string) $id)));
+    $selectedModulesByClass = $_POST["module_ids_by_classe"] ?? [];
     $anneeScolaire = clean($_POST["annee_scolaire"] ?? "");
 
-    if (empty($mat) || empty($moduleId) || empty($classeId) || empty($anneeScolaire)) {
-        $error = "Veuillez remplir tous les champs.";
+    if (empty($mat) || empty($selectedClassIds) || empty($anneeScolaire)) {
+        $error = "Selectionnez un professeur, au moins une classe et l'annee scolaire.";
     } else {
-        $stmtCheckModule = $pdo->prepare("SELECT COUNT(*) FROM classe_modules WHERE classe_id = ? AND module_id = ?");
-        $stmtCheckModule->execute([$classeId, $moduleId]);
-        if ((int) $stmtCheckModule->fetchColumn() === 0) {
-            $error = "Le module choisi n'appartient pas a cette classe.";
-        } else {
         try {
-            $stmt = $pdo->prepare("
+            $pdo->beginTransaction();
+
+            $stmtCheckModule = $pdo->prepare("SELECT COUNT(*) FROM classe_modules WHERE classe_id = ? AND module_id = ?");
+            $stmtExisting = $pdo->prepare("
+                SELECT u.prenom, u.nom
+                FROM enseignement_affectation a
+                INNER JOIN utilisateur u ON u.MAT = a.MAT_enseignant
+                WHERE a.module_id = ? AND a.classe_id = ? AND a.annee_scolaire = ?
+                LIMIT 1
+            ");
+            $stmtInsert = $pdo->prepare("
                 INSERT INTO enseignement_affectation (MAT_enseignant, module_id, classe_id, annee_scolaire)
                 VALUES (?, ?, ?, ?)
             ");
-            $stmt->execute([$mat, $moduleId, $classeId, $anneeScolaire]);
 
-            header("Location: affectations.php?success=created");
-            exit;
-        } catch (PDOException $e) {
-            if ($e->getCode() === "23000") {
-                $error = "Cette classe a deja un professeur pour ce module sur cette annee scolaire.";
-            } else {
-                $error = "Erreur lors de la creation de l'affectation.";
+            $created = 0;
+            $skipped = 0;
+            $invalid = 0;
+            $missingModules = 0;
+
+            foreach ($selectedClassIds as $classeId) {
+                $moduleIds = array_values(array_filter($selectedModulesByClass[$classeId] ?? [], static fn($id) => ctype_digit((string) $id)));
+
+                if (empty($moduleIds)) {
+                    $missingModules++;
+                    continue;
+                }
+
+                foreach ($moduleIds as $moduleId) {
+                    $stmtCheckModule->execute([$classeId, $moduleId]);
+                    if ((int) $stmtCheckModule->fetchColumn() === 0) {
+                        $invalid++;
+                        continue;
+                    }
+
+                    $stmtExisting->execute([$moduleId, $classeId, $anneeScolaire]);
+                    if ($stmtExisting->fetch()) {
+                        $skipped++;
+                        continue;
+                    }
+
+                    $stmtInsert->execute([$mat, $moduleId, $classeId, $anneeScolaire]);
+                    $created++;
+                }
             }
-        }
+
+            if ($created === 0) {
+                $pdo->rollBack();
+                $error = "Aucune affectation creee. Selectionnez au moins un module disponible dans les classes choisies.";
+                if ($skipped > 0) {
+                    $error .= " Certaines affectations existent deja pour cette annee.";
+                }
+                if ($missingModules > 0) {
+                    $error .= " Certaines classes n'ont aucun module selectionne.";
+                }
+                if ($invalid > 0) {
+                    $error .= " Certains modules ne correspondent pas aux classes choisies.";
+                }
+            } else {
+                $pdo->commit();
+                header("Location: affectations.php?success=created&count=" . urlencode((string) $created) . "&skipped=" . urlencode((string) $skipped));
+                exit;
+            }
+        } catch (PDOException $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            $error = "Erreur lors de la creation des affectations.";
         }
     }
 }
@@ -103,6 +152,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <?php if (!empty($error)): ?>
                 <div class="alert-error"><?= $error ?></div>
             <?php endif; ?>
+            <?php if (!empty($success)): ?>
+                <div class="alert-success"><?= $success ?></div>
+            <?php endif; ?>
 
             <form method="POST" class="admin-form">
                 <div class="form-grid">
@@ -119,58 +171,77 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </div>
 
                     <div>
-                        <label>Module</label>
-                        <select name="module_id" id="moduleSelect">
-                            <option value="">Selectionner une classe d'abord</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label>Classe</label>
-                        <select name="classe_id">
-                            <option value="">Selectionner une classe</option>
-                            <?php foreach ($classes as $classe): ?>
-                                <option value="<?= htmlspecialchars($classe["ID"]) ?>" <?= (string) $classeId === (string) $classe["ID"] ? "selected" : "" ?>>
-                                    <?= htmlspecialchars($classe["nom"] . " - " . $classe["niveau"]) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div>
                         <label>Annee scolaire</label>
                         <input type="text" name="annee_scolaire" value="<?= htmlspecialchars($anneeScolaire) ?>" placeholder="Ex : 2025-2026">
                     </div>
                 </div>
 
-                <button type="submit" class="submit-btn">Creer l'affectation</button>
+                <div class="assignment-picker">
+                    <div class="assignment-picker-head">
+                        <div>
+                            <h3>Classes et modules</h3>
+                            <p>Selectionnez les classes, puis cochez les modules a confier au professeur.</p>
+                        </div>
+                    </div>
+
+                    <?php foreach ($classes as $classe): ?>
+                        <?php
+                            $cid = (string) $classe["ID"];
+                            $classModules = $modulesByClasse[$cid] ?? [];
+                            $isClassSelected = in_array($cid, array_map("strval", $selectedClassIds), true);
+                            $selectedModuleIds = array_map("strval", $selectedModulesByClass[$cid] ?? []);
+                        ?>
+                        <div class="assignment-class" data-assignment-class="<?= htmlspecialchars($cid) ?>">
+                            <label class="assignment-class-title">
+                                <input type="checkbox" name="classe_ids[]" value="<?= htmlspecialchars($cid) ?>" <?= $isClassSelected ? "checked" : "" ?>>
+                                <span><?= htmlspecialchars($classe["nom"] . " - " . $classe["niveau"]) ?></span>
+                                <small><?= count($classModules) ?> module<?= count($classModules) > 1 ? "s" : "" ?></small>
+                            </label>
+
+                            <div class="assignment-modules">
+                                <?php foreach ($classModules as $module): ?>
+                                    <label>
+                                        <input
+                                            type="checkbox"
+                                            name="module_ids_by_classe[<?= htmlspecialchars($cid) ?>][]"
+                                            value="<?= htmlspecialchars($module["id"]) ?>"
+                                            <?= in_array((string) $module["id"], $selectedModuleIds, true) ? "checked" : "" ?>
+                                        >
+                                        <span><?= htmlspecialchars($module["nom"]) ?></span>
+                                    </label>
+                                <?php endforeach; ?>
+
+                                <?php if (count($classModules) === 0): ?>
+                                    <div class="assignment-empty">Aucun module ajoute dans cette classe.</div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <button type="submit" class="submit-btn">Creer les affectations</button>
             </form>
         </div>
     </section>
 </main>
 <script>
-const modulesByClasse = <?= json_encode($modulesByClasse, JSON_UNESCAPED_UNICODE) ?>;
-const classeSelect = document.querySelector('select[name="classe_id"]');
-const moduleSelect = document.getElementById("moduleSelect");
-const selectedModule = <?= json_encode((string) $moduleId) ?>;
-function syncModules() {
-    const classeId = classeSelect.value;
-    const modules = modulesByClasse[classeId] || [];
-    moduleSelect.innerHTML = "";
-    const first = document.createElement("option");
-    first.value = "";
-    first.textContent = modules.length ? "Selectionner un module" : "Aucun module pour cette classe";
-    moduleSelect.appendChild(first);
-    modules.forEach((m) => {
-        const opt = document.createElement("option");
-        opt.value = m.id;
-        opt.textContent = m.nom;
-        if (selectedModule !== "" && selectedModule === m.id) opt.selected = true;
-        moduleSelect.appendChild(opt);
+function syncAssignmentClass(card) {
+    const classCheckbox = card.querySelector('.assignment-class-title input[type="checkbox"]');
+    const moduleCheckboxes = card.querySelectorAll('.assignment-modules input[type="checkbox"]');
+    card.classList.toggle("active", classCheckbox.checked);
+    moduleCheckboxes.forEach((checkbox) => {
+        checkbox.disabled = !classCheckbox.checked;
+        if (!classCheckbox.checked) {
+            checkbox.checked = false;
+        }
     });
 }
-classeSelect.addEventListener("change", syncModules);
-syncModules();
+
+document.querySelectorAll(".assignment-class").forEach((card) => {
+    const classCheckbox = card.querySelector('.assignment-class-title input[type="checkbox"]');
+    classCheckbox.addEventListener("change", () => syncAssignmentClass(card));
+    syncAssignmentClass(card);
+});
 </script>
 </body>
 </html>

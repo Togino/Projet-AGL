@@ -66,6 +66,11 @@ $adminController = new AdminController($roleService, $adminAlertService);
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 
+if ($method === 'GET' && preg_match('#/admin(?:/index\.php)?/?$#', $path)) {
+    header('Location: dashboard.php');
+    return;
+}
+
 if ($path === '/login' && $method === 'POST') {
     $authController->login();
     return;

@@ -4,7 +4,32 @@ function clean($data) {
     return htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8');
 }
 
+function app_url(string $path = ""): string {
+    $scriptName = str_replace("\\", "/", $_SERVER["SCRIPT_NAME"] ?? "");
+    $basePath = rtrim(str_replace("\\", "/", dirname($scriptName)), "/");
+    if ($basePath === ".") {
+        $basePath = "";
+    }
+    $rootDirs = ["admin", "public", "gestionnaire", "enseignant", "etudiant"];
+
+    foreach ($rootDirs as $dir) {
+        $marker = "/" . $dir;
+        $pos = strpos($basePath . "/", $marker . "/");
+        if ($pos !== false) {
+            $basePath = substr($basePath, 0, $pos);
+            break;
+        }
+    }
+
+    $basePath = $basePath === "/" ? "" : $basePath;
+    return ($basePath !== "" ? $basePath : "") . "/" . ltrim($path, "/");
+}
+
 function redirect($path) {
+    if (!preg_match('#^(?:https?://|/)#i', $path)) {
+        $path = app_url($path);
+    }
+
     header("Location: " . $path);
     exit;
 }
@@ -27,11 +52,11 @@ function hasRole($role) {
 
 function require_auth(array $roles = []) {
     if (!isLoggedIn()) {
-        redirect("../public/login.php");
+        redirect("public/login.php");
     }
 
     if ($roles && !in_array($_SESSION['user']['role'] ?? '', $roles, true)) {
-        redirect("../public/login.php");
+        redirect("public/login.php");
     }
 }
 
@@ -196,28 +221,28 @@ function render_app_page($pageTitle, $sidebarFile) {
 
 function redirect_by_role() {
     if (!isset($_SESSION['user']['role'])) {
-        redirect("../public/login.php");
+        redirect("public/login.php");
     }
 
     $role = $_SESSION['user']['role'];
 
     if ($role === "SUPER_ADMIN" || $role === "ADMIN") {
-        redirect("../admin/dashboard.php");
+        redirect("admin/dashboard.php");
     }
 
     if ($role === "GESTIONNAIRE") {
-        redirect("../gestionnaire/dashboard.php");
+        redirect("gestionnaire/dashboard.php");
     }
 
     if ($role === "ETUDIANT") {
-        redirect("../etudiant/dashboard.php");
+        redirect("etudiant/dashboard.php");
     }
 
     if ($role === "ENSEIGNANT") {
-        redirect("../enseignant/dashboard.php");
+        redirect("enseignant/dashboard.php");
     }
 
-    redirect("../public/login.php");
+    redirect("public/login.php");
 }
 
 function ensure_student_extra_columns(PDO $pdo) {
@@ -272,6 +297,8 @@ function ui_icon($name) {
         "plus" => '<path d="M12 5v14"/><path d="M5 12h14"/>',
         "pin" => '<path d="M12 17v5"/><path d="M9 10.8 4 8l8-6 8 6-5 2.8V17H9v-6.2Z"/>',
         "bolt" => '<path d="M13 2 4 14h7l-1 8 10-13h-7l1-7Z"/>',
+        "folder" => '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/>',
+        "link" => '<path d="M10 13a5 5 0 0 0 7.07 0l2.12-2.12a5 5 0 0 0-7.07-7.07L11 4.93"/><path d="M14 11a5 5 0 0 0-7.07 0L4.81 13.12a5 5 0 0 0 7.07 7.07L13 19.07"/>',
     ];
 
     if (!isset($icons[$name])) {

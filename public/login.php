@@ -14,19 +14,19 @@ $redirectUrl = "";
 function login_redirect_for_role(string $role): string
 {
     if ($role === "SUPER_ADMIN" || $role === "ADMIN") {
-        return "../admin/dashboard.php";
+        return app_url("admin/dashboard.php");
     }
 
     if ($role === "GESTIONNAIRE") {
-        return "../gestionnaire/dashboard.php";
+        return app_url("gestionnaire/dashboard.php");
     }
 
     if ($role === "ETUDIANT") {
-        return "../etudiant/dashboard.php";
+        return app_url("etudiant/dashboard.php");
     }
 
     if ($role === "ENSEIGNANT") {
-        return "../enseignant/dashboard.php";
+        return app_url("enseignant/dashboard.php");
     }
 
     return "";

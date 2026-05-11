@@ -239,12 +239,13 @@ $classCode = "CLS-" . str_pad($classe["ID"], 3, "0", STR_PAD_LEFT);
     </div>
 
     <div class="class-tabs">
-        <button class="active" data-class-tab="info">Informations de la classe</button>
+        <button class="active" data-class-tab="modules">Semestres & Modules</button>
+        <button data-class-tab="info">Informations de la classe</button>
         <button data-class-tab="teachers">Enseignants</button>
         <button data-class-tab="students">Etudiants</button>
     </div>
 
-    <div class="class-tab-panel active" data-class-panel="info">
+    <div class="class-tab-panel" data-class-panel="info">
         <div class="semester-card">
             <div class="semester-top">
                 <div>
@@ -333,8 +334,9 @@ $classCode = "CLS-" . str_pad($classe["ID"], 3, "0", STR_PAD_LEFT);
         </div>
     </div>
 
-    <div class="semester-layout class-legacy-modules" style="display: none;">
-        <div class="semester-main">
+    <div class="class-tab-panel active" data-class-panel="modules">
+        <div class="semester-layout class-legacy-modules">
+            <div class="semester-main">
             <div class="semester-top">
                 <div>
                     <h2>Semestres & Modules</h2>
@@ -442,37 +444,38 @@ $classCode = "CLS-" . str_pad($classe["ID"], 3, "0", STR_PAD_LEFT);
                     </tbody>
                 </table>
             </div>
+            </div>
+
+            <aside class="semester-sidebar">
+                <div class="side-card">
+                    <h3>Informations sur la classe</h3>
+                    <div class="side-info-list">
+                        <div><i data-lucide="school"></i><article><small>Classe</small><strong><?= htmlspecialchars($classe["nom"]) ?></strong></article></div>
+                        <div><i data-lucide="graduation-cap"></i><article><small>Niveau</small><strong><?= htmlspecialchars($classe["niveau"] ?: "-") ?></strong></article></div>
+                        <div><i data-lucide="calendar-days"></i><article><small>Semestres</small><strong><?= $totalSemesters ?> crees</strong></article></div>
+                        <div><i data-lucide="book-open"></i><article><small>Modules</small><strong><?= $totalModules ?> modules</strong></article></div>
+                    </div>
+                </div>
+
+                <div class="side-card">
+                    <h3>Enseignants</h3>
+                    <div class="side-info-list">
+                        <?php foreach ($teachers as $teacher): ?>
+                            <div>
+                                <i data-lucide="user"></i>
+                                <article>
+                                    <small><?= htmlspecialchars($teacher["specialisation"] ?: "Specialisation non renseignee") ?></small>
+                                    <strong><?= htmlspecialchars($teacher["prenom"] . " " . $teacher["nom"]) ?></strong>
+                                </article>
+                            </div>
+                        <?php endforeach; ?>
+                        <?php if (count($teachers) === 0): ?>
+                            <div><i data-lucide="info"></i><article><small>Aucune affectation</small><strong>Aucun enseignant</strong></article></div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </aside>
         </div>
-
-        <aside class="semester-sidebar">
-            <div class="side-card">
-                <h3>Informations sur la classe</h3>
-                <div class="side-info-list">
-                    <div><i data-lucide="school"></i><article><small>Classe</small><strong><?= htmlspecialchars($classe["nom"]) ?></strong></article></div>
-                    <div><i data-lucide="graduation-cap"></i><article><small>Niveau</small><strong><?= htmlspecialchars($classe["niveau"] ?: "-") ?></strong></article></div>
-                    <div><i data-lucide="calendar-days"></i><article><small>Semestres</small><strong><?= $totalSemesters ?> crees</strong></article></div>
-                    <div><i data-lucide="book-open"></i><article><small>Modules</small><strong><?= $totalModules ?> modules</strong></article></div>
-                </div>
-            </div>
-
-            <div class="side-card">
-                <h3>Enseignants</h3>
-                <div class="side-info-list">
-                    <?php foreach ($teachers as $teacher): ?>
-                        <div>
-                            <i data-lucide="user"></i>
-                            <article>
-                                <small><?= htmlspecialchars($teacher["specialisation"] ?: "Specialisation non renseignee") ?></small>
-                                <strong><?= htmlspecialchars($teacher["prenom"] . " " . $teacher["nom"]) ?></strong>
-                            </article>
-                        </div>
-                    <?php endforeach; ?>
-                    <?php if (count($teachers) === 0): ?>
-                        <div><i data-lucide="info"></i><article><small>Aucune affectation</small><strong>Aucun enseignant</strong></article></div>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </aside>
     </div>
 </section>
 </main>
