@@ -125,7 +125,7 @@ $totalModules = (int) $stmtModules->fetchColumn();
             <div class="teacher-classes-grid">
                 <?php if (count($classes) > 0): ?>
                     <?php foreach ($classes as $classe): ?>
-                        <a href="classes.php?id=<?= urlencode($classe["ID"]) ?>" class="teacher-class-card">
+                        <a href="academique/classes.php?id=<?= urlencode($classe["ID"]) ?>" class="teacher-class-card">
                             <div class="teacher-class-icon">
                                 <i data-lucide="school"></i>
                             </div>
@@ -153,12 +153,12 @@ $totalModules = (int) $stmtModules->fetchColumn();
             <div class="teacher-side-card">
                 <h3>Actions rapides</h3>
 
-                <a href="classes.php">
+                <a href="academique/classes.php">
                     <i data-lucide="school"></i>
                     Voir mes classes
                 </a>
 
-                <a href="notes.php">
+                <a href="academique/notes.php">
                     <i data-lucide="file-pen-line"></i>
                     Voir les notes
                 </a>

@@ -1,8 +1,9 @@
 <?php
 $unreadTopbarAlerts = 0;
 $currentRole = $_SESSION["user"]["role"] ?? "";
-$alertsHref = $currentRole === "ENSEIGNANT" || $currentRole === "ETUDIANT" ? "dashboard.php" : "alertes.php";
-$settingsHref = in_array($currentRole, ["ENSEIGNANT", "ETUDIANT", "GESTIONNAIRE", "SUPER_ADMIN", "ADMIN"], true) ? "profil.php" : "parametres.php";
+$navPrefix = $navPrefix ?? "";
+$alertsHref = $currentRole === "ENSEIGNANT" || $currentRole === "ETUDIANT" ? "dashboard.php" : (in_array($currentRole, ["GESTIONNAIRE", "SUPER_ADMIN", "ADMIN"], true) ? "workflow/alertes.php" : "alertes.php");
+$settingsHref = in_array($currentRole, ["ENSEIGNANT", "ETUDIANT", "GESTIONNAIRE", "SUPER_ADMIN", "ADMIN"], true) ? "compte/profil.php" : "parametres.php";
 $roleLabels = [
     "SUPER_ADMIN" => "Super administrateur",
     "ADMIN" => "Administrateur",
@@ -14,9 +15,17 @@ $roleLabel = $roleLabels[$currentRole] ?? "Utilisateur";
 
 if (isset($pdo) && $pdo instanceof PDO) {
     try {
-        $unreadTopbarAlerts = (int) $pdo
-            ->query("SELECT COUNT(*) FROM admin_alerts WHERE is_read = 0")
-            ->fetchColumn();
+        $matCurrent = $_SESSION["user"]["MAT"] ?? null;
+        if ($matCurrent) {
+            $stmtAlerts = $pdo->prepare("
+                SELECT COUNT(*)
+                FROM admin_alerts
+                WHERE is_read = 0
+                  AND (target_mat_user IS NULL OR target_mat_user = ?)
+            ");
+            $stmtAlerts->execute([$matCurrent]);
+            $unreadTopbarAlerts = (int) $stmtAlerts->fetchColumn();
+        }
     } catch (PDOException $e) {
         $unreadTopbarAlerts = 0;
     }
@@ -32,14 +41,16 @@ if (isset($pdo) && $pdo instanceof PDO) {
     </div>
 
     <div class="top-actions">
-        <a class="notif" href="<?= htmlspecialchars($alertsHref) ?>" title="Alertes et notifications" aria-label="Alertes et notifications">
-            <?= ui_icon("bell") ?>
-            <?php if ($unreadTopbarAlerts > 0): ?>
-                <span><?= $unreadTopbarAlerts > 99 ? "99+" : $unreadTopbarAlerts ?></span>
-            <?php endif; ?>
-        </a>
+        <?php if ($currentRole !== "ETUDIANT"): ?>
+            <a class="notif" href="<?= htmlspecialchars($navPrefix . $alertsHref) ?>" title="Alertes et notifications" aria-label="Alertes et notifications">
+                <?= ui_icon("bell") ?>
+                <?php if ($unreadTopbarAlerts > 0): ?>
+                    <span><?= $unreadTopbarAlerts > 99 ? "99+" : $unreadTopbarAlerts ?></span>
+                <?php endif; ?>
+            </a>
+        <?php endif; ?>
 
-        <a class="settings" href="<?= htmlspecialchars($settingsHref) ?>" title="Parametres" aria-label="Parametres">
+        <a class="settings" href="<?= htmlspecialchars($navPrefix . $settingsHref) ?>" title="Parametres" aria-label="Parametres">
             <?= ui_icon("settings") ?>
         </a>
 

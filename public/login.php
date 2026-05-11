@@ -5,6 +5,32 @@ require_once "../app/config/database.php";
 require_once "../app/helpers/functions.php";
 
 $error = "";
+$isAjax = (
+    ($_SERVER["HTTP_X_REQUESTED_WITH"] ?? "") === "XMLHttpRequest"
+    || str_contains($_SERVER["HTTP_ACCEPT"] ?? "", "application/json")
+);
+$redirectUrl = "";
+
+function login_redirect_for_role(string $role): string
+{
+    if ($role === "SUPER_ADMIN" || $role === "ADMIN") {
+        return "../admin/dashboard.php";
+    }
+
+    if ($role === "GESTIONNAIRE") {
+        return "../gestionnaire/dashboard.php";
+    }
+
+    if ($role === "ETUDIANT") {
+        return "../etudiant/dashboard.php";
+    }
+
+    if ($role === "ENSEIGNANT") {
+        return "../enseignant/dashboard.php";
+    }
+
+    return "";
+}
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $identifier = clean($_POST["identifier"]);
@@ -41,33 +67,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 ];
 
                 if ((int) $user["must_change_password"] === 1) {
-                    header("Location: changer-mot-de-passe.php");
-                    exit;
-                }
-
-                if ($user["role"] === "SUPER_ADMIN" || $user["role"] === "ADMIN") {
-                    header("Location: ../admin/dashboard.php");
-                    exit;
-                }
-
-                if ($user["role"] === "GESTIONNAIRE") {
-                    header("Location: ../gestionnaire/dashboard.php");
-                    exit;
-                }
-
-                if ($user["role"] === "ETUDIANT") {
-                    header("Location: ../etudiant/dashboard.php");
-                    exit;
-                }
-
-                if ($user["role"] === "ENSEIGNANT") {
-                    header("Location: ../enseignant/dashboard.php");
-                    exit;
+                    $redirectUrl = "changer-mot-de-passe.php";
+                } else {
+                    $redirectUrl = login_redirect_for_role($user["role"]);
                 }
             }
         } else {
             $error = "Email, matricule ou mot de passe incorrect.";
         }
+    }
+
+    if ($isAjax) {
+        header("Content-Type: application/json; charset=utf-8");
+        echo json_encode([
+            "success" => $error === "",
+            "error" => $error,
+            "redirect" => $redirectUrl,
+        ]);
+        exit;
+    }
+
+    if ($error === "" && $redirectUrl !== "") {
+        header("Location: " . $redirectUrl);
+        exit;
     }
 }
 ?>
@@ -150,16 +172,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <div class="login-right-panel">
 
-    <form method="POST" class="edusys-login-card">
+    <form method="POST" class="edusys-login-card" id="loginForm">
 
         <div class="login-card-head">
             <h2>Bienvenue ! 👋</h2>
             <p>Connectez-vous à votre espace EDUSYS</p>
         </div>
 
-        <?php if (!empty($error)): ?>
-            <div class="alert-error"><?= $error ?></div>
-        <?php endif; ?>
+        <div class="alert-error" id="loginError" <?= empty($error) ? 'style="display: none;"' : "" ?>><?= htmlspecialchars($error) ?></div>
 
         <div class="login-field">
             <label>Email ou matricule</label>
@@ -200,9 +220,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <a href="#">Mot de passe oublié ?</a>
         </div>
 
-        <button type="submit" class="login-submit">
+        <button type="submit" class="login-submit" id="loginSubmit">
             <i data-lucide="lock"></i>
-            Se connecter
+            <span>Se connecter</span>
         </button>
 
         <div class="login-separator">
@@ -230,9 +250,49 @@ lucide.createIcons();
 
 const toggleBtn = document.getElementById("toggleLoginPassword");
 const passwordInput = document.getElementById("loginPassword");
+const loginForm = document.getElementById("loginForm");
+const loginError = document.getElementById("loginError");
+const loginSubmit = document.getElementById("loginSubmit");
+const loginSubmitText = loginSubmit.querySelector("span");
 
 toggleBtn.addEventListener("click", () => {
     passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+});
+
+loginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    loginError.style.display = "none";
+    loginError.textContent = "";
+    loginSubmit.disabled = true;
+    loginSubmitText.textContent = "Connexion...";
+
+    try {
+        const response = await fetch(loginForm.action || window.location.href, {
+            method: "POST",
+            body: new FormData(loginForm),
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "Accept": "application/json"
+            }
+        });
+
+        const result = await response.json();
+
+        if (result.success && result.redirect) {
+            window.location.href = result.redirect;
+            return;
+        }
+
+        loginError.textContent = result.error || "Connexion impossible.";
+        loginError.style.display = "block";
+    } catch (error) {
+        loginError.textContent = "Erreur de connexion. Veuillez reessayer.";
+        loginError.style.display = "block";
+    } finally {
+        loginSubmit.disabled = false;
+        loginSubmitText.textContent = "Se connecter";
+    }
 });
 </script>
 

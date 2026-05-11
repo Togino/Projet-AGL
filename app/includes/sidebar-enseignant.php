@@ -1,5 +1,6 @@
 <?php
 $currentPage = basename($_SERVER["SCRIPT_NAME"]);
+$enseignantNavPrefix = $enseignantNavPrefix ?? "";
 
 if (!function_exists("sidebar_active")) {
     function sidebar_active($pages) {
@@ -19,15 +20,15 @@ if (!function_exists("sidebar_active")) {
     </div>
 
     <nav class="menu">
-        <a class="<?= sidebar_active("dashboard.php") ?>" href="dashboard.php"><?= ui_icon("home") ?> Tableau de bord</a>
+        <a class="<?= sidebar_active("dashboard.php") ?>" href="<?= $enseignantNavPrefix ?>dashboard.php"><?= ui_icon("home") ?> Tableau de bord</a>
 
         <span>Academique</span>
-        <a class="<?= sidebar_active("classes.php") ?>" href="classes.php"><?= ui_icon("school") ?> Mes classes</a>
-        <a class="<?= sidebar_active("notes.php") ?>" href="notes.php"><?= ui_icon("chart") ?> Notes</a>
+        <a class="<?= sidebar_active("classes.php") ?>" href="<?= $enseignantNavPrefix ?>academique/classes.php"><?= ui_icon("school") ?> Mes classes</a>
+        <a class="<?= sidebar_active("notes.php") ?>" href="<?= $enseignantNavPrefix ?>academique/notes.php"><?= ui_icon("chart") ?> Notes</a>
 
         <span>Compte</span>
-        <a class="<?= sidebar_active("profil.php") ?>" href="profil.php"><?= ui_icon("user") ?> Mon profil</a>
+        <a class="<?= sidebar_active("profil.php") ?>" href="<?= $enseignantNavPrefix ?>compte/profil.php"><?= ui_icon("user") ?> Mon profil</a>
     </nav>
 
-    <a href="../public/logout.php" class="logout"><?= ui_icon("log-out") ?> Deconnexion</a>
+    <a href="<?= $enseignantNavPrefix ?>../public/logout.php" class="logout"><?= ui_icon("log-out") ?> Deconnexion</a>
 </aside>

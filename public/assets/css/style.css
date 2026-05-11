@@ -2587,6 +2587,11 @@ body {
     width: 23px;
 }
 
+.login-submit:disabled {
+    opacity: 0.72;
+    cursor: wait;
+}
+
 .login-separator {
     display: flex;
     align-items: center;
@@ -5820,4 +5825,36 @@ body {
     .edt-toolbar-actions {
         flex-wrap: wrap;
     }
+}
+
+.grades-entry-table input[type="number"] {
+    width: 86px;
+    max-width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #dfe8e2;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #111712;
+    font-weight: 700;
+}
+
+.grades-entry-table input[type="number"]:focus {
+    outline: 2px solid rgba(21, 122, 61, 0.18);
+    border-color: #157a3d;
+}
+
+.inline-decision-form {
+    display: grid;
+    gap: 8px;
+    min-width: 220px;
+}
+
+.inline-decision-form textarea {
+    width: 100%;
+    min-height: 54px;
+    resize: vertical;
+    border: 1px solid #dfe8e2;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-family: inherit;
 }

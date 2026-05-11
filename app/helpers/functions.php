@@ -279,3 +279,329 @@ function ui_icon($name) {
 
     return '<svg class="icon icon-' . htmlspecialchars($name, ENT_QUOTES, "UTF-8") . '" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' . $icons[$name] . '</svg>';
 }
+
+function ensure_sensitive_action_tables(PDO $pdo): void
+{
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS action_queue (
+            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            action_type VARCHAR(60) NOT NULL,
+            target_type VARCHAR(60) NOT NULL,
+            target_id VARCHAR(60) NOT NULL,
+            payload JSON NULL,
+            requested_by VARCHAR(10) NOT NULL,
+            status ENUM('pending','approved','rejected','executed','failed') NOT NULL DEFAULT 'pending',
+            required_confirmations INT NOT NULL DEFAULT 1,
+            created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+            processed_at DATETIME NULL,
+            INDEX idx_action_queue_status (status),
+            INDEX idx_action_queue_type_target (action_type, target_type, target_id),
+            CONSTRAINT fk_action_queue_user FOREIGN KEY (requested_by) REFERENCES utilisateur(MAT) ON DELETE CASCADE
+        )
+    ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS action_confirmations (
+            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            action_queue_id BIGINT NOT NULL,
+            confirmed_by VARCHAR(10) NOT NULL,
+            decision ENUM('approve','reject') NOT NULL DEFAULT 'approve',
+            comment_text VARCHAR(255) NULL,
+            created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY uq_action_confirmation (action_queue_id, confirmed_by),
+            INDEX idx_action_confirm_action (action_queue_id),
+            CONSTRAINT fk_action_confirm_queue FOREIGN KEY (action_queue_id) REFERENCES action_queue(id) ON DELETE CASCADE,
+            CONSTRAINT fk_action_confirm_user FOREIGN KEY (confirmed_by) REFERENCES utilisateur(MAT) ON DELETE CASCADE
+        )
+    ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS action_archive (
+            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            action_queue_id BIGINT NULL,
+            action_type VARCHAR(60) NOT NULL,
+            target_type VARCHAR(60) NOT NULL,
+            target_id VARCHAR(60) NOT NULL,
+            payload JSON NULL,
+            requested_by VARCHAR(10) NOT NULL,
+            executed_by VARCHAR(10) NULL,
+            execution_status ENUM('success','failed') NOT NULL DEFAULT 'success',
+            execution_message VARCHAR(255) NULL,
+            created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+            INDEX idx_action_archive_type_target (action_type, target_type, target_id),
+            CONSTRAINT fk_action_archive_queue FOREIGN KEY (action_queue_id) REFERENCES action_queue(id) ON DELETE SET NULL,
+            CONSTRAINT fk_action_archive_requested_by FOREIGN KEY (requested_by) REFERENCES utilisateur(MAT) ON DELETE CASCADE,
+            CONSTRAINT fk_action_archive_executed_by FOREIGN KEY (executed_by) REFERENCES utilisateur(MAT) ON DELETE SET NULL
+        )
+    ");
+}
+
+function ensure_optional_birthdate_for_personnel(PDO $pdo): void
+{
+    $stmt = $pdo->prepare("
+        SELECT IS_NULLABLE
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+          AND TABLE_NAME = 'utilisateur'
+          AND COLUMN_NAME = 'date_de_naissance'
+        LIMIT 1
+    ");
+    $stmt->execute();
+    $nullable = $stmt->fetchColumn();
+    if ($nullable === "NO") {
+        $pdo->exec("ALTER TABLE utilisateur MODIFY date_de_naissance DATE NULL");
+    }
+}
+
+function notify_admin_and_gestionnaires(
+    PDO $pdo,
+    string $type,
+    string $severity,
+    string $title,
+    string $message,
+    ?string $createdBy = null,
+    ?string $excludeMat = null
+): void {
+    $stmt = $pdo->prepare("
+        SELECT u.MAT
+        FROM utilisateur u
+        INNER JOIN roles r ON r.id = u.role_id
+        WHERE u.deleted_at IS NULL
+          AND u.statut = 1
+          AND r.name IN ('SUPER_ADMIN', 'ADMIN', 'GESTIONNAIRE')
+    ");
+    $stmt->execute();
+    $targets = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+    $insert = $pdo->prepare("
+        INSERT INTO admin_alerts (type, severity, title, message, target_mat_user, created_by)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ");
+
+    foreach ($targets as $targetMat) {
+        if ($excludeMat !== null && $targetMat === $excludeMat) {
+            continue;
+        }
+        $insert->execute([$type, $severity, $title, $message, $targetMat, $createdBy]);
+    }
+}
+
+function normalize_role_group(string $role): string
+{
+    return in_array($role, ["SUPER_ADMIN", "ADMIN"], true) ? "ADMIN" : $role;
+}
+
+function required_confirmations_for_role(PDO $pdo, string $roleGroup): int
+{
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*)
+        FROM utilisateur u
+        INNER JOIN roles r ON r.id = u.role_id
+        WHERE r.name = 'GESTIONNAIRE' AND u.deleted_at IS NULL AND u.statut = 1
+    ");
+    $stmt->execute();
+    $totalGestionnaires = (int) $stmt->fetchColumn();
+    if ($roleGroup === "GESTIONNAIRE") {
+        return max($totalGestionnaires - 1, 1);
+    }
+    return 1;
+}
+
+function can_confirm_sensitive_action(string $requesterRole, string $confirmerRole): bool
+{
+    $requesterGroup = normalize_role_group($requesterRole);
+    $confirmerGroup = normalize_role_group($confirmerRole);
+
+    if ($requesterGroup === "GESTIONNAIRE") {
+        return $confirmerGroup === "GESTIONNAIRE";
+    }
+
+    if ($requesterGroup === "ADMIN") {
+        return in_array($confirmerGroup, ["ADMIN", "GESTIONNAIRE"], true);
+    }
+
+    return false;
+}
+
+function enqueue_sensitive_action(
+    PDO $pdo,
+    string $actionType,
+    string $targetType,
+    string $targetId,
+    ?array $payload,
+    string $requestedBy,
+    string $requesterRole
+): int {
+    ensure_sensitive_action_tables($pdo);
+    $roleGroup = normalize_role_group($requesterRole);
+    $required = required_confirmations_for_role($pdo, $roleGroup);
+
+    $checkPending = $pdo->prepare("
+        SELECT id FROM action_queue
+        WHERE action_type = ? AND target_type = ? AND target_id = ? AND status = 'pending'
+        LIMIT 1
+    ");
+    $checkPending->execute([$actionType, $targetType, $targetId]);
+    $existing = $checkPending->fetchColumn();
+    if ($existing) {
+        return (int) $existing;
+    }
+
+    $stmt = $pdo->prepare("
+        INSERT INTO action_queue (action_type, target_type, target_id, payload, requested_by, required_confirmations)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ");
+    $stmt->execute([
+        $actionType,
+        $targetType,
+        $targetId,
+        $payload ? json_encode($payload, JSON_UNESCAPED_UNICODE) : null,
+        $requestedBy,
+        $required
+    ]);
+    return (int) $pdo->lastInsertId();
+}
+
+function execute_sensitive_action(PDO $pdo, array $queue, string $executedBy): array
+{
+    $actionType = $queue["action_type"];
+    $targetId = $queue["target_id"];
+    $message = "";
+
+    if ($actionType === "DELETE_CLASSE") {
+        $classId = (int) $targetId;
+        $stmtClass = $pdo->prepare("SELECT ID, nom FROM classe WHERE ID = ? LIMIT 1");
+        $stmtClass->execute([$classId]);
+        if (!$stmtClass->fetch()) {
+            return ["status" => "failed", "message" => "Classe introuvable au moment de l'execution."];
+        }
+        $stmtStudents = $pdo->prepare("SELECT COUNT(*) FROM etudiant WHERE classe_id = ?");
+        $stmtStudents->execute([$classId]);
+        if ((int) $stmtStudents->fetchColumn() > 0) {
+            return ["status" => "failed", "message" => "Suppression refusee: cette classe contient des etudiants."];
+        }
+        $pdo->prepare("DELETE FROM classe WHERE ID = ?")->execute([$classId]);
+        $message = "Suppression de classe executee apres confirmations.";
+    } elseif ($actionType === "DELETE_MODULE") {
+        $moduleId = (int) $targetId;
+        $stmtModule = $pdo->prepare("SELECT ID FROM module WHERE ID = ? LIMIT 1");
+        $stmtModule->execute([$moduleId]);
+        if (!$stmtModule->fetch()) {
+            return ["status" => "failed", "message" => "Module introuvable au moment de l'execution."];
+        }
+        $stmtUsage = $pdo->prepare("
+            SELECT
+                (SELECT COUNT(*) FROM note WHERE module_id = ?) AS total_notes,
+                (SELECT COUNT(*) FROM enseignement_affectation WHERE module_id = ?) AS total_affectations
+        ");
+        $stmtUsage->execute([$moduleId, $moduleId]);
+        $usage = $stmtUsage->fetch();
+        if ((int) $usage["total_notes"] > 0 || (int) $usage["total_affectations"] > 0) {
+            return ["status" => "failed", "message" => "Suppression refusee: module deja utilise."];
+        }
+        $pdo->prepare("DELETE FROM module WHERE ID = ?")->execute([$moduleId]);
+        $message = "Suppression du module executee apres confirmations.";
+    } elseif ($actionType === "SOFT_DELETE_USER" || $actionType === "DISABLE_TEACHER") {
+        $mat = $targetId;
+        $stmtUser = $pdo->prepare("SELECT MAT FROM utilisateur WHERE MAT = ? AND deleted_at IS NULL LIMIT 1");
+        $stmtUser->execute([$mat]);
+        if (!$stmtUser->fetch()) {
+            return ["status" => "failed", "message" => "Utilisateur introuvable ou deja desactive."];
+        }
+        $pdo->prepare("
+            UPDATE utilisateur
+            SET statut = 0,
+                deleted_at = NOW(),
+                deactivated_at = NOW(),
+                deactivated_by = ?,
+                deactivation_reason = ?,
+                deletion_requested = 1,
+                deletion_requested_at = NOW(),
+                deletion_requested_by = ?
+            WHERE MAT = ?
+        ")->execute([$executedBy, "Compte desactive apres validation.", $executedBy, $mat]);
+        $message = "Desactivation utilisateur executee apres confirmations.";
+    } else {
+        return ["status" => "failed", "message" => "Type d'action non supporte: " . $actionType];
+    }
+
+    return ["status" => "success", "message" => $message];
+}
+
+function can_cancel_archived_action(string $requesterRole, string $cancellerRole): bool
+{
+    return normalize_role_group($requesterRole) === normalize_role_group($cancellerRole);
+}
+
+function restore_archived_action(PDO $pdo, array $archiveRow, string $cancellerMat): array
+{
+    $actionType = $archiveRow["action_type"];
+    $targetId = $archiveRow["target_id"];
+    $payload = [];
+    if (!empty($archiveRow["payload"])) {
+        $decoded = json_decode((string) $archiveRow["payload"], true);
+        if (is_array($decoded)) {
+            $payload = $decoded;
+        }
+    }
+
+    if ($actionType === "SOFT_DELETE_USER" || $actionType === "DISABLE_TEACHER") {
+        $mat = $payload["mat"] ?? $targetId;
+        $stmt = $pdo->prepare("SELECT MAT FROM utilisateur WHERE MAT = ? LIMIT 1");
+        $stmt->execute([$mat]);
+        if (!$stmt->fetch()) {
+            return ["status" => "failed", "message" => "Compte introuvable pour restauration."];
+        }
+        $pdo->prepare("
+            UPDATE utilisateur
+            SET statut = 1,
+                deleted_at = NULL,
+                deactivated_at = NULL,
+                deactivated_by = NULL,
+                deactivation_reason = NULL,
+                deletion_requested = 0,
+                deletion_requested_at = NULL,
+                deletion_requested_by = NULL,
+                reactivated_at = NOW(),
+                reactivated_by = ?
+            WHERE MAT = ?
+        ")->execute([$cancellerMat, $mat]);
+        return ["status" => "success", "message" => "Compte reactive avec succes."];
+    }
+
+    if ($actionType === "DELETE_CLASSE") {
+        $nom = $payload["nom"] ?? null;
+        $niveau = $payload["niveau"] ?? null;
+        if (!$nom) {
+            return ["status" => "failed", "message" => "Donnees de classe insuffisantes pour restauration."];
+        }
+        $check = $pdo->prepare("SELECT ID FROM classe WHERE nom = ? AND niveau = ? LIMIT 1");
+        $check->execute([$nom, $niveau]);
+        if ($check->fetch()) {
+            return ["status" => "success", "message" => "Classe deja presente, restauration non necessaire."];
+        }
+        $pdo->prepare("INSERT INTO classe (nom, niveau) VALUES (?, ?)")->execute([$nom, $niveau]);
+        return ["status" => "success", "message" => "Classe restauree (structure de base)."];
+    }
+
+    if ($actionType === "DELETE_MODULE") {
+        $nom = $payload["nom"] ?? null;
+        if (!$nom) {
+            $stmt = $pdo->prepare("SELECT nom FROM module WHERE ID = ? LIMIT 1");
+            $stmt->execute([(int) $targetId]);
+            $nom = $stmt->fetchColumn() ?: null;
+        }
+        if (!$nom) {
+            return ["status" => "failed", "message" => "Donnees module insuffisantes pour restauration."];
+        }
+        $check = $pdo->prepare("SELECT ID FROM module WHERE nom = ? LIMIT 1");
+        $check->execute([$nom]);
+        if ($check->fetch()) {
+            return ["status" => "success", "message" => "Module deja present, restauration non necessaire."];
+        }
+        $pdo->prepare("INSERT INTO module (nom) VALUES (?)")->execute([$nom]);
+        return ["status" => "success", "message" => "Module restaure."];
+    }
+
+    return ["status" => "failed", "message" => "Restauration non supportee pour cette action."];
+}

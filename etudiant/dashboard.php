@@ -1,6 +1,8 @@
 <?php
 require_once "../app/includes/auth.php";
 require_once "../app/config/database.php";
+require_once "../app/helpers/grades.php";
+require_once "../app/helpers/reclamations.php";
 
 if ($_SESSION["user"]["role"] !== "ETUDIANT") {
     header("Location: ../public/login.php");
@@ -9,10 +11,35 @@ if ($_SESSION["user"]["role"] !== "ETUDIANT") {
 
 $mat = $_SESSION["user"]["MAT"];
 
+ensure_simple_grades_schema($pdo);
+ensure_reclamations_schema($pdo);
+
+$pdo->exec("
+    CREATE TABLE IF NOT EXISTS emploi_temps (
+        id INT NOT NULL AUTO_INCREMENT,
+        classe_id INT NOT NULL,
+        module_id INT NOT NULL,
+        MAT_enseignant VARCHAR(10) NULL,
+        jour_semaine ENUM('Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche') NOT NULL,
+        heure_debut TIME NOT NULL,
+        heure_fin TIME NOT NULL,
+        salle VARCHAR(80) NULL,
+        annee_scolaire VARCHAR(20) NOT NULL,
+        created_by VARCHAR(10) NULL,
+        created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (id),
+        KEY fk_edt_classe (classe_id),
+        KEY fk_edt_module (module_id),
+        KEY fk_edt_enseignant (MAT_enseignant)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+");
+
 $stmt = $pdo->prepare("
     SELECT
         u.MAT, u.nom, u.prenom, u.date_de_naissance, u.email, u.statut,
         e.annee_etude,
+        c.ID AS classe_id,
         c.nom AS classe_nom,
         c.niveau
     FROM etudiant e
@@ -24,11 +51,70 @@ $stmt = $pdo->prepare("
 $stmt->execute([$mat]);
 $etudiant = $stmt->fetch();
 
+$anneeScolaire = date("Y") . "-" . ((int) date("Y") + 1);
+$joursEmploi = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+$libellesJours = [
+    "Lundi" => "Lun",
+    "Mardi" => "Mar",
+    "Mercredi" => "Mer",
+    "Jeudi" => "Jeu",
+    "Vendredi" => "Ven",
+    "Samedi" => "Sam",
+];
+$creneauxEmploi = [];
+$creneauxByDay = array_fill_keys($joursEmploi, []);
+$heuresEmploi = [];
+
+if ($etudiant) {
+    $emploiStmt = $pdo->prepare("
+        SELECT et.*, m.nom AS module_nom, u.nom AS enseignant_nom, u.prenom AS enseignant_prenom
+        FROM emploi_temps et
+        INNER JOIN module m ON m.ID = et.module_id
+        LEFT JOIN utilisateur u ON u.MAT = et.MAT_enseignant
+        INNER JOIN etudiant e ON e.classe_id = et.classe_id
+        WHERE e.MAT = ?
+        AND et.annee_scolaire = ?
+        ORDER BY FIELD(et.jour_semaine, 'Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'), et.heure_debut ASC
+    ");
+    $emploiStmt->execute([$mat, $anneeScolaire]);
+    $creneauxEmploi = $emploiStmt->fetchAll();
+
+    foreach ($creneauxEmploi as $creneau) {
+        if (isset($creneauxByDay[$creneau["jour_semaine"]])) {
+            $creneauxByDay[$creneau["jour_semaine"]][] = $creneau;
+        }
+
+        $debut = substr($creneau["heure_debut"], 0, 5);
+        if (!in_array($debut, $heuresEmploi, true)) {
+            $heuresEmploi[] = $debut;
+        }
+    }
+
+    usort($heuresEmploi, function ($a, $b) {
+        return strtotime($a) <=> strtotime($b);
+    });
+}
+
+function findDashboardCreneau(array $creneauxByDay, string $jour, string $heureDebut)
+{
+    foreach ($creneauxByDay[$jour] ?? [] as $creneau) {
+        if (substr($creneau["heure_debut"], 0, 5) === $heureDebut) {
+            return $creneau;
+        }
+    }
+
+    return null;
+}
+
 $notes = $pdo->prepare("
     SELECT
         n.valeur,
-        n.poids,
-        n.penalite,
+        n.devoir_1,
+        n.devoir_2,
+        n.devoir_3,
+        n.note_classe,
+        n.note_examen,
+        n.note_finale,
         m.nom AS module_nom
     FROM note n
     INNER JOIN module m ON n.module_id = m.ID
@@ -38,15 +124,30 @@ $notes = $pdo->prepare("
 $notes->execute([$mat]);
 $notes = $notes->fetchAll();
 
-$moyenne = 0;
-$totalPoids = 0;
+$semesters = $etudiant ? student_semesters($pdo, (int) $etudiant["classe_id"]) : [];
+$selectedSemesterId = $semesters[0]["id"] ?? null;
+$semesterAverage = $selectedSemesterId
+    ? student_semester_average($pdo, $mat, (int) $etudiant["classe_id"], (int) $selectedSemesterId)
+    : [
+        "semestre_nom" => "Semestre",
+        "total_modules" => 0,
+        "notes_finales" => 0,
+        "complete" => false,
+        "moyenne" => null,
+    ];
 
-foreach ($notes as $n) {
-    $moyenne += $n["valeur"] * $n["poids"];
-    $totalPoids += $n["poids"];
-}
-
-$moyenneFinale = $totalPoids > 0 ? round($moyenne / $totalPoids, 2) : 0;
+$reclamationsStmt = $pdo->prepare("
+    SELECT sujet, statut, created_at
+    FROM reclamations
+    WHERE MAT_etudiant = ?
+    ORDER BY created_at DESC
+    LIMIT 3
+");
+$reclamationsStmt->execute([$mat]);
+$recentReclamations = $reclamationsStmt->fetchAll();
+$pendingReclamationsStmt = $pdo->prepare("SELECT COUNT(*) FROM reclamations WHERE MAT_etudiant = ? AND statut = 'EN_ATTENTE'");
+$pendingReclamationsStmt->execute([$mat]);
+$pendingReclamations = (int) $pendingReclamationsStmt->fetchColumn();
 ?>
 
 <!DOCTYPE html>
@@ -72,8 +173,6 @@ $moyenneFinale = $totalPoids > 0 ? round($moyenne / $totalPoids, 2) : 0;
     </div>
 
     <div class="top-actions">
-        <div class="notif"><?= ui_icon("bell") ?><span>3</span></div>
-
         <div class="admin-profile">
             <div class="avatar"><?= ui_icon("graduation") ?></div>
             <div>
@@ -112,9 +211,13 @@ $moyenneFinale = $totalPoids > 0 ? round($moyenne / $totalPoids, 2) : 0;
         <div class="stat-card">
             <div class="stat-icon"><?= ui_icon("book") ?></div>
             <div>
-                <p>Moyenne generale</p>
-                <h2><?= $moyenneFinale ?>/20</h2>
-                <span><?= $moyenneFinale >= 10 ? "Bien" : "A ameliorer" ?></span>
+                <p>Moyenne generale - <?= htmlspecialchars($semesterAverage["semestre_nom"]) ?></p>
+                <h2><?= $semesterAverage["complete"] ? htmlspecialchars((string) $semesterAverage["moyenne"]) . "/20" : "-" ?></h2>
+                <span>
+                    <?= $semesterAverage["complete"]
+                        ? ($semesterAverage["moyenne"] >= 10 ? "Bien" : "A ameliorer")
+                        : htmlspecialchars($semesterAverage["notes_finales"] . "/" . $semesterAverage["total_modules"] . " notes finales") ?>
+                </span>
             </div>
         </div>
 
@@ -131,7 +234,7 @@ $moyenneFinale = $totalPoids > 0 ? round($moyenne / $totalPoids, 2) : 0;
             <div class="stat-icon"><?= ui_icon("mail") ?></div>
             <div>
                 <p>Reclamations</p>
-                <h2>0</h2>
+                <h2><?= $pendingReclamations ?></h2>
                 <span>En cours</span>
             </div>
         </div>
@@ -143,53 +246,43 @@ $moyenneFinale = $totalPoids > 0 ? round($moyenne / $totalPoids, 2) : 0;
         <div class="card">
             <h3><?= ui_icon("calendar") ?> Emploi du temps</h3>
 
-            <div class="timetable">
-                <div class="time-col">
-                    <span>08:00</span>
-                    <span>10:00</span>
-                    <span>14:00</span>
-                    <span>16:00</span>
-                </div>
+            <?php if (count($heuresEmploi) > 0): ?>
+                <div
+                    class="timetable"
+                    style="grid-template-columns: 70px repeat(<?= count($joursEmploi) ?>, minmax(120px, 1fr));"
+                >
+                    <div class="time-col" style="grid-template-rows: 40px repeat(<?= count($heuresEmploi) ?>, 70px);">
+                        <span></span>
+                        <?php foreach ($heuresEmploi as $heure): ?>
+                            <span><?= htmlspecialchars($heure) ?></span>
+                        <?php endforeach; ?>
+                    </div>
 
-                <div class="day-col">
-                    <strong>Lun</strong>
-                    <div class="course-box">Algorithmique<br><small>Salle 101</small></div>
-                    <div></div>
-                    <div class="course-box">BD<br><small>Salle 203</small></div>
-                </div>
+                    <?php foreach ($joursEmploi as $jour): ?>
+                        <div class="day-col" style="grid-template-rows: 40px repeat(<?= count($heuresEmploi) ?>, 70px);">
+                            <strong><?= htmlspecialchars($libellesJours[$jour]) ?></strong>
 
-                <div class="day-col">
-                    <strong>Mar</strong>
-                    <div></div>
-                    <div class="course-box">Maths discretes<br><small>Salle 201</small></div>
-                    <div></div>
-                    <div class="course-box">Reseaux<br><small>Salle 105</small></div>
-                </div>
+                            <?php foreach ($heuresEmploi as $heure): ?>
+                                <?php $creneau = findDashboardCreneau($creneauxByDay, $jour, $heure); ?>
 
-                <div class="day-col">
-                    <strong>Mer</strong>
-                    <div class="course-box">Base de donnees<br><small>Salle 203</small></div>
-                    <div></div>
-                    <div class="course-box">Structures<br><small>Salle 105</small></div>
+                                <?php if ($creneau): ?>
+                                    <div class="course-box">
+                                        <?= htmlspecialchars($creneau["module_nom"]) ?><br>
+                                        <small><?= substr($creneau["heure_debut"], 0, 5) ?>-<?= substr($creneau["heure_fin"], 0, 5) ?></small><br>
+                                        <small><?= htmlspecialchars($creneau["salle"] ?: "Salle non renseignee") ?></small>
+                                    </div>
+                                <?php else: ?>
+                                    <div></div>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
+            <?php else: ?>
+                <div class="timetable-empty">Aucun cours dans l'emploi du temps <?= htmlspecialchars($anneeScolaire) ?>.</div>
+            <?php endif; ?>
 
-                <div class="day-col">
-                    <strong>Jeu</strong>
-                    <div></div>
-                    <div class="course-box">Algorithmique<br><small>Salle 101</small></div>
-                    <div></div>
-                    <div class="course-box">BD<br><small>Salle 203</small></div>
-                </div>
-
-                <div class="day-col">
-                    <strong>Ven</strong>
-                    <div class="course-box">Reseaux<br><small>Salle 105</small></div>
-                    <div></div>
-                    <div class="course-box">Anglais<br><small>Salle 302</small></div>
-                </div>
-            </div>
-
-            <a href="emploi-temps.php" class="card-link">Voir tout l'emploi du temps -></a>
+            <a href="etudes/emploi-temps.php" class="card-link">Voir tout l'emploi du temps -></a>
         </div>
 
         <div class="card">
@@ -199,9 +292,9 @@ $moyenneFinale = $totalPoids > 0 ? round($moyenne / $totalPoids, 2) : 0;
                 <thead>
                     <tr>
                         <th>Matiere</th>
-                        <th>Note</th>
-                        <th>Poids</th>
-                        <th>Appreciation</th>
+                        <th>Classe</th>
+                        <th>Examen</th>
+                        <th>Finale</th>
                     </tr>
                 </thead>
 
@@ -209,15 +302,15 @@ $moyenneFinale = $totalPoids > 0 ? round($moyenne / $totalPoids, 2) : 0;
                     <?php foreach ($notes as $n): ?>
                         <tr>
                             <td><?= htmlspecialchars($n["module_nom"]) ?></td>
-                            <td><strong><?= htmlspecialchars($n["valeur"]) ?>/20</strong></td>
-                            <td><?= htmlspecialchars($n["poids"]) ?>%</td>
+                            <td><?= $n["note_classe"] !== null ? htmlspecialchars($n["note_classe"]) : "-" ?></td>
+                            <td><?= $n["note_examen"] !== null ? htmlspecialchars($n["note_examen"]) : "-" ?></td>
                             <td>
-                                <?php if ($n["valeur"] >= 14): ?>
-                                    <span class="status active">Tres bien</span>
-                                <?php elseif ($n["valeur"] >= 10): ?>
-                                    <span class="badge">Bien</span>
+                                <?php if ($n["note_finale"] === null): ?>
+                                    -
+                                <?php elseif ($n["note_finale"] >= 10): ?>
+                                    <span class="status active"><?= htmlspecialchars($n["note_finale"]) ?>/20</span>
                                 <?php else: ?>
-                                    <span class="status inactive">Faible</span>
+                                    <span class="status inactive"><?= htmlspecialchars($n["note_finale"]) ?>/20</span>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -231,32 +324,47 @@ $moyenneFinale = $totalPoids > 0 ? round($moyenne / $totalPoids, 2) : 0;
                 </tbody>
             </table>
 
-            <a href="notes.php" class="card-link">Voir toutes mes notes -></a>
+            <a href="etudes/notes.php" class="card-link">Voir toutes mes notes -></a>
         </div>
 
         <div class="card">
             <h3><?= ui_icon("mail") ?> Mes reclamations</h3>
 
-            <div class="list-item">
-                <div class="mini-avatar"><?= ui_icon("pin") ?></div>
-                <div>
-                    <strong>Aucune reclamation recente</strong>
-                    <small>Vos demandes apparaitront ici.</small>
+            <?php if (count($recentReclamations) === 0): ?>
+                <div class="list-item">
+                    <div class="mini-avatar"><?= ui_icon("pin") ?></div>
+                    <div>
+                        <strong>Aucune reclamation recente</strong>
+                        <small>Vos demandes apparaitront ici.</small>
+                    </div>
+                    <span>OK</span>
                 </div>
-                <span>OK</span>
-            </div>
+            <?php endif; ?>
 
-            <a href="reclamations.php" class="card-link">Voir toutes mes reclamations -></a>
+            <?php foreach ($recentReclamations as $reclamation): ?>
+                <div class="list-item">
+                    <div class="mini-avatar"><?= ui_icon("mail") ?></div>
+                    <div>
+                        <strong><?= htmlspecialchars($reclamation["sujet"]) ?></strong>
+                        <small><?= date("d/m/Y", strtotime($reclamation["created_at"])) ?></small>
+                    </div>
+                    <span class="<?= htmlspecialchars(reclamation_status_class($reclamation["statut"])) ?>">
+                        <?= htmlspecialchars(reclamation_status_label($reclamation["statut"])) ?>
+                    </span>
+                </div>
+            <?php endforeach; ?>
+
+            <a href="reclamations/" class="card-link">Voir toutes mes reclamations -></a>
         </div>
 
         <div class="card">
             <h3><?= ui_icon("bolt") ?> Actions rapides</h3>
 
             <div class="quick-actions">
-                <a href="nouvelle-reclamation.php"><?= ui_icon("clipboard") ?><strong>Faire une reclamation</strong><small>Declarer un probleme</small></a>
-                <a href="notes.php"><?= ui_icon("chart") ?><strong>Consulter mes notes</strong><small>Voir mes resultats</small></a>
-                <a href="emploi-temps.php"><?= ui_icon("calendar") ?><strong>Emploi du temps</strong><small>Voir mon planning</small></a>
-                <a href="profil.php"><?= ui_icon("user") ?><strong>Mon profil</strong><small>Mes informations</small></a>
+                <a href="reclamations/nouvelle.php"><?= ui_icon("clipboard") ?><strong>Faire une reclamation</strong><small>Declarer un probleme</small></a>
+                <a href="etudes/notes.php"><?= ui_icon("chart") ?><strong>Consulter mes notes</strong><small>Voir mes resultats</small></a>
+                <a href="etudes/emploi-temps.php"><?= ui_icon("calendar") ?><strong>Emploi du temps</strong><small>Voir mon planning</small></a>
+                <a href="compte/profil.php"><?= ui_icon("user") ?><strong>Mon profil</strong><small>Mes informations</small></a>
             </div>
         </div>
 

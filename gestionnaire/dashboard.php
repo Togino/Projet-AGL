@@ -109,28 +109,28 @@ $recentNotes = $pdo->query("
                 <p>Accédez rapidement aux fonctionnalités principales du gestionnaire.</p>
 
                 <div class="settings-grid">
-                    <a href="etudiants.php" class="settings-box green">
+                    <a href="etudiants/etudiants.php" class="settings-box green">
                         <div><i data-lucide="users"></i></div>
                         <h3>Gérer les étudiants</h3>
                         <p>Consulter, ajouter et modifier les étudiants.</p>
                         <span><i data-lucide="arrow-right"></i> Accéder</span>
                     </a>
 
-                    <a href="enseignants.php" class="settings-box blue">
+                    <a href="enseignants/enseignants.php" class="settings-box blue">
                         <div><i data-lucide="graduation-cap"></i></div>
                         <h3>Gérer les enseignants</h3>
                         <p>Consulter les enseignants et leurs informations.</p>
                         <span><i data-lucide="arrow-right"></i> Accéder</span>
                     </a>
 
-                    <a href="classes.php" class="settings-box orange">
+                    <a href="classes/classes.php" class="settings-box orange">
                         <div><i data-lucide="school"></i></div>
                         <h3>Gérer les classes</h3>
                         <p>Voir les classes et les effectifs.</p>
                         <span><i data-lucide="arrow-right"></i> Accéder</span>
                     </a>
 
-                    <a href="notes.php" class="settings-box purple">
+                    <a href="pedagogie/notes.php" class="settings-box purple">
                         <div><i data-lucide="file-pen-line"></i></div>
                         <h3>Gérer les notes</h3>
                         <p>Ajouter, modifier et consulter les notes.</p>

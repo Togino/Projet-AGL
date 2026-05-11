@@ -1,0 +1,20 @@
+# Systeme
+Thumbs.db
+Desktop.ini
+
+# Editeurs
+.vscode/
+.idea/
+
+# Logs et temporaires
+*.log
+*.tmp
+*_tmp.php
+
+# Dependances eventuelles
+vendor/
+node_modules/
+
+# Fichiers d'environnement locaux
+.env
+.env.local

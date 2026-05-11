@@ -16,13 +16,8 @@ function scalar(PDO $pdo, string $sql, array $params = []): int
 
 function trend_text(int $current, int $previous, string $noun): string
 {
-    if ($previous === 0) {
-        return $current > 0 ? "+" . $current . " " . $noun . " ce mois" : "Aucun nouveau ce mois";
-    }
-
-    $percent = round((($current - $previous) / $previous) * 100, 1);
-    $prefix = $percent > 0 ? "+" : "";
-    return $prefix . $percent . "% vs mois dernier";
+    unset($previous);
+    return $current > 0 ? "+" . $current . " " . $noun . " ce mois" : "Aucun nouveau ce mois";
 }
 
 function percent(int $part, int $total): int
@@ -147,6 +142,14 @@ foreach ($monthlyStmt->fetchAll() as $row) {
     }
 }
 $maxMonthlyStudents = max(1, ...array_column($months, "total"));
+$linePoints = [];
+$indexLine = 0;
+foreach ($months as $month) {
+    $x = (int) round(($indexLine / max(count($months) - 1, 1)) * 100);
+    $y = 100 - (int) round(($month["total"] / $maxMonthlyStudents) * 100);
+    $linePoints[] = $x . "," . $y;
+    $indexLine++;
+}
 
 $userStatus = [
     "active" => scalar($pdo, "SELECT COUNT(*) FROM utilisateur WHERE deleted_at IS NULL AND statut = 1"),
@@ -179,12 +182,15 @@ $topClasses = $pdo->query("
     LIMIT 3
 ")->fetchAll();
 
-$alerts = $pdo->query("
+$alertsStmt = $pdo->prepare("
     SELECT title, message, severity, created_at
     FROM admin_alerts
+    WHERE target_mat_user IS NULL OR target_mat_user = ?
     ORDER BY created_at DESC
     LIMIT 3
-")->fetchAll();
+");
+$alertsStmt->execute([$_SESSION["user"]["MAT"]]);
+$alerts = $alertsStmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -284,23 +290,22 @@ $alerts = $pdo->query("
                         <?php endif; ?>
                     </ul>
                 </div>
-                <a href="etudiants.php" class="card-link">Voir le detail -></a>
+                <a href="etudiants/etudiants.php" class="card-link">Voir le detail -></a>
             </div>
 
             <div class="card line-card">
-                <h3>Evolution des nouveaux etudiants</h3>
-                <div class="fake-line-chart">
-                    <?php foreach ($months as $month): ?>
-                        <?php $height = max(8, (int) round(($month["total"] / $maxMonthlyStudents) * 100)); ?>
-                        <span style="height:<?= $height ?>%" title="<?= htmlspecialchars($month["label"]) ?> : <?= $month["total"] ?>"></span>
-                    <?php endforeach; ?>
+                <h3>Inscriptions mensuelles des etudiants</h3>
+                <div style="padding:8px 0 4px;">
+                    <svg viewBox="0 0 100 100" width="100%" height="160" preserveAspectRatio="none" aria-label="Courbe des inscriptions">
+                        <polyline fill="none" stroke="#157a3d" stroke-width="2" points="<?= htmlspecialchars(implode(" ", $linePoints)) ?>"></polyline>
+                    </svg>
                 </div>
                 <div class="months">
                     <?php foreach ($months as $month): ?>
                         <small><?= htmlspecialchars($month["label"]) ?></small>
                     <?php endforeach; ?>
                 </div>
-                <a href="etudiants.php" class="card-link">Voir les etudiants -></a>
+                <a href="etudiants/etudiants.php" class="card-link">Voir les etudiants -></a>
             </div>
 
             <div class="card chart-card">
@@ -318,7 +323,7 @@ $alerts = $pdo->query("
                         <li><span class="danger"></span> Supprimes <b><?= $deletedPercent ?>%</b></li>
                     </ul>
                 </div>
-                <a href="utilisateurs.php" class="card-link">Voir tous les utilisateurs -></a>
+                <a href="utilisateurs/utilisateurs.php" class="card-link">Voir tous les utilisateurs -></a>
             </div>
 
             <div class="card">
@@ -335,7 +340,7 @@ $alerts = $pdo->query("
                     </div>
                 <?php endforeach; ?>
 
-                <a href="utilisateurs.php" class="card-link">Voir tous les utilisateurs -></a>
+                <a href="utilisateurs/utilisateurs.php" class="card-link">Voir tous les utilisateurs -></a>
             </div>
 
             <div class="card">
@@ -361,7 +366,7 @@ $alerts = $pdo->query("
                     </div>
                 <?php endif; ?>
 
-                <a href="classes.php" class="card-link">Voir toutes les classes -></a>
+                <a href="classes/classes.php" class="card-link">Voir toutes les classes -></a>
             </div>
 
             <div class="card">
@@ -387,7 +392,7 @@ $alerts = $pdo->query("
                     </div>
                 <?php endif; ?>
 
-                <a href="alertes.php" class="card-link">Voir toutes les alertes -></a>
+                <a href="workflow/alertes.php" class="card-link">Voir toutes les alertes -></a>
             </div>
         </div>
     </section>
