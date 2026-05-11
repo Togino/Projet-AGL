@@ -2,6 +2,10 @@
 require_once "../../app/includes/auth.php";
 require_once "../../app/config/database.php";
 require_once "../../app/helpers/functions.php";
+
+$adminNavPrefix = '../';
+$navPrefix = '../';
+
 ensure_optional_birthdate_for_personnel($pdo);
 
 $roles = $pdo->query("
@@ -10,7 +14,6 @@ $roles = $pdo->query("
     WHERE name IN ('SUPER_ADMIN', 'ADMIN', 'GESTIONNAIRE', 'ENSEIGNANT')
     ORDER BY FIELD(name, 'SUPER_ADMIN', 'ADMIN', 'GESTIONNAIRE', 'ENSEIGNANT')
 ")->fetchAll();
-
 $classes = $pdo->query("
     SELECT ID, nom, niveau
     FROM classe
@@ -661,20 +664,16 @@ function validateStep2() {
         form.annee_scolaire.focus();
         return false;
     }
-
     if (classes.length === 0) {
         document.querySelector('[data-choice-group="classes"]')?.scrollIntoView({ behavior: "smooth", block: "center" });
         return false;
     }
-
     if (modules.length === 0) {
         document.querySelector('[data-choice-group="modules"]')?.scrollIntoView({ behavior: "smooth", block: "center" });
         return false;
     }
-
     return true;
 }
-
 function updateStep() {
     panels.forEach(panel => panel.classList.remove("active"));
     panels[currentStep - 1].classList.add("active");
@@ -684,11 +683,9 @@ function updateStep() {
         dot.classList.toggle("active", step === currentStep);
         dot.classList.toggle("done", step < currentStep);
     });
-
     prevBtn.style.display = currentStep === 1 ? "none" : "inline-flex";
     nextBtn.classList.toggle("hidden", currentStep === 3);
     submitBtn.classList.toggle("hidden", currentStep !== 3);
-
     if (currentStep === 3) buildSummary();
 
     lucide.createIcons();

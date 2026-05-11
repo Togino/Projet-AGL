@@ -99,7 +99,7 @@ $modules = $pdo->query("
                             <td><?= htmlspecialchars($module["total_enseignants"]) ?></td>
                             <td><?= htmlspecialchars($module["total_notes"]) ?></td>
                             <td class="actions">
-                                <a href="affectations.php?module_id=<?= $module["ID"] ?>" class="edit-btn">Affectations</a>
+                                <a href="../affectations/affectations.php?module_id=<?= $module["ID"] ?>" class="edit-btn">Affectations</a>
                                 <a href="supprimer-module.php?id=<?= $module["ID"] ?>" class="delete-btn" onclick="return confirm('Supprimer ce module ?')">Supprimer</a>
                             </td>
                         </tr>

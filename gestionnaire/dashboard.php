@@ -11,7 +11,6 @@ $totalEtudiants = $pdo->query("SELECT COUNT(*) FROM etudiant")->fetchColumn();
 $totalEnseignants = $pdo->query("SELECT COUNT(*) FROM enseignant")->fetchColumn();
 $totalClasses = $pdo->query("SELECT COUNT(*) FROM classe")->fetchColumn();
 $totalNotes = $pdo->query("SELECT COUNT(*) FROM note")->fetchColumn();
-
 $recentEtudiants = $pdo->query("
     SELECT u.MAT, u.nom, u.prenom, u.email, c.nom AS classe_nom, c.niveau
     FROM etudiant e
@@ -61,7 +60,6 @@ $recentNotes = $pdo->query("
             </div>
         </div>
     </div>
-
     <div class="classes-stats-grid">
         <div class="class-stat-box green">
             <div><i data-lucide="users"></i></div>

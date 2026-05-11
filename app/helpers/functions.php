@@ -44,7 +44,6 @@ function ensure_password_changed_column(PDO $pdo) {
         AND COLUMN_NAME = 'password_changed_at'
     ");
     $stmt->execute();
-
     if ((int) $stmt->fetchColumn() === 0) {
         $pdo->exec("ALTER TABLE utilisateur ADD COLUMN password_changed_at DATETIME NULL AFTER must_change_password");
     }
@@ -56,7 +55,6 @@ function handle_weekly_password_change(PDO $pdo, string $mat): array {
     if (($_SERVER["REQUEST_METHOD"] ?? "GET") !== "POST" || ($_POST["action"] ?? "") !== "change_password") {
         return $result;
     }
-
     ensure_password_changed_column($pdo);
 
     $stmt = $pdo->prepare("SELECT motdepasse, password_changed_at FROM utilisateur WHERE MAT = ? LIMIT 1");
@@ -156,7 +154,10 @@ function render_password_change_card(array $state, array $message = []) {
 }
 
 function render_app_page($pageTitle, $sidebarFile) {
+    global $navPrefix, $adminNavPrefix, $gestionnaireNavPrefix, $enseignantNavPrefix, $etudiantNavPrefix;
+
     $sidebarPath = __DIR__ . "/../includes/" . basename($sidebarFile);
+    $publicPrefix = ($navPrefix ?? "") . "../public/";
 
     if (!is_file($sidebarPath)) {
         die("Sidebar introuvable.");
@@ -166,8 +167,8 @@ function render_app_page($pageTitle, $sidebarFile) {
     <html lang="fr">
     <head>
         <meta charset="UTF-8">
-        <title><?= e($pageTitle) ?> - EduManage</title>
-        <link rel="stylesheet" href="../public/assets/css/style.css">
+        <title><?= e($pageTitle) ?> - EduSystème</title>
+        <link rel="stylesheet" href="<?= e($publicPrefix) ?>assets/css/style.css">
     </head>
     <body class="app-body">
         <?php include $sidebarPath; ?>

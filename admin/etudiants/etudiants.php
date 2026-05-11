@@ -3,6 +3,9 @@ require_once "../../app/includes/auth.php";
 require_once "../../app/config/database.php";
 require_once "../../app/helpers/functions.php";
 
+$adminNavPrefix = '../';
+$navPrefix = '../';
+
 ensure_student_extra_columns($pdo);
 
 $search = trim($_GET["search"] ?? "");

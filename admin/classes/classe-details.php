@@ -3,6 +3,9 @@ require_once "../../app/includes/auth.php";
 require_once "../../app/config/database.php";
 require_once "../../app/helpers/functions.php";
 
+$adminNavPrefix = '../';
+$navPrefix = '../';
+
 $classeId = $_GET["id"] ?? "";
 
 if (!ctype_digit((string) $classeId)) {
@@ -236,13 +239,101 @@ $classCode = "CLS-" . str_pad($classe["ID"], 3, "0", STR_PAD_LEFT);
     </div>
 
     <div class="class-tabs">
-        <button>Informations generales</button>
-        <button class="active">Semestres & Modules</button>
-        <button>Enseignants</button>
-        <button>Etudiants</button>
+        <button class="active" data-class-tab="info">Informations de la classe</button>
+        <button data-class-tab="teachers">Enseignants</button>
+        <button data-class-tab="students">Etudiants</button>
     </div>
 
-    <div class="semester-layout">
+    <div class="class-tab-panel active" data-class-panel="info">
+        <div class="semester-card">
+            <div class="semester-top">
+                <div>
+                    <h2>Informations de la classe</h2>
+                    <p>Vue generale de la classe, de son niveau et de ses effectifs.</p>
+                </div>
+            </div>
+            <div class="side-info-list">
+                <div><i data-lucide="school"></i><article><small>Classe</small><strong><?= htmlspecialchars($classe["nom"]) ?></strong></article></div>
+                <div><i data-lucide="graduation-cap"></i><article><small>Niveau</small><strong><?= htmlspecialchars($classe["niveau"] ?: "-") ?></strong></article></div>
+                <div><i data-lucide="hash"></i><article><small>Code classe</small><strong><?= htmlspecialchars($classCode) ?></strong></article></div>
+                <div><i data-lucide="calendar-days"></i><article><small>Annee scolaire</small><strong>2024-2025</strong></article></div>
+                <div><i data-lucide="users"></i><article><small>Etudiants</small><strong><?= $totalStudents ?> inscrit<?= $totalStudents > 1 ? "s" : "" ?></strong></article></div>
+                <div><i data-lucide="graduation-cap"></i><article><small>Enseignants</small><strong><?= $totalTeachers ?> affecte<?= $totalTeachers > 1 ? "s" : "" ?></strong></article></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="class-tab-panel" data-class-panel="teachers">
+        <div class="semester-card">
+            <div class="semester-top">
+                <div>
+                    <h2>Enseignants</h2>
+                    <p>Liste des enseignants affectes a cette classe.</p>
+                </div>
+            </div>
+            <table class="semester-table">
+                <thead>
+                <tr>
+                    <th>Matricule</th>
+                    <th>Nom complet</th>
+                    <th>Email</th>
+                    <th>Specialisation</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($teachers as $teacher): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($teacher["MAT"]) ?></td>
+                        <td><?= htmlspecialchars($teacher["prenom"] . " " . $teacher["nom"]) ?></td>
+                        <td><?= htmlspecialchars($teacher["email"]) ?></td>
+                        <td><?= htmlspecialchars($teacher["specialisation"] ?: "-") ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                <?php if (count($teachers) === 0): ?>
+                    <tr><td colspan="4">Aucun enseignant affecte a cette classe.</td></tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="class-tab-panel" data-class-panel="students">
+        <div class="semester-card">
+            <div class="semester-top">
+                <div>
+                    <h2>Etudiants</h2>
+                    <p>Liste des etudiants inscrits dans cette classe.</p>
+                </div>
+            </div>
+            <table class="semester-table">
+                <thead>
+                <tr>
+                    <th>Matricule</th>
+                    <th>Nom complet</th>
+                    <th>Email</th>
+                    <th>Annee d'etude</th>
+                    <th>Statut</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($students as $student): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($student["MAT"]) ?></td>
+                        <td><?= htmlspecialchars($student["prenom"] . " " . $student["nom"]) ?></td>
+                        <td><?= htmlspecialchars($student["email"]) ?></td>
+                        <td><?= htmlspecialchars($student["annee_etude"]) ?></td>
+                        <td><?= $student["statut"] ? '<span class="status active">Actif</span>' : '<span class="status inactive">Inactif</span>' ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                <?php if (count($students) === 0): ?>
+                    <tr><td colspan="5">Aucun etudiant inscrit dans cette classe.</td></tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="semester-layout class-legacy-modules" style="display: none;">
         <div class="semester-main">
             <div class="semester-top">
                 <div>
@@ -494,6 +585,18 @@ if (openModuleBtn) {
 }
 document.getElementById("closeModuleModal").onclick = () => moduleModal.classList.remove("active");
 document.getElementById("cancelModuleBtn").onclick = () => moduleModal.classList.remove("active");
+
+document.querySelectorAll("[data-class-tab]").forEach((tab) => {
+    tab.addEventListener("click", () => {
+        const target = tab.dataset.classTab;
+
+        document.querySelectorAll("[data-class-tab]").forEach((button) => button.classList.remove("active"));
+        document.querySelectorAll("[data-class-panel]").forEach((panel) => panel.classList.remove("active"));
+
+        tab.classList.add("active");
+        document.querySelector(`[data-class-panel="${target}"]`)?.classList.add("active");
+    });
+});
 </script>
 
 </body>

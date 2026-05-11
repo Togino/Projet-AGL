@@ -1,19 +1,16 @@
 <?php
 require_once "../app/includes/auth.php";
 require_once "../app/config/database.php";
-
 if ($_SESSION["user"]["role"] !== "SUPER_ADMIN" && $_SESSION["user"]["role"] !== "ADMIN") {
     header("Location: ../public/login.php");
     exit;
 }
-
 function scalar(PDO $pdo, string $sql, array $params = []): int
 {
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     return (int) $stmt->fetchColumn();
 }
-
 function trend_text(int $current, int $previous, string $noun): string
 {
     unset($previous);
@@ -88,7 +85,7 @@ if (!$anneeScolaire) {
     $year = (int) date("Y");
     $startYear = (int) date("n") >= 9 ? $year : $year - 1;
     $anneeScolaire = $startYear . "-" . ($startYear + 1);
-}
+} 
 
 $studentDistribution = $pdo->query("
     SELECT COALESCE(NULLIF(c.niveau, ''), c.nom, 'Sans classe') AS label, COUNT(e.MAT) AS total
@@ -126,7 +123,6 @@ for ($i = 5; $i >= 0; $i--) {
         "total" => 0,
     ];
 }
-
 $monthlyStmt = $pdo->prepare("
     SELECT DATE_FORMAT(u.created_at, '%Y-%m') AS month_key, COUNT(*) AS total
     FROM etudiant e
@@ -141,6 +137,7 @@ foreach ($monthlyStmt->fetchAll() as $row) {
         $months[$row["month_key"]]["total"] = (int) $row["total"];
     }
 }
+
 $maxMonthlyStudents = max(1, ...array_column($months, "total"));
 $linePoints = [];
 $indexLine = 0;
@@ -197,7 +194,7 @@ $alerts = $alertsStmt->fetchAll();
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Admin - EduManage</title>
+    <title>Dashboard Admin - EduSystème</title>
     <link rel="stylesheet" href="../public/assets/css/style.css">
 </head>
 <body class="app-body">
@@ -292,13 +289,13 @@ $alerts = $alertsStmt->fetchAll();
                 </div>
                 <a href="etudiants/etudiants.php" class="card-link">Voir le detail -></a>
             </div>
-
             <div class="card line-card">
                 <h3>Inscriptions mensuelles des etudiants</h3>
                 <div style="padding:8px 0 4px;">
                     <svg viewBox="0 0 100 100" width="100%" height="160" preserveAspectRatio="none" aria-label="Courbe des inscriptions">
                         <polyline fill="none" stroke="#157a3d" stroke-width="2" points="<?= htmlspecialchars(implode(" ", $linePoints)) ?>"></polyline>
                     </svg>
+
                 </div>
                 <div class="months">
                     <?php foreach ($months as $month): ?>
@@ -371,7 +368,6 @@ $alerts = $alertsStmt->fetchAll();
 
             <div class="card">
                 <h3>Alertes et notifications</h3>
-
                 <?php if (count($alerts) > 0): ?>
                     <?php foreach ($alerts as $alert): ?>
                         <div class="alert-item">

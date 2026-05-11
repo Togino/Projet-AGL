@@ -51,7 +51,7 @@ $enseignants = $pdo->query("
                 <p>Consulter et modifier les profils enseignants.</p>
             </div>
 
-            <a href="ajouter-utilisateur.php?role=ENSEIGNANT" class="year-btn">+ Nouvel enseignant</a>
+            <a href="../utilisateurs/ajouter-utilisateur.php?role=ENSEIGNANT" class="year-btn">+ Nouvel enseignant</a>
         </div>
 
         <?php if (isset($_GET["success"]) && $_GET["success"] === "created"): ?>
@@ -118,7 +118,7 @@ $enseignants = $pdo->query("
                             </td>
                             <td class="actions">
                                 <a href="modifier-enseignant.php?mat=<?= urlencode($enseignant["MAT"]) ?>" class="edit-btn">Modifier</a>
-                                <a href="affectations.php" class="edit-btn">Affectations</a>
+                                <a href="../affectations/affectations.php" class="edit-btn">Affectations</a>
                                 <a href="supprimer-enseignant.php?mat=<?= urlencode($enseignant["MAT"]) ?>" class="delete-btn" onclick="return confirm('Voulez-vous vraiment desactiver cet enseignant ?')">Desactiver</a>
                             </td>
                         </tr>

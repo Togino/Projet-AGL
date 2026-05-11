@@ -2,6 +2,9 @@
 require_once "../../app/includes/auth.php";
 require_once "../../app/config/database.php";
 
+$adminNavPrefix = '../';
+$navPrefix = '../';
+
 $pdo->exec("
     CREATE TABLE IF NOT EXISTS emploi_temps (
         id INT NOT NULL AUTO_INCREMENT,
@@ -36,6 +39,7 @@ $stmtClasse = $pdo->prepare("
     FROM classe
     WHERE ID = ?
 ");
+
 $stmtClasse->execute([$selectedClasse]);
 
 $currentClasse = $stmtClasse->fetch();
@@ -98,9 +102,10 @@ usort($heures, function ($a, $b) {
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
-    <title>Emploi du temps - EduManage</title>
+    <title>Emploi du temps - EduSystème</title>
 
     <link rel="stylesheet" href="../../public/assets/css/style.css">
 
@@ -109,198 +114,198 @@ usort($heures, function ($a, $b) {
 
 <body class="app-body">
 
-<?php include "../../app/includes/sidebar-admin.php"; ?>
+    <?php include "../../app/includes/sidebar-admin.php"; ?>
 
-<main class="main-content">
+    <main class="main-content">
 
-<?php include "../../app/includes/topbar.php"; ?>
+        <?php include "../../app/includes/topbar.php"; ?>
 
-<section class="dashboard">
+        <section class="dashboard">
 
-    <div class="students-header">
-        <div>
-            <h1>Emploi du temps des classes</h1>
+            <div class="students-header">
+                <div>
+                    <h1>Emploi du temps des classes</h1>
 
-            <div class="breadcrumb">
-                <span>Accueil</span>
-                <i data-lucide="chevron-right"></i>
-                <span>Classes</span>
-                <i data-lucide="chevron-right"></i>
-                <strong>Emploi du temps</strong>
-            </div>
-        </div>
-    </div>
-
-    <div class="edt-toolbar">
-
-        <form method="GET" class="edt-toolbar-left">
-
-            <div class="toolbar-group">
-                <label>Classe</label>
-
-                <select name="classe" onchange="this.form.submit()">
-
-                    <?php foreach ($classes as $classe): ?>
-
-                        <option 
-                            value="<?= $classe["ID"] ?>"
-                            <?= $selectedClasse == $classe["ID"] ? "selected" : "" ?>
-                        >
-                            <?= htmlspecialchars($classe["nom"]) ?>
-                            -
-                            <?= htmlspecialchars($classe["niveau"]) ?>
-                        </option>
-
-                    <?php endforeach; ?>
-
-                </select>
+                    <div class="breadcrumb">
+                        <span>Accueil</span>
+                        <i data-lucide="chevron-right"></i>
+                        <span>Classes</span>
+                        <i data-lucide="chevron-right"></i>
+                        <strong>Emploi du temps</strong>
+                    </div>
+                </div>
             </div>
 
-            <div class="toolbar-group">
-                <label>Annee scolaire</label>
+            <div class="edt-toolbar">
 
-                <input type="text" value="<?= htmlspecialchars($anneeAffichee) ?>" readonly>
-            </div>
+                <form method="GET" class="edt-toolbar-left">
 
-        </form>
+                    <div class="toolbar-group">
+                        <label>Classe</label>
 
-        <div class="edt-toolbar-actions">
+                        <select name="classe" onchange="this.form.submit()">
 
-            <button class="outlined-btn">
-                <i data-lucide="download"></i>
-                Exporter
-            </button>
+                            <?php foreach ($classes as $classe): ?>
 
-        </div>
+                                <option
+                                    value="<?= $classe["ID"] ?>"
+                                    <?= $selectedClasse == $classe["ID"] ? "selected" : "" ?>>
+                                    <?= htmlspecialchars($classe["nom"]) ?>
+                                    -
+                                    <?= htmlspecialchars($classe["niveau"]) ?>
+                                </option>
 
-    </div>
+                            <?php endforeach; ?>
 
-    <div class="edt-layout">
-
-        <div class="edt-main-card">
-
-            <div class="edt-table">
-
-                <div class="edt-header">
-
-                    <div class="edt-hour-column">
-                        Heure
+                        </select>
                     </div>
 
-                    <?php foreach ($jours as $jour): ?>
+                    <div class="toolbar-group">
+                        <label>Annee scolaire</label>
 
-                        <div class="edt-day-column">
-                            <strong><?= $jour ?></strong>
-                        </div>
+                        <input type="text" value="<?= htmlspecialchars($anneeAffichee) ?>" readonly>
+                    </div>
 
-                    <?php endforeach; ?>
+                </form>
+
+                <div class="edt-toolbar-actions">
+
+                    <button class="outlined-btn">
+                        <i data-lucide="download"></i>
+                        Exporter
+                    </button>
 
                 </div>
 
-                <?php foreach ($heures as $heure): ?>
+            </div>
 
-                    <div class="edt-row">
+            <div class="edt-layout">
 
-                        <div class="edt-hour-cell">
-                            <?= $heure ?>
+                <div class="edt-main-card">
+
+                    <div class="edt-table">
+
+                        <div class="edt-header">
+
+                            <div class="edt-hour-column">
+                                Heure
+                            </div>
+
+                            <?php foreach ($jours as $jour): ?>
+
+                                <div class="edt-day-column">
+                                    <strong><?= $jour ?></strong>
+                                </div>
+
+                            <?php endforeach; ?>
+
                         </div>
 
-                        <?php foreach ($jours as $jour): ?>
+                        <?php foreach ($heures as $heure): ?>
 
-                            <?php $cours = getCours($planning, $jour, $heure); ?>
+                            <div class="edt-row">
 
-                            <div class="edt-course-cell">
+                                <div class="edt-hour-cell">
+                                    <?= $heure ?>
+                                </div>
 
-                                <?php if ($cours): ?>
+                                <?php foreach ($jours as $jour): ?>
 
-                                    <div class="course-card green">
+                                    <?php $cours = getCours($planning, $jour, $heure); ?>
 
-                                        <h4>
-                                            <?= htmlspecialchars($cours["module_nom"]) ?>
-                                        </h4>
+                                    <div class="edt-course-cell">
 
-                                        <p>
-                                            <?= htmlspecialchars($cours["prenom"]) ?>
-                                            <?= htmlspecialchars($cours["nom"]) ?>
-                                        </p>
+                                        <?php if ($cours): ?>
 
-                                        <small>
-                                            Salle <?= htmlspecialchars($cours["salle"] ?: "-") ?>
-                                        </small>
+                                            <div class="course-card green">
+
+                                                <h4>
+                                                    <?= htmlspecialchars($cours["module_nom"]) ?>
+                                                </h4>
+
+                                                <p>
+                                                    <?= htmlspecialchars($cours["prenom"]) ?>
+                                                    <?= htmlspecialchars($cours["nom"]) ?>
+                                                </p>
+
+                                                <small>
+                                                    Salle <?= htmlspecialchars($cours["salle"] ?: "-") ?>
+                                                </small>
+
+                                            </div>
+
+                                        <?php else: ?>
+
+                                            <span class="empty-course">—</span>
+
+                                        <?php endif; ?>
 
                                     </div>
 
-                                <?php else: ?>
-
-                                    <span class="empty-course">—</span>
-
-                                <?php endif; ?>
+                                <?php endforeach; ?>
 
                             </div>
 
                         <?php endforeach; ?>
 
+                        <?php if (count($heures) === 0): ?>
+                            <div class="edt-empty-state">Aucun cours enregistre pour cette classe.</div>
+                        <?php endif; ?>
+
                     </div>
 
-                <?php endforeach; ?>
+                    <div class="edt-footer-info">
 
-                <?php if (count($heures) === 0): ?>
-                    <div class="edt-empty-state">Aucun cours enregistre pour cette classe.</div>
-                <?php endif; ?>
+                        <i data-lucide="info"></i>
 
-            </div>
+                        Vue en lecture seule de l'emploi du temps de la classe.
 
-            <div class="edt-footer-info">
+                    </div>
 
-                <i data-lucide="info"></i>
-
-                Vue en lecture seule de l'emploi du temps de la classe.
-
-            </div>
-
-        </div>
-
-        <aside class="edt-sidebar">
-
-            <div class="edt-side-card">
-
-                <h3>Informations de la classe</h3>
-
-                <div class="class-summary-icon">
-                    <i data-lucide="users"></i>
                 </div>
 
-                <div class="class-summary-info">
-                    <span>Classe</span>
-                    <strong>
-                        <?= htmlspecialchars($currentClasse["nom"] ?? "") ?>
-                    </strong>
-                </div>
+                <aside class="edt-sidebar">
 
-                <div class="class-summary-info">
-                    <span>Niveau</span>
-                    <strong>
-                        <?= htmlspecialchars($currentClasse["niveau"] ?? "") ?>
-                    </strong>
-                </div>
+                    <div class="edt-side-card">
 
-                <div class="class-summary-info">
-                    <span>Année scolaire</span>
-                    <strong><?= htmlspecialchars($anneeAffichee) ?></strong>
-                </div>
+                        <h3>Informations de la classe</h3>
+
+                        <div class="class-summary-icon">
+                            <i data-lucide="users"></i>
+                        </div>
+
+                        <div class="class-summary-info">
+                            <span>Classe</span>
+                            <strong>
+                                <?= htmlspecialchars($currentClasse["nom"] ?? "") ?>
+                            </strong>
+                        </div>
+
+                        <div class="class-summary-info">
+                            <span>Niveau</span>
+                            <strong>
+                                <?= htmlspecialchars($currentClasse["niveau"] ?? "") ?>
+                            </strong>
+                        </div>
+
+                        <div class="class-summary-info">
+                            <span>Année scolaire</span>
+                            <strong><?= htmlspecialchars($anneeAffichee) ?></strong>
+                        </div>
+                    </div>
+                    <div class="edt-side-card">
+                        <h3>Lecture seule</h3>
+                        <p class="muted-text">La configuration se fait depuis le compte gestionnaire.</p>
+                    </div>
+                </aside>
             </div>
-            <div class="edt-side-card">
-                <h3>Lecture seule</h3>
-                <p class="muted-text">La configuration se fait depuis le compte gestionnaire.</p>
-            </div>
-        </aside>
-    </div>
-</section>
-</main>
+        </section>
+    </main>
 
-<script>
-lucide.createIcons();
-</script>
+    <script>
+        lucide.createIcons();
+    </script>
 
 </body>
+
 </html>

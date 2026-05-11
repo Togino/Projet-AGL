@@ -18,13 +18,15 @@ if (file_exists($envFile)) {
 
 // Configuration avec valeurs par défaut
 $host = getenv('DB_HOST') ?: 'localhost';
+$port = getenv('DB_PORT') ?: '3306';
 $dbname = getenv('DB_NAME') ?: 'scolar_sys';
 $username = getenv('DB_USER') ?: 'root';
 $password = getenv('DB_PASS') ?: '';
+$debug = filter_var(getenv('APP_DEBUG') ?: false, FILTER_VALIDATE_BOOLEAN);
 
 try {
     $pdo = new PDO(
-        "mysql:host=$host;dbname=$dbname;charset=utf8mb4",
+        "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4",
         $username,
         $password,
         [
@@ -33,5 +35,9 @@ try {
         ]
     );
 } catch (PDOException $e) {
-    die("Erreur de connexion à la base de données.");
+    if ($debug) {
+        die("Erreur de connexion a la base de donnees : " . $e->getMessage());
+    }
+
+    die("Erreur de connexion a la base de donnees.");
 }

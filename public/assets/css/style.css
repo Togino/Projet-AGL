@@ -315,7 +315,7 @@ body {
     border: 1px solid #dfe8e2;
     border-radius: 10px;
     padding: 13px 18px;
-   
+
     font-weight: bold;
     cursor: pointer;
     display: inline-flex;
@@ -672,6 +672,7 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
 .data-table {
     width: 100%;
     border-collapse: collapse;
@@ -738,6 +739,7 @@ body {
     color: #ff6b6b;
     background: rgba(255, 107, 107, 0.12);
 }
+
 .form-card {
     background: #ffffff;
     border: 1px solid #dfe8e2;
@@ -830,6 +832,7 @@ body {
     color: #5b6f63;
     line-height: 1.5;
 }
+
 .switch-box {
     display: flex;
     align-items: center;
@@ -846,6 +849,7 @@ body {
 .switch-box label {
     margin: 0;
 }
+
 /* TABLE SPACING FIX */
 
 .card table {
@@ -877,6 +881,7 @@ body {
 .dashboard-head p {
     margin-top: 5px;
 }
+
 .student-top-grid {
     display: grid;
     grid-template-columns: 2fr repeat(3, 1fr);
@@ -1021,6 +1026,7 @@ body {
 }
 
 @media (max-width: 1200px) {
+
     .student-top-grid,
     .student-grid {
         grid-template-columns: 1fr;
@@ -1030,6 +1036,7 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
 .create-user-layout {
     display: grid;
     grid-template-columns: 1.25fr 1.15fr 0.85fr;
@@ -1151,11 +1158,11 @@ body {
     transition: 0.2s;
 }
 
-.toggle input:checked + b {
+.toggle input:checked+b {
     background: rgba(0, 237, 100, 0.25);
 }
 
-.toggle input:checked + b::after {
+.toggle input:checked+b::after {
     left: 24px;
     background: #00ed64;
 }
@@ -1229,6 +1236,7 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
 .eye-btn {
     position: absolute;
     right: 12px;
@@ -1351,11 +1359,11 @@ body {
     transition: 0.2s;
 }
 
-.switch input:checked + b {
+.switch input:checked+b {
     background: #157a3d;
 }
 
-.switch input:checked + b::after {
+.switch input:checked+b::after {
     left: 24px;
 }
 
@@ -1623,7 +1631,7 @@ body {
     border-bottom: 1px solid #dfe8e2;
 }
 
-.role-help > div {
+.role-help>div {
     width: 38px;
     height: 38px;
     border-radius: 12px;
@@ -1635,12 +1643,12 @@ body {
     flex: 0 0 auto;
 }
 
-.role-help.orange > div {
+.role-help.orange>div {
     background: rgba(245, 158, 11, 0.16);
     color: #b45309;
 }
 
-.role-help.blue > div {
+.role-help.blue>div {
     background: rgba(37, 99, 235, 0.12);
     color: #2563eb;
 }
@@ -1694,7 +1702,7 @@ body {
     flex-wrap: wrap;
 }
 
-.steps-indicator > span {
+.steps-indicator>span {
     width: 34px;
     height: 1px;
     background: #dfe8e2;
@@ -1788,6 +1796,7 @@ body {
 }
 
 @media (max-width: 700px) {
+
     .form-grid,
     .permissions-list,
     .teacher-assignments {
@@ -1799,6 +1808,7 @@ body {
         padding: 18px;
     }
 }
+
 .students-header {
     display: flex;
     justify-content: space-between;
@@ -1834,7 +1844,7 @@ body {
     align-items: center;
     gap: 10px;
     font-weight: 600;
-    box-shadow: 0 10px 30px rgba(0,132,61,0.15);
+    box-shadow: 0 10px 30px rgba(0, 132, 61, 0.15);
 }
 
 .add-student-btn svg {
@@ -2079,6 +2089,7 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
 .student-create-layout {
     display: grid;
     grid-template-columns: 1.1fr 1.1fr 1fr 0.85fr;
@@ -2277,6 +2288,7 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
 .edusys-login-body {
     min-height: 100vh;
     min-height: 100dvh;
@@ -2315,7 +2327,7 @@ body {
     position: absolute;
     inset: 0;
     background-image:
-        radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px);
+        radial-gradient(circle, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
     background-size: 24px 24px;
     opacity: 0.08;
     pointer-events: none;
@@ -2365,7 +2377,7 @@ body {
 }
 
 .login-brand p {
-    color: rgba(255,255,255,0.72);
+    color: rgba(255, 255, 255, 0.72);
     font-size: clamp(14px, 1.8vh, 20px);
     margin-top: 10px;
 }
@@ -2388,7 +2400,7 @@ body {
 }
 
 .login-slogan p {
-    color: rgba(255,255,255,0.86);
+    color: rgba(255, 255, 255, 0.86);
     line-height: 1.7;
     font-size: clamp(14px, 1.7vh, 18px);
 }
@@ -2408,7 +2420,7 @@ body {
     align-items: center;
 }
 
-.login-feature > div {
+.login-feature>div {
     width: clamp(48px, 6.4vh, 70px);
     height: clamp(48px, 6.4vh, 70px);
     border-radius: 18px;
@@ -2430,7 +2442,7 @@ body {
 }
 
 .login-feature p {
-    color: rgba(255,255,255,0.82);
+    color: rgba(255, 255, 255, 0.82);
     line-height: 1.55;
 }
 
@@ -2442,7 +2454,7 @@ body {
     align-items: flex-start;
     margin-top: clamp(18px, 3.5vh, 44px);
     max-width: 520px;
-    color: rgba(255,255,255,0.82);
+    color: rgba(255, 255, 255, 0.82);
     line-height: 1.7;
 }
 
@@ -2658,6 +2670,7 @@ body {
 }
 
 @media (max-height: 760px) and (min-width: 1101px) {
+
     .login-quote,
     .password-note {
         display: none;
@@ -2686,6 +2699,7 @@ body {
 }
 
 @media (max-height: 700px) {
+
     .login-separator,
     .guest-btn,
     .secure-login {
@@ -2706,6 +2720,7 @@ body {
 }
 
 @media (max-width: 640px) {
+
     .login-right-panel,
     .password-right-panel {
         padding: 14px;
@@ -2772,7 +2787,7 @@ body {
     position: absolute;
     inset: 0;
     background-image:
-        radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px);
+        radial-gradient(circle, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
     background-size: 24px 24px;
     opacity: 0.08;
     pointer-events: none;
@@ -2822,7 +2837,7 @@ body {
 }
 
 .password-brand p {
-    color: rgba(255,255,255,0.78);
+    color: rgba(255, 255, 255, 0.78);
     font-size: clamp(14px, 1.8vh, 18px);
     margin-top: 10px;
 }
@@ -2846,7 +2861,7 @@ body {
 .password-message p {
     font-size: clamp(15px, 2vh, 21px);
     line-height: 1.55;
-    color: rgba(255,255,255,0.9);
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .password-features {
@@ -2865,7 +2880,7 @@ body {
     max-width: 550px;
 }
 
-.password-feature > div {
+.password-feature>div {
     width: clamp(48px, 6.4vh, 70px);
     height: clamp(48px, 6.4vh, 70px);
     border-radius: 18px;
@@ -2887,7 +2902,7 @@ body {
 }
 
 .password-feature p {
-    color: rgba(255,255,255,0.84);
+    color: rgba(255, 255, 255, 0.84);
     font-size: clamp(14px, 1.7vh, 17px);
     line-height: 1.55;
 }
@@ -2904,7 +2919,7 @@ body {
     display: flex;
     align-items: center;
     gap: 18px;
-    color: rgba(255,255,255,0.84);
+    color: rgba(255, 255, 255, 0.84);
     line-height: 1.6;
 }
 
@@ -3070,6 +3085,7 @@ body {
         padding: 24px 18px;
     }
 }
+
 .class-detail-header {
     display: flex;
     justify-content: space-between;
@@ -3112,7 +3128,7 @@ body {
 .green-btn {
     background: linear-gradient(135deg, #00843d, #00a34c);
     color: white;
-    box-shadow: 0 10px 30px rgba(0,132,61,0.18);
+    box-shadow: 0 10px 30px rgba(0, 132, 61, 0.18);
 }
 
 .white-btn svg,
@@ -3191,7 +3207,7 @@ body {
     gap: 18px;
 }
 
-.class-stat-card > div {
+.class-stat-card>div {
     width: 64px;
     height: 64px;
     border-radius: 16px;
@@ -3205,22 +3221,22 @@ body {
     height: 28px;
 }
 
-.class-stat-card.green > div {
+.class-stat-card.green>div {
     background: #e9f9ef;
     color: #00843d;
 }
 
-.class-stat-card.orange > div {
+.class-stat-card.orange>div {
     background: #fff7ed;
     color: #ea580c;
 }
 
-.class-stat-card.blue > div {
+.class-stat-card.blue>div {
     background: #eef5ff;
     color: #2563eb;
 }
 
-.class-stat-card.purple > div {
+.class-stat-card.purple>div {
     background: #f3e8ff;
     color: #9333ea;
 }
@@ -3268,6 +3284,15 @@ body {
     height: 3px;
     border-radius: 999px;
     background: #00843d;
+}
+
+.class-tab-panel {
+    display: none;
+    margin-bottom: 24px;
+}
+
+.class-tab-panel.active {
+    display: block;
 }
 
 .semester-layout {
@@ -3413,7 +3438,7 @@ body {
     gap: 22px;
 }
 
-.side-info-list > div {
+.side-info-list>div {
     display: flex;
     gap: 16px;
 }
@@ -3438,7 +3463,7 @@ body {
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(15,23,42,0.45);
+    background: rgba(15, 23, 42, 0.45);
     backdrop-filter: blur(4px);
     display: flex;
     justify-content: center;
@@ -3553,6 +3578,7 @@ body {
         padding: 24px;
     }
 }
+
 .classes-page-head {
     margin-bottom: 28px;
 }
@@ -3581,7 +3607,7 @@ body {
     box-shadow: 0 12px 35px rgba(15, 23, 42, 0.04);
 }
 
-.class-stat-box > div {
+.class-stat-box>div {
     width: 74px;
     height: 74px;
     border-radius: 50%;
@@ -3595,22 +3621,22 @@ body {
     height: 34px;
 }
 
-.class-stat-box.green > div {
+.class-stat-box.green>div {
     background: #e9f9ef;
     color: #00843d;
 }
 
-.class-stat-box.blue > div {
+.class-stat-box.blue>div {
     background: #eef5ff;
     color: #2776c9;
 }
 
-.class-stat-box.orange > div {
+.class-stat-box.orange>div {
     background: #fff7ed;
     color: #ea580c;
 }
 
-.class-stat-box.purple > div {
+.class-stat-box.purple>div {
     background: #f3e8ff;
     color: #9333ea;
 }
@@ -3884,6 +3910,7 @@ body {
         justify-content: center;
     }
 }
+
 .settings-head {
     margin-bottom: 28px;
 }
@@ -3957,7 +3984,7 @@ body {
     margin-bottom: 8px;
 }
 
-.settings-overview-card > p {
+.settings-overview-card>p {
     color: #64748b;
     margin-bottom: 26px;
 }
@@ -3984,7 +4011,7 @@ body {
     box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
 }
 
-.settings-box > div {
+.settings-box>div {
     width: 84px;
     height: 84px;
     border-radius: 50%;
@@ -4025,14 +4052,45 @@ body {
     height: 16px;
 }
 
-.settings-box.green > div { background: #e9f9ef; color: #00843d; }
-.settings-box.blue > div { background: #eef5ff; color: #2563eb; }
-.settings-box.orange > div { background: #fff7ed; color: #ea580c; }
-.settings-box.purple > div { background: #f3e8ff; color: #9333ea; }
-.settings-box.pink > div { background: #fff1f2; color: #e11d48; }
-.settings-box.cyan > div { background: #ecfeff; color: #0891b2; }
-.settings-box.yellow > div { background: #fef3c7; color: #d97706; }
-.settings-box.gray > div { background: #f1f5f9; color: #64748b; }
+.settings-box.green>div {
+    background: #e9f9ef;
+    color: #00843d;
+}
+
+.settings-box.blue>div {
+    background: #eef5ff;
+    color: #2563eb;
+}
+
+.settings-box.orange>div {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+.settings-box.purple>div {
+    background: #f3e8ff;
+    color: #9333ea;
+}
+
+.settings-box.pink>div {
+    background: #fff1f2;
+    color: #e11d48;
+}
+
+.settings-box.cyan>div {
+    background: #ecfeff;
+    color: #0891b2;
+}
+
+.settings-box.yellow>div {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.settings-box.gray>div {
+    background: #f1f5f9;
+    color: #64748b;
+}
 
 .activity-table {
     width: 100%;
@@ -4208,6 +4266,7 @@ body {
         overflow-x: auto;
     }
 }
+
 .alerts-head {
     display: flex;
     justify-content: space-between;
@@ -4233,7 +4292,7 @@ body {
     align-items: center;
     gap: 10px;
     cursor: pointer;
-    box-shadow: 0 10px 30px rgba(0,132,61,0.16);
+    box-shadow: 0 10px 30px rgba(0, 132, 61, 0.16);
 }
 
 .mark-all-btn svg {
@@ -4255,10 +4314,10 @@ body {
     display: flex;
     align-items: center;
     gap: 20px;
-    box-shadow: 0 12px 35px rgba(15,23,42,0.04);
+    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.04);
 }
 
-.alert-stat > div {
+.alert-stat>div {
     width: 70px;
     height: 70px;
     border-radius: 50%;
@@ -4272,22 +4331,22 @@ body {
     height: 32px;
 }
 
-.alert-stat.green > div {
+.alert-stat.green>div {
     background: #e9f9ef;
     color: #00843d;
 }
 
-.alert-stat.orange > div {
+.alert-stat.orange>div {
     background: #fff7ed;
     color: #ea580c;
 }
 
-.alert-stat.red > div {
+.alert-stat.red>div {
     background: #fff1f2;
     color: #dc2626;
 }
 
-.alert-stat.blue > div {
+.alert-stat.blue>div {
     background: #eef5ff;
     color: #2563eb;
 }
@@ -4320,7 +4379,7 @@ body {
     background: white;
     border: 1px solid #e5e9ef;
     border-radius: 22px;
-    box-shadow: 0 12px 35px rgba(15,23,42,0.04);
+    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.04);
 }
 
 .alerts-main-card {
@@ -4605,6 +4664,7 @@ body {
         justify-content: flex-end;
     }
 }
+
 .light-sidebar {
     background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
     border-right: 1px solid #e5e9ef;
@@ -4682,7 +4742,7 @@ body {
 .light-sidebar .menu a.active {
     background: linear-gradient(135deg, #00843d, #00a34c);
     color: white;
-    box-shadow: 0 10px 30px rgba(0,132,61,0.16);
+    box-shadow: 0 10px 30px rgba(0, 132, 61, 0.16);
 }
 
 .light-sidebar .menu a svg {
@@ -4736,7 +4796,7 @@ body {
     width: 340px;
     height: 340px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.08);
+    background: rgba(255, 255, 255, 0.08);
     top: -120px;
     right: -80px;
 }
@@ -4747,7 +4807,7 @@ body {
     width: 240px;
     height: 240px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.05);
     bottom: -90px;
     left: -60px;
 }
@@ -4765,7 +4825,7 @@ body {
     font-size: 17px;
     line-height: 1.7;
     max-width: 700px;
-    color: rgba(255,255,255,0.92);
+    color: rgba(255, 255, 255, 0.92);
 }
 
 .manager-welcome-grid {
@@ -4776,8 +4836,8 @@ body {
 }
 
 .manager-welcome-card {
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 18px;
     padding: 22px;
     backdrop-filter: blur(8px);
@@ -4791,7 +4851,7 @@ body {
 .manager-welcome-card p {
     font-size: 14px;
     line-height: 1.6;
-    color: rgba(255,255,255,0.82);
+    color: rgba(255, 255, 255, 0.82);
 }
 
 .manager-section-title {
@@ -4823,12 +4883,12 @@ body {
     padding: 30px 24px;
     text-decoration: none;
     transition: 0.25s;
-    box-shadow: 0 12px 35px rgba(15,23,42,0.04);
+    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.04);
 }
 
 .manager-action-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 22px 45px rgba(15,23,42,0.08);
+    box-shadow: 0 22px 45px rgba(15, 23, 42, 0.08);
 }
 
 .manager-action-card .icon {
@@ -4901,7 +4961,7 @@ body {
     border: 1px solid #e5e9ef;
     border-radius: 22px;
     padding: 24px;
-    box-shadow: 0 12px 35px rgba(15,23,42,0.04);
+    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.04);
 }
 
 .manager-card h2 {
@@ -4987,6 +5047,7 @@ body {
 }
 
 @media (max-width: 900px) {
+
     .manager-actions-grid,
     .manager-welcome-grid {
         grid-template-columns: 1fr;
@@ -5000,6 +5061,7 @@ body {
         font-size: 34px;
     }
 }
+
 .teacher-sidebar {
     background: #07350d;
     border-right: 1px solid #123325;
@@ -5121,11 +5183,9 @@ body {
 }
 
 .teacher-hero {
-    background: linear-gradient(
-        135deg,
-        #00843d,
-        #00a34c
-    );
+    background: linear-gradient(135deg,
+            #00843d,
+            #00a34c);
 
     border-radius: 28px;
 
@@ -5148,7 +5208,7 @@ body {
 .teacher-hero p {
     max-width: 700px;
     line-height: 1.7;
-    color: rgba(255,255,255,0.9);
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .teacher-hero-badge {
@@ -5156,7 +5216,7 @@ body {
     height: 120px;
     border-radius: 30px;
 
-    background: rgba(255,255,255,0.12);
+    background: rgba(255, 255, 255, 0.12);
 
     display: flex;
     align-items: center;
@@ -5170,7 +5230,7 @@ body {
 
 .teacher-stats-grid {
     display: grid;
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 22px;
 
     margin-bottom: 26px;
@@ -5188,7 +5248,7 @@ body {
     align-items: center;
 }
 
-.teacher-stat-card > div {
+.teacher-stat-card>div {
     width: 72px;
     height: 72px;
     border-radius: 20px;
@@ -5203,22 +5263,22 @@ body {
     height: 34px;
 }
 
-.teacher-stat-card.green > div {
+.teacher-stat-card.green>div {
     background: #e9f9ef;
     color: #00843d;
 }
 
-.teacher-stat-card.blue > div {
+.teacher-stat-card.blue>div {
     background: #eef5ff;
     color: #2563eb;
 }
 
-.teacher-stat-card.orange > div {
+.teacher-stat-card.orange>div {
     background: #fff7ed;
     color: #ea580c;
 }
 
-.teacher-stat-card.red > div {
+.teacher-stat-card.red>div {
     background: #fff1f2;
     color: #dc2626;
 }
@@ -5263,7 +5323,7 @@ body {
 
 .teacher-classes-grid {
     display: grid;
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 22px;
 }
 
@@ -5281,7 +5341,7 @@ body {
 .teacher-class-card:hover {
     transform: translateY(-5px);
 
-    box-shadow: 0 20px 45px rgba(15,23,42,0.08);
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
 }
 
 .teacher-class-icon {
@@ -5380,11 +5440,11 @@ body {
 @media (max-width: 1450px) {
 
     .teacher-stats-grid {
-        grid-template-columns: repeat(2,1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .teacher-classes-grid {
-        grid-template-columns: repeat(2,1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .teacher-dashboard-layout {
@@ -5405,6 +5465,7 @@ body {
         gap: 24px;
     }
 }
+
 /*
 |--------------------------------------------------------------------------
 | EMPLOI DU TEMPS

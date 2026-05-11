@@ -3,6 +3,9 @@ require_once "../../app/includes/auth.php";
 require_once "../../app/config/database.php";
 require_once "../../app/helpers/functions.php";
 
+$adminNavPrefix = '../';
+$navPrefix = '../';
+
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {

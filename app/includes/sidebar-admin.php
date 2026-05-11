@@ -32,13 +32,11 @@ function sidebar_active($pages) {
         <a class="<?= sidebar_active(["affectations.php", "ajouter-affectation.php", "supprimer-affectation.php"]) ?>" href="<?= $adminNavPrefix ?>affectations/affectations.php"><?= ui_icon("link") ?> Affectations</a>
         <a class="<?= sidebar_active(["centre-attente.php"]) ?>" href="<?= $adminNavPrefix ?>workflow/centre-attente.php"><?= ui_icon("clipboard") ?> Centre d'attente</a>
         <a class="<?= sidebar_active(["archive.php"]) ?>" href="<?= $adminNavPrefix ?>workflow/archive.php"><?= ui_icon("book") ?> Archive</a>
-        <a class="<?= sidebar_active(["logs.php"]) ?>" href="<?= $adminNavPrefix ?>workflow/logs.php"><?= ui_icon("file-text") ?> Logs</a>
         <a class="<?= sidebar_active(["emploi-temps.php"]) ?>" href="<?= $adminNavPrefix ?>pedagogie/emploi-temps.php"><?= ui_icon("calendar") ?> Emploi du temps</a>
         <a class="<?= sidebar_active(["notes.php"]) ?>" href="<?= $adminNavPrefix ?>pedagogie/notes.php"><?= ui_icon("chart") ?> Notes</a>
 
         <span>Securite</span>
         <a class="<?= sidebar_active(["profil.php"]) ?>" href="<?= $adminNavPrefix ?>compte/profil.php"><?= ui_icon("user") ?> Mon profil</a>
-        <a class="<?= sidebar_active(["parametres.php"]) ?>" href="<?= $adminNavPrefix ?>compte/parametres.php"><?= ui_icon("settings") ?> Parametres</a>
         <a class="<?= sidebar_active(["alertes.php"]) ?>" href="<?= $adminNavPrefix ?>workflow/alertes.php"><?= ui_icon("bell") ?> Alertes</a>
     </nav>
 

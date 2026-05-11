@@ -2,6 +2,9 @@
 require_once "../../app/includes/auth.php";
 require_once "../../app/config/database.php";
 
+$adminNavPrefix = '../';
+$navPrefix = '../';
+
 $classes = $pdo->query("
     SELECT 
         c.ID,

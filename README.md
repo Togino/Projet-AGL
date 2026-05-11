@@ -1,4 +1,4 @@
-# EduManage - Projet AGL
+# EduSystème - Projet AGL
 
 Application web PHP/MySQL de gestion scolaire.
 
