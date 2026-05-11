@@ -167,7 +167,7 @@ function render_app_page($pageTitle, $sidebarFile) {
     <html lang="fr">
     <head>
         <meta charset="UTF-8">
-        <title><?= e($pageTitle) ?> - EduSystème</title>
+        <title><?= e($pageTitle) ?> - EduSysteme</title>
         <link rel="stylesheet" href="<?= e($publicPrefix) ?>assets/css/style.css">
     </head>
     <body class="app-body">

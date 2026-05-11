@@ -64,7 +64,7 @@ $totalEtudiants = array_sum(array_column($classes, "effectif"));
             <article>
                 <h2><?= $totalClasses ?></h2>
                 <p>Total classes</p>
-                <small>Actives cette année</small>
+                <small>Actives cette annee</small>
             </article>
         </div>
 
@@ -72,7 +72,7 @@ $totalEtudiants = array_sum(array_column($classes, "effectif"));
             <div><i data-lucide="users"></i></div>
             <article>
                 <h2><?= $totalEtudiants ?></h2>
-                <p>Total étudiants</p>
+                <p>Total etudiants</p>
                 <small>Toutes les classes</small>
             </article>
         </div>
@@ -102,7 +102,7 @@ $totalEtudiants = array_sum(array_column($classes, "effectif"));
                     <option>25</option>
                     <option>50</option>
                 </select>
-                <span>entrées</span>
+                <span>entrees</span>
             </div>
 
             <div class="classes-search-filter">
@@ -126,7 +126,7 @@ $totalEtudiants = array_sum(array_column($classes, "effectif"));
                         <th>Nom de la classe <i data-lucide="chevrons-up-down"></i></th>
                         <th>Niveau <i data-lucide="chevrons-up-down"></i></th>
                         <th>Effectif <i data-lucide="chevrons-up-down"></i></th>
-                        <th>Année scolaire <i data-lucide="chevrons-up-down"></i></th>
+                        <th>Annee scolaire <i data-lucide="chevrons-up-down"></i></th>
                         <th>Statut <i data-lucide="chevrons-up-down"></i></th>
                         <th>Actions</th>
                     </tr>
@@ -173,8 +173,8 @@ $totalEtudiants = array_sum(array_column($classes, "effectif"));
                             <td colspan="7">
                                 <div class="empty-state">
                                     <i data-lucide="school"></i>
-                                    <h3>Aucune classe enregistrée</h3>
-                                    <p>Ajoutez votre première classe pour commencer.</p>
+                                    <h3>Aucune classe enregistree</h3>
+                                    <p>Ajoutez votre premiere classe pour commencer.</p>
                                 </div>
                             </td>
                         </tr>
@@ -184,7 +184,7 @@ $totalEtudiants = array_sum(array_column($classes, "effectif"));
         </div>
 
         <div class="classes-pagination">
-            <p>Affichage de 1 à <?= count($classes) ?> sur <?= count($classes) ?> entrées</p>
+            <p>Affichage de 1 a <?= count($classes) ?> sur <?= count($classes) ?> entrees</p>
 
             <div>
                 <button><i data-lucide="arrow-left"></i></button>

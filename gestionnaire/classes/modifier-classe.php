@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <p>Modifier les informations de la classe</p>
     </div>
 
-    <a href="classes.php" class="year-btn">← Retour</a>
+    <a href="classes.php" class="year-btn"><- Retour</a>
 </div>
 
 <div class="form-card">

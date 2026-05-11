@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once "../../app/includes/auth.php";
 require_once "../../app/config/database.php";
 require_once "../../app/helpers/functions.php";
@@ -173,7 +173,7 @@ $classCode = "CLS-" . str_pad($classe["ID"], 3, "0", STR_PAD_LEFT);
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>DÃ©tail classe - Gestionnaire</title>
+    <title>Detail classe - Gestionnaire</title>
     <link rel="stylesheet" href="../../public/assets/css/style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -188,7 +188,7 @@ $classCode = "CLS-" . str_pad($classe["ID"], 3, "0", STR_PAD_LEFT);
 <section class="dashboard">
     <div class="class-detail-header">
         <div>
-            <h1>DÃ©tail de la classe</h1>
+            <h1>Detail de la classe</h1>
             <div class="breadcrumb">
                 <span>Accueil</span>
                 <i data-lucide="chevron-right"></i>
@@ -201,7 +201,7 @@ $classCode = "CLS-" . str_pad($classe["ID"], 3, "0", STR_PAD_LEFT);
         <div class="class-detail-actions">
             <a href="classes.php" class="white-btn">
                 <i data-lucide="arrow-left"></i>
-                Retour Ã  la liste
+                Retour   la liste
             </a>
 
             <a href="modifier-classe.php?id=<?= urlencode($classe["ID"]) ?>" class="green-btn">
@@ -226,13 +226,13 @@ $classCode = "CLS-" . str_pad($classe["ID"], 3, "0", STR_PAD_LEFT);
                 <div class="class-meta">
                     <p><strong>Code classe :</strong> <?= htmlspecialchars($classCode) ?></p>
                     <p><strong>Niveau :</strong> <?= htmlspecialchars($classe["niveau"] ?: "-") ?></p>
-                    <p><strong>AnnÃ©e scolaire :</strong> 2024-2025</p>
+                    <p><strong>Annee scolaire :</strong> 2024-2025</p>
                 </div>
             </div>
         </div>
 
         <div class="class-stats-grid">
-            <div class="class-stat-card green"><div><i data-lucide="users"></i></div><article><h3><?= $totalStudents ?></h3><p>Ã‰tudiants</p></article></div>
+            <div class="class-stat-card green"><div><i data-lucide="users"></i></div><article><h3><?= $totalStudents ?></h3><p>Etudiants</p></article></div>
             <div class="class-stat-card orange"><div><i data-lucide="book-open"></i></div><article><h3><?= $totalModules ?></h3><p>Modules</p></article></div>
             <div class="class-stat-card blue"><div><i data-lucide="graduation-cap"></i></div><article><h3><?= $totalTeachers ?></h3><p>Enseignants</p></article></div>
             <div class="class-stat-card purple"><div><i data-lucide="calendar-days"></i></div><article><h3><?= $totalSemesters ?></h3><p>Semestres</p></article></div>
@@ -288,13 +288,13 @@ $classCode = "CLS-" . str_pad($classe["ID"], 3, "0", STR_PAD_LEFT);
             <div class="semester-top">
                 <div>
                     <h2>Semestres & Modules</h2>
-                    <p>CrÃ©ez les semestres de la classe, puis ajoutez les modules dans chaque semestre.</p>
+                    <p>Creez les semestres de la classe, puis ajoutez les modules dans chaque semestre.</p>
                 </div>
 
                 <div class="class-detail-actions">
                     <button class="white-btn" id="openSemesterCreateModal">
                         <i data-lucide="calendar-plus"></i>
-                        CrÃ©er un semestre
+                        Creer un semestre
                     </button>
                     <button class="green-btn" id="openModuleModal" <?= count($semesters) === 0 ? "disabled" : "" ?>>
                         <i data-lucide="plus"></i>
@@ -351,8 +351,8 @@ $classCode = "CLS-" . str_pad($classe["ID"], 3, "0", STR_PAD_LEFT);
                 <div class="semester-card">
                     <div class="empty-state">
                         <i data-lucide="calendar-plus"></i>
-                        <h3>Aucun semestre crÃ©Ã©</h3>
-                        <p>CrÃ©ez d'abord un semestre pour pouvoir y insÃ©rer des modules.</p>
+                        <h3>Aucun semestre cree</h3>
+                        <p>Creez d'abord un semestre pour pouvoir y inserer des modules.</p>
                     </div>
                 </div>
             <?php endif; ?>
@@ -360,7 +360,7 @@ $classCode = "CLS-" . str_pad($classe["ID"], 3, "0", STR_PAD_LEFT);
             <div class="semester-top">
                 <div>
                     <h2>Etudiants</h2>
-                    <p>Liste des Ã©tudiants inscrits dans cette classe.</p>
+                    <p>Liste des etudiants inscrits dans cette classe.</p>
                 </div>
             </div>
 
@@ -371,7 +371,7 @@ $classCode = "CLS-" . str_pad($classe["ID"], 3, "0", STR_PAD_LEFT);
                         <th>Matricule</th>
                         <th>Nom complet</th>
                         <th>Email</th>
-                        <th>AnnÃ©e d'Ã©tude</th>
+                        <th>Annee d'etude</th>
                         <th>Statut</th>
                     </tr>
                     </thead>
@@ -387,7 +387,7 @@ $classCode = "CLS-" . str_pad($classe["ID"], 3, "0", STR_PAD_LEFT);
                     <?php endforeach; ?>
 
                     <?php if (count($students) === 0): ?>
-                        <tr><td colspan="5">Aucun Ã©tudiant inscrit dans cette classe.</td></tr>
+                        <tr><td colspan="5">Aucun etudiant inscrit dans cette classe.</td></tr>
                     <?php endif; ?>
                     </tbody>
                 </table>
@@ -400,7 +400,7 @@ $classCode = "CLS-" . str_pad($classe["ID"], 3, "0", STR_PAD_LEFT);
                 <div class="side-info-list">
                     <div><i data-lucide="school"></i><article><small>Classe</small><strong><?= htmlspecialchars($classe["nom"]) ?></strong></article></div>
                     <div><i data-lucide="graduation-cap"></i><article><small>Niveau</small><strong><?= htmlspecialchars($classe["niveau"] ?: "-") ?></strong></article></div>
-                    <div><i data-lucide="calendar-days"></i><article><small>Semestres</small><strong><?= $totalSemesters ?> crÃ©Ã©s</strong></article></div>
+                    <div><i data-lucide="calendar-days"></i><article><small>Semestres</small><strong><?= $totalSemesters ?> crees</strong></article></div>
                     <div><i data-lucide="book-open"></i><article><small>Modules</small><strong><?= $totalModules ?> modules</strong></article></div>
                 </div>
             </div>
@@ -430,7 +430,7 @@ $classCode = "CLS-" . str_pad($classe["ID"], 3, "0", STR_PAD_LEFT);
 <div class="modal-overlay" id="semesterCreateModal">
     <div class="module-modal">
         <div class="modal-head">
-            <h2>CrÃ©er un semestre</h2>
+            <h2>Creer un semestre</h2>
             <button id="closeSemesterCreateModal" type="button"><i data-lucide="x"></i></button>
         </div>
 
@@ -446,13 +446,13 @@ $classCode = "CLS-" . str_pad($classe["ID"], 3, "0", STR_PAD_LEFT);
                     <input type="number" name="semester_order" min="1" placeholder="Ex : 1" required>
                 </div>
                 <div>
-                    <label>AnnÃ©e scolaire</label>
+                    <label>Annee scolaire</label>
                     <input type="text" name="school_year" value="2024-2025" placeholder="Ex : 2024-2025">
                 </div>
             </div>
             <div class="modal-actions">
                 <button type="button" class="white-btn" id="cancelSemesterCreateBtn">Annuler</button>
-                <button type="submit" class="green-btn">CrÃ©er le semestre</button>
+                <button type="submit" class="green-btn">Creer le semestre</button>
             </div>
         </form>
     </div>
@@ -471,7 +471,7 @@ $classCode = "CLS-" . str_pad($classe["ID"], 3, "0", STR_PAD_LEFT);
                 <div>
                     <label>Semestre</label>
                     <select name="semestre_id" required>
-                        <option value="">SÃ©lectionner un semestre</option>
+                        <option value="">Selectionner un semestre</option>
                         <?php foreach ($semesters as $semester): ?>
                             <option value="<?= htmlspecialchars($semester["id"]) ?>"><?= htmlspecialchars($semester["nom"]) ?></option>
                         <?php endforeach; ?>
@@ -480,7 +480,7 @@ $classCode = "CLS-" . str_pad($classe["ID"], 3, "0", STR_PAD_LEFT);
                 <div>
                     <label>Module existant</label>
                     <select name="module_id">
-                        <option value="">CrÃ©er un nouveau module</option>
+                        <option value="">Creer un nouveau module</option>
                         <?php foreach ($allModules as $module): ?>
                             <option value="<?= htmlspecialchars($module["ID"]) ?>"><?= htmlspecialchars($module["nom"]) ?></option>
                         <?php endforeach; ?>

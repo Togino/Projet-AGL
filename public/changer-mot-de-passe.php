@@ -54,13 +54,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } elseif ($new_password !== $confirm_password) {
         $error = "Les nouveaux mots de passe ne correspondent pas.";
     } elseif (strlen($new_password) < 8) {
-        $error = "Le mot de passe doit contenir au moins 8 caractères.";
+        $error = "Le mot de passe doit contenir au moins 8 caracteres.";
     } elseif (!preg_match('/[A-Z]/', $new_password)) {
         $error = "Le mot de passe doit contenir au moins une lettre majuscule.";
     } elseif (!preg_match('/[a-z]/', $new_password)) {
         $error = "Le mot de passe doit contenir au moins une lettre minuscule.";
     } elseif (!preg_match('/[0-9\W]/', $new_password)) {
-        $error = "Le mot de passe doit contenir au moins un chiffre ou un caractère spécial.";
+        $error = "Le mot de passe doit contenir au moins un chiffre ou un caractere special.";
     } else {
         $hashedPassword = password_hash($new_password, PASSWORD_DEFAULT);
 
@@ -126,14 +126,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <div>
             <h1>EDU<span>SYS</span></h1>
-            <p>Système de Gestion Scolaire</p>
+            <p>Systeme de Gestion Scolaire</p>
         </div>
     </div>
 
     <div class="password-message">
         <h2>Bienvenue dans <span>EDUSYS !</span></h2>
         <p>
-            Pour des raisons de sécurité, vous devez changer votre mot de passe avant d'accéder à votre espace.
+            Pour des raisons de securite, vous devez changer votre mot de passe avant d'acceder a votre espace.
         </p>
     </div>
 
@@ -142,24 +142,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <div class="password-feature">
             <div><i data-lucide="shield-check"></i></div>
             <article>
-                <h3>Sécurité renforcée</h3>
-                <p>Protégez votre compte avec un mot de passe personnel.</p>
+                <h3>Securite renforcee</h3>
+                <p>Protegez votre compte avec un mot de passe personnel.</p>
             </article>
         </div>
 
         <div class="password-feature">
             <div><i data-lucide="key-round"></i></div>
             <article>
-                <h3>Accès sécurisé</h3>
-                <p>Un nouveau mot de passe garantit la sécurité de vos données.</p>
+                <h3>Acces securise</h3>
+                <p>Un nouveau mot de passe garantit la securite de vos donnees.</p>
             </article>
         </div>
 
         <div class="password-feature">
             <div><i data-lucide="users"></i></div>
             <article>
-                <h3>Expérience personnalisée</h3>
-                <p>Profitez d’un accès sécurisé et personnalisé à EDUSYS.</p>
+                <h3>Experience personnalisee</h3>
+                <p>Profitez d'un acces securise et personnalise a EDUSYS.</p>
             </article>
         </div>
 
@@ -167,7 +167,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <div class="password-note">
         <i data-lucide="shield-check"></i>
-        <p>Votre nouveau mot de passe doit être unique et différent des mots de passe précédents.</p>
+        <p>Votre nouveau mot de passe doit etre unique et different des mots de passe precedents.</p>
     </div>
 
 </div>
@@ -182,7 +182,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <div class="password-card-head">
             <h2>Changer votre mot de passe</h2>
-            <p>Vous devez définir un nouveau mot de passe pour continuer</p>
+            <p>Vous devez definir un nouveau mot de passe pour continuer</p>
         </div>
 
         <?php if (!empty($error)): ?>
@@ -226,21 +226,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <h4>Le mot de passe doit contenir :</h4>
 
             <div class="rules-grid">
-                <p><i data-lucide="check-circle"></i> Au moins 8 caractères</p>
+                <p><i data-lucide="check-circle"></i> Au moins 8 caracteres</p>
                 <p><i data-lucide="check-circle"></i> Une lettre majuscule</p>
                 <p><i data-lucide="check-circle"></i> Une lettre minuscule</p>
-                <p><i data-lucide="check-circle"></i> Un chiffre ou caractère spécial</p>
+                <p><i data-lucide="check-circle"></i> Un chiffre ou caractere special</p>
             </div>
         </div>
 
         <button type="submit" class="password-submit">
             <i data-lucide="lock"></i>
-            Mettre à jour le mot de passe
+            Mettre a jour le mot de passe
         </button>
 
         <div class="secure-login">
             <i data-lucide="shield-check"></i>
-            <span>Connexion sécurisée avec chiffrement SSL</span>
+            <span>Connexion securisee avec chiffrement SSL</span>
         </div>
 
     </form>

@@ -15,7 +15,7 @@ if (!$id) {
     exit;
 }
 
-// Vérifier si la classe existe
+// Verifier si la classe existe
 $stmt = $pdo->prepare("SELECT * FROM classe WHERE ID=?");
 $stmt->execute([$id]);
 $classe = $stmt->fetch();
@@ -25,13 +25,13 @@ if (!$classe) {
     exit;
 }
 
-// Vérifier si la classe a des étudiants
+// Verifier si la classe a des etudiants
 $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM etudiant WHERE classe_id=?");
 $stmt->execute([$id]);
 $etudiants = $stmt->fetch();
 
 if ($etudiants["count"] > 0) {
-    // Rediriger avec un message d'erreur si la classe a des étudiants
+    // Rediriger avec un message d'erreur si la classe a des etudiants
     header("Location: classes.php?error=has_students");
     exit;
 }

@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if ($user && password_verify($password, $user["motdepasse"])) {
             if (!$user["statut"]) {
-                $error = "Votre compte est désactivé.";
+                $error = "Votre compte est desactive.";
             } else {
                 $_SESSION["user"] = [
                     "MAT" => $user["MAT"],
@@ -115,14 +115,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <div>
             <h1>EDU<span>SYS</span></h1>
-            <p>Système de Gestion Scolaire</p>
+            <p>Systeme de Gestion Scolaire</p>
         </div>
     </div>
 
     <div class="login-slogan">
-        <h2>La gestion scolaire<br><span>simplifiée & intelligente</span></h2>
+        <h2>La gestion scolaire<br><span>simplifiee & intelligente</span></h2>
         <p>
-            EDUSYS vous accompagne dans la gestion des étudiants,
+            EDUSYS vous accompagne dans la gestion des etudiants,
             des enseignants, des classes, des notes et bien plus encore.
         </p>
     </div>
@@ -132,24 +132,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <div class="login-feature">
             <div><i data-lucide="users"></i></div>
             <article>
-                <h3>Gestion complète</h3>
-                <p>Étudiants, enseignants, classes, matières et évaluations.</p>
+                <h3>Gestion complete</h3>
+                <p>Etudiants, enseignants, classes, matieres et evaluations.</p>
             </article>
         </div>
 
         <div class="login-feature">
             <div><i data-lucide="shield-check"></i></div>
             <article>
-                <h3>Sécurisé & fiable</h3>
-                <p>Vos données sont protégées avec les meilleures pratiques de sécurité.</p>
+                <h3>Securise & fiable</h3>
+                <p>Vos donnees sont protegees avec les meilleures pratiques de securite.</p>
             </article>
         </div>
 
         <div class="login-feature">
             <div><i data-lucide="bar-chart-3"></i></div>
             <article>
-                <h3>Suivi en temps réel</h3>
-                <p>Tableaux de bord, statistiques et rapports instantanés.</p>
+                <h3>Suivi en temps reel</h3>
+                <p>Tableaux de bord, statistiques et rapports instantanes.</p>
             </article>
         </div>
 
@@ -157,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <div><i data-lucide="bell"></i></div>
             <article>
                 <h3>Notifications</h3>
-                <p>Restez informé grâce aux alertes et notifications intelligentes.</p>
+                <p>Restez informe grace aux alertes et notifications intelligentes.</p>
             </article>
         </div>
 
@@ -165,7 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <div class="login-quote">
         <i data-lucide="quote"></i>
-        <p>EDUSYS, la solution idéale pour une gestion scolaire efficace et moderne.</p>
+        <p>EDUSYS, la solution ideale pour une gestion scolaire efficace et moderne.</p>
     </div>
 
 </div>
@@ -175,8 +175,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <form method="POST" class="edusys-login-card" id="loginForm">
 
         <div class="login-card-head">
-            <h2>Bienvenue ! 👋</h2>
-            <p>Connectez-vous à votre espace EDUSYS</p>
+            <h2>Bienvenue ! </h2>
+            <p>Connectez-vous a votre espace EDUSYS</p>
         </div>
 
         <div class="alert-error" id="loginError" <?= empty($error) ? 'style="display: none;"' : "" ?>><?= htmlspecialchars($error) ?></div>
@@ -217,7 +217,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <span>Se souvenir de moi</span>
             </label>
 
-            <a href="#">Mot de passe oublié ?</a>
+            <a href="#">Mot de passe oublie ?</a>
         </div>
 
         <button type="submit" class="login-submit" id="loginSubmit">
@@ -233,12 +233,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <button type="button" class="guest-btn">
             <i data-lucide="users"></i>
-            Accéder en tant qu'invité
+            Acceder en tant qu'invite
         </button>
 
         <div class="secure-login">
             <i data-lucide="shield-check"></i>
-            <span>Connexion sécurisée avec chiffrement SSL</span>
+            <span>Connexion securisee avec chiffrement SSL</span>
         </div>
 
     </form>

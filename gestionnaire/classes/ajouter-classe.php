@@ -45,10 +45,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <div class="dashboard-head">
     <div>
         <h1>Ajouter une classe</h1>
-        <p>Créer une nouvelle classe dans le système</p>
+        <p>Creer une nouvelle classe dans le systeme</p>
     </div>
 
-    <a href="classes.php" class="year-btn">← Retour</a>
+    <a href="classes.php" class="year-btn"><- Retour</a>
 </div>
 
 <div class="form-card">
@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </div>
 
     <button type="submit" class="submit-btn">
-        Créer la classe
+        Creer la classe
     </button>
 
 </form>

@@ -55,7 +55,7 @@ $totalModules = (int) $stmtModules->fetchColumn();
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Espace Enseignant - EduSystème</title>
+    <title>Espace Enseignant - EduSysteme</title>
     <link rel="stylesheet" href="../public/assets/css/style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>

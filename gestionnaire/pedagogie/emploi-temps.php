@@ -383,7 +383,7 @@ function findCreneauForSlot($creneauxByDay, $jour, $heureDebut)
                                     data-fin="<?= htmlspecialchars($heure["fin"]) ?>"
                                     aria-label="Ajouter un cours le <?= htmlspecialchars($jour) ?> a <?= htmlspecialchars($heure["debut"]) ?>"
                                 >
-                                    <span class="empty-course">—</span>
+                                    <span class="empty-course">-</span>
                                 </button>
                             <?php endif; ?>
                         </div>

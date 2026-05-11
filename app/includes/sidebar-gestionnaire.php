@@ -14,7 +14,7 @@ if (!function_exists("sidebar_active")) {
     <div class="brand">
         <div class="brand-icon"><?= ui_icon("leaf") ?></div>
         <div>
-            <h2>EduSystème</h2>
+            <h2>EduSysteme</h2>
             <p>Espace Gestionnaire</p>
         </div>
     </div>

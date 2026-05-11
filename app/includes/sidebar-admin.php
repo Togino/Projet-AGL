@@ -12,7 +12,7 @@ function sidebar_active($pages) {
     <div class="brand">
         <div class="brand-icon"><?= ui_icon("leaf") ?></div>
         <div>
-            <h2>EduSystème</h2>
+            <h2>EduSysteme</h2>
             <p>Gestion Universitaire</p>
         </div>
     </div>

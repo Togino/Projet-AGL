@@ -65,8 +65,8 @@ $recentNotes = $pdo->query("
             <div><i data-lucide="users"></i></div>
             <article>
                 <h2><?= $totalEtudiants ?></h2>
-                <p>Étudiants</p>
-                <small>Inscrits dans le système</small>
+                <p>Etudiants</p>
+                <small>Inscrits dans le systeme</small>
             </article>
         </div>
 
@@ -75,7 +75,7 @@ $recentNotes = $pdo->query("
             <article>
                 <h2><?= $totalEnseignants ?></h2>
                 <p>Enseignants</p>
-                <small>Personnel pédagogique</small>
+                <small>Personnel pedagogique</small>
             </article>
         </div>
 
@@ -93,7 +93,7 @@ $recentNotes = $pdo->query("
             <article>
                 <h2><?= $totalNotes ?></h2>
                 <p>Notes</p>
-                <small>Notes enregistrées</small>
+                <small>Notes enregistrees</small>
             </article>
         </div>
     </div>
@@ -104,47 +104,47 @@ $recentNotes = $pdo->query("
 
             <div class="settings-overview-card">
                 <h2>Actions rapides</h2>
-                <p>Accédez rapidement aux fonctionnalités principales du gestionnaire.</p>
+                <p>Accedez rapidement aux fonctionnalites principales du gestionnaire.</p>
 
                 <div class="settings-grid">
                     <a href="etudiants/etudiants.php" class="settings-box green">
                         <div><i data-lucide="users"></i></div>
-                        <h3>Gérer les étudiants</h3>
-                        <p>Consulter, ajouter et modifier les étudiants.</p>
-                        <span><i data-lucide="arrow-right"></i> Accéder</span>
+                        <h3>Gerer les etudiants</h3>
+                        <p>Consulter, ajouter et modifier les etudiants.</p>
+                        <span><i data-lucide="arrow-right"></i> Acceder</span>
                     </a>
 
                     <a href="enseignants/enseignants.php" class="settings-box blue">
                         <div><i data-lucide="graduation-cap"></i></div>
-                        <h3>Gérer les enseignants</h3>
+                        <h3>Gerer les enseignants</h3>
                         <p>Consulter les enseignants et leurs informations.</p>
-                        <span><i data-lucide="arrow-right"></i> Accéder</span>
+                        <span><i data-lucide="arrow-right"></i> Acceder</span>
                     </a>
 
                     <a href="classes/classes.php" class="settings-box orange">
                         <div><i data-lucide="school"></i></div>
-                        <h3>Gérer les classes</h3>
+                        <h3>Gerer les classes</h3>
                         <p>Voir les classes et les effectifs.</p>
-                        <span><i data-lucide="arrow-right"></i> Accéder</span>
+                        <span><i data-lucide="arrow-right"></i> Acceder</span>
                     </a>
 
                     <a href="pedagogie/notes.php" class="settings-box purple">
                         <div><i data-lucide="file-pen-line"></i></div>
-                        <h3>Gérer les notes</h3>
+                        <h3>Gerer les notes</h3>
                         <p>Ajouter, modifier et consulter les notes.</p>
-                        <span><i data-lucide="arrow-right"></i> Accéder</span>
+                        <span><i data-lucide="arrow-right"></i> Acceder</span>
                     </a>
                 </div>
             </div>
 
             <div class="activity-card">
-                <h2>Étudiants récents</h2>
+                <h2>Etudiants recents</h2>
 
                 <table class="activity-table">
                     <thead>
                         <tr>
                             <th>Matricule</th>
-                            <th>Étudiant</th>
+                            <th>Etudiant</th>
                             <th>Email</th>
                             <th>Classe</th>
                         </tr>
@@ -168,7 +168,7 @@ $recentNotes = $pdo->query("
         <aside class="settings-side">
 
             <div class="system-card">
-                <h3>Dernières notes</h3>
+                <h3>Dernieres notes</h3>
 
                 <?php foreach ($recentNotes as $note): ?>
                     <div class="system-row">
@@ -180,14 +180,14 @@ $recentNotes = $pdo->query("
             </div>
 
             <div class="help-settings-card">
-                <h3>Rôle gestionnaire</h3>
+                <h3>Role gestionnaire</h3>
                 <p>
-                    Le gestionnaire peut gérer les étudiants, les enseignants, les classes et les notes.
+                    Le gestionnaire peut gerer les etudiants, les enseignants, les classes et les notes.
                 </p>
 
                 <button>
                     <i data-lucide="shield-check"></i>
-                    Accès limité et sécurisé
+                    Acces limite et securise
                 </button>
             </div>
 

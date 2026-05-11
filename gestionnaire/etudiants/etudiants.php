@@ -95,7 +95,7 @@ foreach ($etudiants as $etudiant) {
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Liste des étudiants - EduManage</title>
+    <title>Liste des etudiants - EduManage</title>
 
     <link rel="stylesheet" href="../../public/assets/css/style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -114,20 +114,20 @@ foreach ($etudiants as $etudiant) {
     <div class="students-header">
 
         <div>
-            <h1>Liste des étudiants</h1>
+            <h1>Liste des etudiants</h1>
 
             <div class="breadcrumb">
                 <span>Accueil</span>
                 <i data-lucide="chevron-right"></i>
-                <span>Étudiants</span>
+                <span>Etudiants</span>
                 <i data-lucide="chevron-right"></i>
-                <strong>Liste des étudiants</strong>
+                <strong>Liste des etudiants</strong>
             </div>
         </div>
 
         <a href="inscriptions.php" class="add-student-btn">
             <i data-lucide="plus"></i>
-            Ajouter un étudiant
+            Ajouter un etudiant
         </a>
 
     </div>
@@ -153,7 +153,7 @@ foreach ($etudiants as $etudiant) {
             </div>
 
             <div>
-                <small>Total étudiants</small>
+                <small>Total etudiants</small>
                 <h2><?= $total ?></h2>
                 <span>Effectif actuel</span>
             </div>
@@ -165,7 +165,7 @@ foreach ($etudiants as $etudiant) {
             </div>
 
             <div>
-                <small>Garçons</small>
+                <small>Garcons</small>
                 <h2><?= $totalGarcons ?></h2>
                 <span>Sexe masculin</span>
             </div>
@@ -209,7 +209,7 @@ foreach ($etudiants as $etudiant) {
                     <input 
                         type="text"
                         name="search"
-                        placeholder="Rechercher par nom, prénom, matricule, email..."
+                        placeholder="Rechercher par nom, prenom, matricule, email..."
                         value="<?= htmlspecialchars($search) ?>"
                     >
                 </div>
@@ -256,11 +256,11 @@ foreach ($etudiants as $etudiant) {
                         <th>#</th>
                         <th>Photo</th>
                         <th>Matricule</th>
-                        <th>Nom & prénom</th>
+                        <th>Nom & prenom</th>
                         <th>Classe</th>
                         <th>Niveau</th>
                         <th>Email</th>
-                        <th>Téléphone</th>
+                        <th>Telephone</th>
                         <th>Statut</th>
                         <th>Inscription</th>
                         <th>Actions</th>
@@ -354,10 +354,10 @@ foreach ($etudiants as $etudiant) {
 
                                 <i data-lucide="users"></i>
 
-                                <h3>Aucun étudiant trouvé</h3>
+                                <h3>Aucun etudiant trouve</h3>
 
                                 <p>
-                                    Aucun étudiant ne correspond à votre recherche.
+                                    Aucun etudiant ne correspond a votre recherche.
                                 </p>
 
                             </div>

@@ -16,7 +16,7 @@ if (file_exists($envFile)) {
     }
 }
 
-// Configuration avec valeurs par défaut
+// Configuration avec valeurs par defaut
 $host = getenv('DB_HOST') ?: 'localhost';
 $port = getenv('DB_PORT') ?: '3306';
 $dbname = getenv('DB_NAME') ?: 'scolar_sys';
