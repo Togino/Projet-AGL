@@ -22,7 +22,8 @@ SET time_zone = "+00:00";
 --
 
 -- --------------------------------------------------------
-
+CREATE DATABASE scolar_sys; 
+use scolar_sys;
 --
 -- Structure de la table `action_archive`
 --
