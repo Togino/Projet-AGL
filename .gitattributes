@@ -1,0 +1,18 @@
+# Force LF line endings for all files to avoid Windows/Unix line ending issues
+* text=auto
+
+# Force LF for PHP files (no conversion)
+*.php text eol=lf
+*.js text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+
+# Binary files - don't convert
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.zip binary
+*.sql binary

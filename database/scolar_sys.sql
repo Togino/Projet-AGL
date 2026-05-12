@@ -1028,7 +1028,7 @@ CREATE TABLE `utilisateur` (
 --
 -- Déchargement des données de la table `utilisateur`
 --
-
+"
 INSERT INTO `utilisateur` (`MAT`, `nom`, `prenom`, `date_de_naissance`, `email`, `telephone`, `motdepasse`, `role_id`, `statut`, `must_change_password`, `password_changed_at`, `deleted_at`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deactivation_reason`, `deactivated_at`, `deactivated_by`, `deletion_requested`, `deletion_requested_at`, `deletion_requested_by`, `reactivated_at`, `reactivated_by`) VALUES
 ('AD-0001', 'Admin', 'Principal', '1990-01-01', 'admin@scolarsys.test', NULL, '$2y$10$LWoU9Tl6N3B9giJrsVG6DOmazh/PSJsGk2A9UnAzLKEFgc7r0gBCe', 2, 1, 0, NULL, NULL, NULL, NULL, '2026-04-02 17:29:55', '2026-05-10 13:48:21', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL),
 ('ES-0001', 'Diarra', 'Maimouna', '2005-11-20', 'maimouna02@gmail.com', NULL, '$2y$10$TcRIRuHIMT7VfDStjufk4OxmRrGpGP8nnVQWrimoLQiwSTAcJG6hq', 3, 1, 0, NULL, NULL, 'AD-0001', 'AD-0001', '2026-04-07 06:54:10', '2026-05-10 17:10:01', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL),
