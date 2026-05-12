@@ -16,10 +16,29 @@ class AuthController
 
         try {
             $user = $this->authService->login($payload['email'] ?? '', $payload['motdepasse'] ?? ($payload['password'] ?? ''));
-            $this->jsonResponse(['message' => 'Connexion reussie.', 'data' => $user]);
+            
+            // Déterminer l'URL de redirection selon le rôle
+            $redirectUrl = $this->getRedirectUrlForRole($user['role_name']);
+            
+            $this->jsonResponse([
+                'message' => 'Connexion reussie.', 
+                'data' => $user,
+                'redirect' => $redirectUrl
+            ]);
         } catch (\Throwable $exception) {
             $this->jsonResponse(['message' => $exception->getMessage()], 401);
         }
+    }
+
+    private function getRedirectUrlForRole(string $role): string
+    {
+        return match($role) {
+            'SUPER_ADMIN', 'ADMIN' => 'admin/dashboard.php',
+            'GESTIONNAIRE' => 'gestionnaire/dashboard.php',
+            'ETUDIANT' => 'etudiant/dashboard.php',
+            'ENSEIGNANT' => 'enseignant/dashboard.php',
+            default => 'public/login.php'
+        };
     }
 
     public function logout(): void

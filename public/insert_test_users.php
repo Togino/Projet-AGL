@@ -10,19 +10,23 @@ try {
     // For now, assume tables exist, or add basic ones
 
     // Insert test users
-    $password = password_hash("password123", PASSWORD_DEFAULT);
+    $admin_password = password_hash("admin123", PASSWORD_DEFAULT);
+    $other_password = password_hash("123", PASSWORD_DEFAULT);
 
-    // Admin
+    // Admin (identifiants pour tout le monde)
     $stmt = $pdo->prepare("INSERT IGNORE INTO utilisateur (MAT, nom, prenom, email, motdepasse, role_id, statut) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->execute(["ADM001", "Admin", "Test", "admin@test.com", $password, 1, 1]); // Assume role_id 1 is admin
+    $stmt->execute(["AD-0001", "Admin", "Principal", "admin@scolarsys.test", $admin_password, 2, 1]); 
 
     // Gestionnaire
-    $stmt->execute(["GEST001", "Gestionnaire", "Test", "gestionnaire@test.com", $password, 2, 1]); // Assume 2 is gestionnaire
+    $stmt->execute(["GE-0001", "Gestionnaire", "Test", "gestionnaire@scolarsys.test", $other_password, 3, 1]); 
+
+    // Enseignant
+    $stmt->execute(["ES-0001", "Enseignant", "Test", "enseignant@scolarsys.test", $other_password, 4, 1]); 
 
     // Etudiant
-    $stmt->execute(["ETU001", "Etudiant", "Test", "etudiant@test.com", $password, 3, 1]); // Assume 3 is etudiant
+    $stmt->execute(["ET-0001", "Etudiant", "Test", "etudiant@scolarsys.test", $other_password, 5, 1]);
 
-    echo "Test users inserted. Login with email: admin@test.com, gestionnaire@test.com, etudiant@test.com, password: password123";
+    echo "Test users inserted. Identifiants:\n- Admin: admin@scolarsys.test / admin123\n- Autres roles: utiliser le mail avec / 123";
 
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();

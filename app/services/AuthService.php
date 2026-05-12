@@ -28,10 +28,21 @@ class AuthService
 
         session_regenerate_id(true);
 
+        // Stocker dans $_SESSION['matricule'] pour l'API/admin
         $_SESSION['matricule'] = $user['MAT'];
         $_SESSION['role_name'] = $user['role_name'];
         $_SESSION['permissions'] = $this->roleService->getPermissionsForUser($user['MAT']);
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        
+        // Stocker aussi dans $_SESSION['user'] pour compatibilité avec public/login.php
+        $_SESSION['user'] = [
+            'MAT' => $user['MAT'],
+            'nom' => $user['nom'],
+            'prenom' => $user['prenom'],
+            'email' => $user['email'],
+            'role' => $user['role_name'],
+            'must_change_password' => (int) ($user['must_change_password'] ?? 0)
+        ];
 
         $this->securityLogService->log($user['MAT'], 'login.success', 'Connexion reussie');
 
