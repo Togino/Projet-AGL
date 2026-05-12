@@ -13,8 +13,8 @@ Roles concernes :
 - `ETUDIANT`
 
 Exemples de matricules presents dans la base :
-
-- Enseignants : `ES-0001`, `ES-0002`, `ES-0003`
+%
+- Enseignants : `ES-0001`, `ES-0002`, `ES-0003`I
 - Etudiants : `ET-0001`, `ET-0002`, `ET-0003`
 - Gestionnaires : `GE-0001`
 
