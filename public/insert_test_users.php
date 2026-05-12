@@ -18,10 +18,10 @@ try {
     $stmt->execute(["AD-0001", "Admin", "Principal", "admin@scolarsys.test", $admin_password, 2, 1]); 
 
     // Gestionnaire
-    $stmt->execute(["GE-0001", "Gestionnaire", "Test", "gestionnaire@scolarsys.test", $other_password, 3, 1]); 
+    $stmt->execute(["GE-0001", "Gestionnaire", "Test", "gestionnaire@scolarsys.test", $other_password, 4, 1]); 
 
     // Enseignant
-    $stmt->execute(["ES-0001", "Enseignant", "Test", "enseignant@scolarsys.test", $other_password, 4, 1]); 
+    $stmt->execute(["ES-0001", "Enseignant", "Test", "enseignant@scolarsys.test", $other_password, 3, 1]); 
 
     // Etudiant
     $stmt->execute(["ET-0001", "Etudiant", "Test", "etudiant@scolarsys.test", $other_password, 5, 1]);

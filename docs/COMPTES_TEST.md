@@ -1,25 +1,39 @@
 # Comptes de test
 
-Les comptes des roles suivants utilisent tous le mot de passe :
+Apres import de `database/scolar_sys.sql`, utiliser ces comptes.
+
+## Administrateur
 
 ```text
-123
+Email : admin@scolarsys.test
+Mot de passe : admin123
+```
+## Autres roles
+Les comptes gestionnaire, enseignant et etudiant utilisent tous :
+```text
+Mot de passe : 123
+```
+Exemples :
+```text
+Gestionnaire : gestionnaire1@gmail.com / 123
+Enseignant   : enseignant1@demo.local / 123
+Etudiant     : etudiantild1@demo.local / 123
 ```
 
-Roles concernes :
+La connexion accepte aussi le matricule a la place de l'email, par exemple :
 
-- `ENSEIGNANT`
-- `GESTIONNAIRE`
-- `ETUDIANT`
+```text
+AD-0001 / admin123
+GE-0001 / 123
+ES-0002 / 123
+ET-0002 / 123
+```
 
-Exemples de matricules presents dans la base :
-%
-- Enseignants : `ES-0001`, `ES-0002`, `ES-0003`I
-- Etudiants : `ET-0001`, `ET-0002`, `ET-0003`
-- Gestionnaires : `GE-0001`
+Redirections attendues apres connexion :
 
-compte admin par défaut:
-{
-email:admin@scolarsys.test
-mot_de_passe:admin123
-}
+```text
+AD-0001 -> admin/dashboard.php
+GE-0001 -> gestionnaire/dashboard.php
+ES-0002 -> enseignant/dashboard.php
+ET-0002 -> etudiant/dashboard.php
+```
