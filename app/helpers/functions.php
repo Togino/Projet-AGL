@@ -82,6 +82,9 @@ function handle_weekly_password_change(PDO $pdo, string $mat): array {
     }
     ensure_password_changed_column($pdo);
 
+
+
+    
     $stmt = $pdo->prepare("SELECT motdepasse, password_changed_at FROM utilisateur WHERE MAT = ? LIMIT 1");
     $stmt->execute([$mat]);
     $user = $stmt->fetch();

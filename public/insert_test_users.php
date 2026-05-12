@@ -2,7 +2,7 @@
 require_once "../app/config/database.php";
 
 try {
-    // Create database if not exists
+    
     $pdo->exec("CREATE DATABASE IF NOT EXISTS scolar_sys");
     $pdo->exec("USE scolar_sys");
 

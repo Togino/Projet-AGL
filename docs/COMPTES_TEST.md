@@ -18,4 +18,8 @@ Exemples de matricules presents dans la base :
 - Etudiants : `ET-0001`, `ET-0002`, `ET-0003`
 - Gestionnaires : `GE-0001`
 
-Les comptes administrateurs ne sont pas modifies par cette fiche.
+compte admin par défaut:
+{
+email:admin@scolarsys.test
+mot_de_passe:admin123
+}

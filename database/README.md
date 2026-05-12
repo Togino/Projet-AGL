@@ -5,13 +5,13 @@ Ce dossier contient l'export MySQL du projet.
 Fichier principal :
 
 ```text
-scolar_sys_dump.sql
+scolar_sys.sql
 ```
 
 Import :
 
 ```powershell
-mysql -uroot < database\scolar_sys_dump.sql
+mysql -uroot < database\scolar_sys.sql
 ```
 
 La configuration de connexion est dans :

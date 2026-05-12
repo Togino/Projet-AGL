@@ -20,7 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `scolar_sys`
 --
-
 -- --------------------------------------------------------
 CREATE DATABASE scolar_sys; 
 use scolar_sys;

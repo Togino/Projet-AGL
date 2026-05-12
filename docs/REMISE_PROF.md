@@ -24,7 +24,7 @@
 L'export se trouve ici :
 
 ```text
-database/scolar_sys_dump.sql
+database/scolar_sys.sql
 ```
 
 ## URL de lancement

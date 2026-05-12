@@ -18,7 +18,7 @@ C:\xampp\htdocs\Projet-AGL
 3. Importer la base :
 
 ```powershell
-mysql -uroot < database\scolar_sys_dump.sql
+mysql -uroot < database\scolar_sys.sql
 ```
 
 4. Verifier la configuration :

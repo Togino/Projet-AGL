@@ -1,3 +1,4 @@
+
 # EduSysteme - Projet AGL
 
 Application web PHP/MySQL de gestion scolaire.
@@ -31,12 +32,14 @@ Application web PHP/MySQL de gestion scolaire.
 
 ## Installation rapide
 
+NB: Faire attention au fichier .env et le modifier en fonction de vos informations personelles(le fichier database.php dans config utilise des variabes d'environnement)
+
 1. Copier le dossier dans `C:\xampp\htdocs\Projet-AGL`.
-2. Importer `database/scolar_sys_dump.sql` dans MySQL.
+2. Importer `database/scolar_sys.sql` dans MySQL.
 3. Verifier la configuration dans `app/config/database.php`.
 4. Lancer Apache/MySQL avec XAMPP, ou le serveur PHP local.
 5. Ouvrir `http://localhost/Projet-AGL/public/login.php`.
-
+NB: Faire attention au fichier .env et le modifier en fonction de vos informations personelles(le fichier database.php dans config utilise des variabes d'environnement)
 ## Comptes
 
 Pour les comptes `ENSEIGNANT`, `GESTIONNAIRE` et `ETUDIANT`, le mot de passe est :
